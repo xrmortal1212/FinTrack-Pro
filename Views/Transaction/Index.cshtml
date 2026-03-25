@@ -1,0 +1,305 @@
+﻿@model IEnumerable<FinTrack_Pro.Models.Transaction>
+@{
+    ViewData["Title"] = "My Transactions";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+    /* =========================================
+               ✨ FTX PREMIUM CUSTOM STYLES ✨
+               ========================================= */
+    
+
+    /* Summary Grid */
+    .ft-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    .ftx-stat-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
+        position: relative;
+        overflow: hidden;
+        will-change: transform, box-shadow;
+    }
+
+    .ft-stat-title {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+        color: #64748b;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .ft-stat-amount {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0;
+        letter-spacing: -1px;
+    }
+
+    /* Accents */
+    .card-income {
+        border-bottom: 4px solid #10b981;
+    }
+
+    .card-expense {
+        border-bottom: 4px solid #f59e0b;
+    }
+
+    .card-balance {
+        border-bottom: 4px solid #3b82f6;
+    }
+
+    /* Table Styles */
+    .ftx-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        border: 1px solid #f1f5f9;
+        overflow: hidden;
+    }
+
+    .ftx-card-header {
+        background: #f8fafc;
+        padding: 20px 24px;
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 1.2rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .ftx-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .ftx-table th {
+            background: #ffffff;
+            color: #64748b;
+            font-weight: 600;
+            padding: 16px 24px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #f1f5f9;
+            text-align: left;
+        }
+
+    .ftx-table-row {
+        border-bottom: 1px solid #f1f5f9;
+        will-change: transform, background-color;
+        transition: background-color 0.3s ease;
+    }
+
+        .ftx-table-row:last-child {
+            border-bottom: none;
+        }
+
+    .ftx-table td {
+        padding: 18px 24px;
+        vertical-align: middle;
+    }
+
+    /* Badges */
+    .ft-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-block;
+    }
+
+    .ft-badge-income {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .ft-badge-expense {
+        background: rgba(244, 63, 94, 0.1);
+        color: #f43f5e;
+    }
+
+    /* Add Button */
+    .ftx-add-btn {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 700;
+        box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        will-change: transform;
+    }
+</style>
+
+<div class="container-fluid mt-4 ftx-transaction-wrapper">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;" data-aos="fade-down" data-aos-duration="600">
+        <h2 style="font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.5px;">Transaction Overview</h2>
+
+        <a asp-controller="Transaction" asp-action="Create" class="ftx-add-btn">
+            <i class="bi bi-plus-lg" style="font-size: 1.1rem; font-weight: bold;"></i> Add Transaction
+        </a>
+    </div>
+
+    <div class="ft-summary-grid">
+        <div class="ftx-stat-card card-income" data-aos="fade-up" data-aos-delay="0">
+            <span class="ft-stat-title">Total Income</span>
+            <h3 class="ft-stat-amount" style="color: #10b981;">Rs. @(ViewBag.TotalIncome?.ToString("N2") ?? "0.00")</h3>
+        </div>
+        <div class="ftx-stat-card card-expense" data-aos="fade-up" data-aos-delay="100">
+            <span class="ft-stat-title">Total Expense</span>
+            <h3 class="ft-stat-amount" style="color: #f59e0b;">Rs. @(ViewBag.TotalExpense?.ToString("N2") ?? "0.00")</h3>
+        </div>
+        <div class="ftx-stat-card card-balance" data-aos="fade-up" data-aos-delay="200">
+            <span class="ft-stat-title">Net Balance</span>
+            <h3 class="ft-stat-amount" style="color: #3b82f6;">Rs. @(ViewBag.NetBalance?.ToString("N2") ?? "0.00")</h3>
+        </div>
+    </div>
+
+    <div class="ft-dashboard-grid" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+        <main class="ft-list-section">
+            <div class="ftx-card">
+                <div class="ftx-card-header">
+                    <i class="bi bi-clock-history" style="margin-right: 8px; color: #64748b;"></i> Recent Transactions
+                </div>
+                <div class="ft-table-wrapper" style="overflow-x: auto;">
+                    <table class="ftx-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th style="text-align: center;">Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                int delay = 0;
+                                foreach (var item in Model)
+                                {
+                                    <tr class="ftx-table-row" data-aos="fade-right" data-aos-delay="@delay" data-aos-duration="400">
+                                        <td style="color: #64748b; white-space: nowrap; font-size: 0.95rem;">
+                                            <i class="bi bi-calendar-event" style="margin-right: 5px; opacity: 0.7;"></i> @item.Date.ToString("dd MMM yyyy")
+                                        </td>
+                                        <td style="font-weight: 600; color: #1e293b;">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <span style="width: 8px; height: 8px; border-radius: 50%; background: @(item.Category?.Type == "Income" ? "#10b981" : "#f43f5e");"></span>
+                                                @(item.Category?.Title ?? "N/A")
+                                            </div>
+                                        </td>
+                                        <td style="color: #64748b; font-size: 0.95rem;">@item.Description</td>
+                                        <td style="font-weight: 800; font-size: 1.1rem; color: #0f172a;">Rs. @item.Amount.ToString("N2")</td>
+                                        <td style="text-align: center;">
+                                            @if (item.Category?.Type == "Income")
+                                            {
+                                                <span class="ft-badge ft-badge-income">Income</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="ft-badge ft-badge-expense">Expense</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    delay += 50; // Stagger effect for table rows
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 60px 20px; color: #94a3b8;">
+                                        <div class="ftx-empty-state" style="display: inline-block;">
+                                            <i class="bi bi-wallet2" style="font-size: 3.5rem; color: #cbd5e1; margin-bottom: 15px; display: block;"></i>
+                                        </div>
+                                        <h4 style="margin-bottom: 8px; font-weight: 700; color: #64748b;">No transactions yet</h4>
+                                        <p style="font-size: 0.95rem;">Click the <strong>'+ Add Transaction'</strong> button above to get started!</p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // 1. Initialize AOS
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                once: true,
+                offset: 20
+            });
+        }
+
+        // 2. Add Button Hover Animation
+        const addBtn = document.querySelector('.ftx-add-btn');
+        if (addBtn) {
+            addBtn.addEventListener('mouseenter', () => {
+                gsap.to(addBtn, { y: -3, scale: 1.02, boxShadow: "0 15px 25px -5px rgba(16, 185, 129, 0.4)", duration: 0.2 });
+            });
+            addBtn.addEventListener('mouseleave', () => {
+                gsap.to(addBtn, { y: 0, scale: 1, boxShadow: "0 10px 15px -3px rgba(16, 185, 129, 0.3)", duration: 0.2 });
+            });
+        }
+
+        // 3. Stat Cards Hover
+        const statCards = document.querySelectorAll('.ftx-stat-card');
+        statCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, { y: -6, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.08)", duration: 0.3, ease: "power2.out" });
+            });
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, { y: 0, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.03)", duration: 0.3, ease: "power2.out" });
+            });
+        });
+
+        // 4. Table Row Interactive Hover (Slide & Highlight)
+        const tableRows = document.querySelectorAll('.ftx-table-row');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                gsap.to(row, {
+                    x: 6, // Slight right slide
+                    backgroundColor: "#f8fafc", // Light gray/blue bg
+                    duration: 0.2,
+                    ease: "power1.out"
+                });
+            });
+            row.addEventListener('mouseleave', () => {
+                gsap.to(row, {
+                    x: 0,
+                    backgroundColor: "transparent",
+                    duration: 0.2,
+                    ease: "power1.out"
+                });
+            });
+        });
+
+        // 5. Empty State Bouncing Wallet
+        const emptyState = document.querySelector('.ftx-empty-state');
+        if (emptyState) {
+            gsap.to(emptyState, { y: -12, repeat: -1, yoyo: true, duration: 1.5, ease: "sine.inOut" });
+        }
+    });
+</script>

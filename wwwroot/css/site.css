@@ -1,0 +1,4579 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    position: relative;
+    font-family: "Syne", sans-serif;
+    background-color: #111;
+}
+
+/* =========================================
+   SCROLL TO TOP BUTTON
+========================================= */
+.ftx-scroll-top-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px; /* Button ka size */
+    height: 60px;
+    background-color: #1a1a1a; /* Dark background (image jaisa) */
+    color: #ffffff; /* Arrow ka color */
+    border-radius: 50%; /* Poora gol (circle) banane ke liye */
+    text-decoration: none;
+    transition: all 0.3s ease;
+    overflow: hidden; /* Taki arrow bahar jaye toh chhup jaye */
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Halka sa premium border */
+}
+
+    /* Arrow ki styling */
+    .ftx-scroll-top-btn i {
+        font-size: 24px;
+        transition: transform 0.3s ease;
+        display: inline-block;
+    }
+
+    /* 🟢 HOVER EFFECTS 🟢 */
+    .ftx-scroll-top-btn:hover {
+        background-color: #333333; /* Hover par thora light dark hoga */
+        transform: translateY(-5px); /* Poora button thora upar uthega */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Premium shadow */
+        color: #ffffff;
+    }
+
+        /* Hover karne par arrow upar udnay ka animation */
+        .ftx-scroll-top-btn:hover i {
+            animation: ftx-arrow-fly 0.5s ease forwards;
+        }
+
+/* Animation Keyframes */
+@keyframes ftx-arrow-fly {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    49% {
+        transform: translateY(-40px);
+        opacity: 0;
+    }
+    /* Upar ja kar chhup jayega */
+    50% {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+    /* Neechay shift hoga */
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    /* Wapas apni jagah aayega */
+}
+
+.ftx-moving-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -999; /* Isay sabse peechay rakhne ke liye */
+    overflow: hidden;
+    pointer-events: none; /* Taake background clicks ko block na kare */
+}
+
+.ftx-blob {
+    position: absolute;
+    border-radius: 50%;
+    /* Asal magic is blur se hota hai */
+    filter: blur(100px);
+    opacity: 0.5; /* Color ko thora soft rakhne ke liye */
+    animation: ftx-float-blob 6s infinite ease-in-out alternate;
+}
+
+/* Top Right wala Orange color */
+.ftx-blob-orange {
+    top: -10%;
+    right: -5%;
+    width: 450px;
+    height: 450px;
+    background: #ff764d;
+    animation-delay: 0s;
+}
+
+/* Bottom Left wala Blue color */
+.ftx-blob-blue {
+    bottom: -15%;
+    left: -10%;
+    width: 550px;
+    height: 550px;
+    background: #0088ff;
+    animation-delay: -5s;
+}
+
+/* Bottom Right ki taraf Purple/Pink color */
+.ftx-blob-purple {
+    bottom: 5%;
+    right: 15%;
+    width: 400px;
+    height: 400px;
+    background: #a64dff;
+    animation-delay: -10s; /* Delay taake sab ek sath move na hon */
+}
+
+/* Animation jo blobs ko har taraf dheere dheere hilaati hai */
+@keyframes ftx-float-blob {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(40px, -60px) scale(1.3);
+    }
+
+    66% {
+        transform: translate(-30px, 30px) scale(0.9);
+    }
+
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+/* =========================================
+   HERO MARQUEE (FINTRACK PRO)
+========================================= */
+.ftx-marquee-wrapper {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 1.5rem 0; /* Dashboard image se thora gap */
+    margin-bottom: 1rem;
+    background: transparent; /* No background */
+    position: relative;
+    user-select: none;
+}
+
+.ftx-marquee-track {
+    display: inline-flex;
+    /* 25s ko kam/ziada kar sakte hain speed adjust karne ke liye */
+    animation: ftx-marquee-scroll 25s linear infinite;
+}
+
+/* Hover karne par text rukk jayega (Good UX) */
+.ftx-marquee-wrapper:hover .ftx-marquee-track {
+    animation-play-state: paused;
+}
+
+.ftx-marquee-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5rem; /* Words ke beech ka gap */
+    padding-right: 1.5rem;
+    font-family: 'Plus Jakarta Sans', sans-serif; /* Ya jo aapki main font ho */
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+/* Reference image styling: Bold and Light text mix */
+.ftx-mq-light {
+    color: rgba(255, 255, 255, 0.5); /* Muted grey/white */
+    font-weight: 500;
+}
+
+.ftx-mq-bold {
+    color: #ffffff; /* Bright white */
+    font-weight: 800;
+}
+
+/* Symbols styling */
+.ftx-mq-star, .ftx-mq-plus {
+    color: #97C9E1; /* Aapki theme ka light blue color */
+    font-size: 1.3rem;
+}
+
+/* Long Arrow styling */
+.ftx-mq-arrow {
+    color: rgba(255, 255, 255, 0.3);
+    font-family: monospace; /* Taki dashes ek line mein lagain */
+    letter-spacing: -2px; /* Dashes ko jorhne ke liye */
+}
+
+/* Infinite Scrolling Animation */
+@keyframes ftx-marquee-scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+    /* Half translate hoga taake loop seamless lage */
+}
+
+.custom-text {
+    font-family: 'Phosphor';
+    font-weight: 700;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+/* Syne font */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap');
+
+@font-face {
+    font-family: 'Surgena';
+    src: url('/fonts/surgena.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Condenso';
+    src: url('/fonts/Condenso.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Safari';
+    src: url('/fonts/Safari.ttf') format('truetype');
+    font-stretch:extra-expanded;
+}
+
+/* =========================
+   GRIT FONT FAMILY
+========================= */
+
+@font-face {
+    font-family: 'Grit-thin';
+    src: url('/fonts/grift-thin.otf') format('opentype');
+   
+}
+
+@font-face {
+    font-family: 'Grit-reg';
+    src: url('/fonts/grift-regular.otf') format('opentype');
+   
+}
+
+@font-face {
+    font-family: 'Grit-med';
+    src: url('/fonts/grift-medium.otf') format('opentype');
+}
+@font-face {
+    font-family: 'Grit-semi';
+    src: url('/fonts/grift-semibold.otf') format('opentype');
+   
+}
+
+@font-face {
+    font-family: 'Grit-bold';
+    src: url('/fonts/grift-bold.otf') format('opentype');
+    
+}
+
+@font-face {
+    font-family: 'Grit-ex';
+    src: url('/fonts/grift-extrabold.otf') format('opentype');
+    
+}
+
+.ftx-dash-title {
+    font-family: "Condenso", sans-serif;
+}
+
+h1 {
+    font-family: "Syne", sans-serif;
+}
+* {
+    font-family: "Grit-semi", sans-serif;
+}
+
+/* =========================================
+   FTX UNIQUE NAVBAR STYLES 
+   ========================================= */
+
+:root {
+    /* Colors strictly matching the image */
+    --ftx-bg-main: #1C1C1E; /* Dark pill background */
+    --ftx-bg-dropdown: #2C2C2E;
+    --ftx-bg-btn-dark: #333336;
+    --_font-default: "Syne", sans-serif;
+    --_font-accent: "Syne", sans-serif;
+    --ftx-bg-btn-light: #FFFFFF;
+    --ftx-text-muted: #A1A1A6;
+    --ftx-text-white: #FFFFFF;
+    --ftx-text-black: #000000;
+    --ftx-border-color: rgba(255, 255, 255, 0.08);
+    --ftx-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ========================================= */
+/* FTX NAVIGATION (FLOATING PILL DESIGN)     */
+/* ========================================= */
+
+/* Wrapper to center the floating pill */
+.ftx-nav-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 10px;
+    position: fixed; /* Fix to top */
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    font-family: 'Inter', -apple-system, sans-serif; /* Modern font */
+}
+
+/* The Dark Pill Container */
+.ftx-nav-container {
+    background-color: var(--ftx-bg-main, #111); /* Fallback color added */
+    border: 1px solid var(--ftx-border-color, #333);
+    border-radius: 50px;
+    padding: 8px 12px 8px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px; /* Space between logo, links, and buttons */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+    position: relative; /* Zaroori hai mobile dropdown ke liye */
+}
+
+/* Logo Styling */
+.ftx-nav-logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-family: "Syne", sans-serif;
+}
+
+.ftx-logo-text {
+    color: var(--ftx-text-white, #fff);
+    font-size: 1.2rem;
+    font-weight: 800;
+    font-family: "Syne", sans-serif;
+    letter-spacing: -0.5px;
+}
+
+.ftx-logo-dot {
+    color: #4BC0C0; /* Teal dot for a pop of modern finance feel */
+}
+
+/* Collapsible Wrapper (Desktop view) */
+.ftx-nav-collapse {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+/* Links List */
+.ftx-nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-family: "Syne", sans-serif;
+    margin: 0 !important;
+    padding: 0;
+}
+
+.ftx-nav-item {
+    position: relative;
+    margin-bottom: 0 !important;
+}
+
+.ftx-nav-link {
+    color: var(--ftx-text-muted, #999);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: "Syne", sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--ftx-transition, 0.3s ease);
+}
+
+    .ftx-nav-link:hover {
+        color: var(--ftx-text-white, #fff);
+    }
+
+.ftx-chevron {
+    transition: var(--ftx-transition, 0.3s ease);
+}
+
+.ftx-nav-link svg {
+    display: block;
+}
+
+/* Dropdown Magic (CSS Only, No JS) */
+.ftx-dropdown-menu {
+    position: absolute;
+    top: 150%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background-color: var(--ftx-bg-dropdown, #1a1a1a);
+    border: 1px solid var(--ftx-border-color, #333);
+    border-radius: 12px;
+    list-style: none;
+    padding: 8px;
+    min-width: 160px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    /* Animation hidden states */
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--ftx-transition, 0.3s ease);
+    margin-bottom: 0 !important;
+}
+
+/* The Invisible Hover Bridge */
+.ftx-has-dropdown::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    bottom: -20px;
+    left: 0;
+}
+
+/* Show dropdown on hover */
+.ftx-has-dropdown:hover .ftx-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Rotate chevron on hover */
+.ftx-has-dropdown:hover .ftx-chevron {
+    transform: rotate(180deg);
+}
+
+.ftx-dropdown-link {
+    display: block;
+    color: var(--ftx-text-muted, #999);
+    text-decoration: none;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-family: "Syne", sans-serif;
+    border-radius: 8px;
+    transition: var(--ftx-transition, 0.3s ease);
+}
+
+    .ftx-dropdown-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--ftx-text-white, #fff);
+    }
+
+/* Action Buttons Container */
+.ftx-nav-actions {
+    display: flex;
+    font-family: "Syne", sans-serif;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Button Base */
+.ftx-btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    font-family: "Syne", sans-serif;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: var(--ftx-transition, 0.3s ease);
+}
+
+/* "Sign In" / "Log In" Button */
+.ftx-btn-dark {
+    background-color: var(--ftx-bg-btn-dark, #333);
+    color: var(--ftx-text-white, #fff);
+}
+
+    .ftx-btn-dark:hover {
+        background-color: #444446;
+    }
+
+/* "Join Us" Button */
+.ftx-btn-light {
+    background-color: var(--ftx-bg-btn-light, #fff);
+    color: var(--ftx-text-black, #111);
+}
+
+    .ftx-btn-light:hover {
+        transform: scale(1.05); /* Slight pop effect */
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    }
+
+/* Hamburger Icon (Hidden on Desktop) */
+.ftx-mobile-toggle {
+    display: none;
+    color: var(--ftx-text-white, #fff);
+}
+
+
+/* ========================================= */
+/* RESPONSIVE: MOBILE & TABLET (COLLAPSER)   */
+/* ========================================= */
+@media (max-width: 991px) {
+    .ftx-nav-container {
+        padding: 10px 20px;
+        width: 100%;
+        max-width: 95%;
+        justify-content: space-between;
+    }
+
+    .ftx-mobile-toggle {
+        display: block !important;
+        background: none;
+        border: none;
+        color: var(--ftx-text-white, #fff);
+        cursor: pointer;
+        padding: 5px;
+        outline: none;
+    }
+
+    .ftx-nav-collapse {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: calc(100% + 15px);
+        left: 0;
+        right: 0;
+        background-color: var(--ftx-bg-main, #111);
+        border: 1px solid var(--ftx-border-color, #333);
+        border-radius: 24px; /* Thora aur gol kar diya app feel ke liye */
+        padding: 24px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+    }
+
+        .ftx-nav-collapse.show-menu {
+            display: flex !important;
+        }
+
+    /* 🌟 NAYA: 2x2 GRID (FOUR BOXES) 🌟 */
+    .ftx-nav-links {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr); /* 2 columns */
+        gap: 12px;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .ftx-nav-item {
+        margin: 0 !important;
+        width: 100%;
+    }
+
+    .ftx-nav-link {
+        background-color: #1a1a1a; /* Dark box background */
+        border: 1px solid #2a2a2a;
+        border-radius: 16px; /* Box ke rounded corners */
+        padding: 20px 10px;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column; /* Text aur icon upar neechay */
+        height: 100%;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+        /* Jab mobile par user box ko touch karega */
+        .ftx-nav-link:active {
+            background-color: #333;
+            transform: scale(0.96); /* Halka sa daba hua feel */
+        }
+
+        .ftx-nav-link svg {
+            margin-top: 8px; /* Chevron ko text ke neechay laya */
+        }
+
+    /* 🌟 DROPDOWN FIX FOR GRID 🌟 */
+    .ftx-has-dropdown {
+        position: relative;
+    }
+
+        /* Dropdown lamba hone ke bajaye ek floating drawer banega */
+        .ftx-has-dropdown .ftx-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0; /* Chotay screen pe right side se align */
+            width: calc(200% + 12px); /* Dono boxes jitni lambai le lega */
+            background: #161616;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Sub-links ko bhi 2 columns mein kar diya */
+            gap: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            z-index: 100;
+        }
+
+    .ftx-dropdown-link {
+        background: #222;
+        border-radius: 8px;
+        text-align: center;
+        padding: 10px;
+        font-size: 0.8rem;
+        display: block;
+    }
+
+    /* Actions Box (Login/Logout buttons) */
+    .ftx-nav-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+        border-top: 1px dashed #333; /* Line ko thora soft kar diya */
+        padding-top: 24px;
+        margin-top: 10px;
+    }
+
+        .ftx-nav-actions .ftx-btn,
+        .ftx-logout-form,
+        .ftx-logout-form button {
+            width: 100%;
+            display: block;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+            .ftx-logout-form button {
+                padding: 12px 20px;
+                border-radius: 50px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+}
+
+    /* =========================================
+   FTX EXACT DOPLER CLONE FOOTER
+   ========================================= */
+
+    :root {
+        --ftx-dftr-bg: #030303; /* Deepest black */
+        --ftx-dftr-border: rgba(255, 255, 255, 0.12); /* Thin subtle grid lines */
+        --ftx-dftr-text-white: #FFFFFF;
+        --ftx-dftr-text-muted: #888888;
+        --ftx-dftr-hover-bg: rgba(255, 255, 255, 0.03);
+        --ftx-dftr-font: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* Wrapper & Global */
+    .ftx-dftr-wrapper {
+        background-color: var(--ftx-dftr-bg);
+        color: var(--ftx-dftr-text-white);
+        font-family: var(--ftx-dftr-font);
+        overflow: hidden;
+        border-top: 1px solid var(--ftx-dftr-border);
+    }
+
+    /* 1. Hero / CTA Section */
+    .ftx-dftr-cta {
+        text-align: center;
+        padding: 120px 20px 80px 20px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .ftx-dftr-cta-title {
+        font-size: 4rem;
+        font-weight: 600;
+        line-height: 1.1;
+        letter-spacing: -1.5px;
+        margin-bottom: 20px;
+        z-index: 2;
+    }
+
+    .ftx-dftr-cta-sub {
+        color: var(--ftx-dftr-text-muted);
+        font-size: 1rem;
+        margin-bottom: 40px;
+        z-index: 2;
+    }
+
+    .ftx-dftr-btn-white {
+        background-color: #FFFFFF;
+        color: #000000;
+        text-decoration: none;
+        padding: 12px 24px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
+
+        .ftx-dftr-btn-white:hover {
+            background-color: #e0e0e0;
+        }
+
+    /* The Glowing Shape from Image */
+    .ftx-dftr-glow-shape {
+        position: absolute;
+        bottom: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        height: 150px;
+        background: #FFFFFF;
+        filter: blur(80px);
+        opacity: 0.15;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* 2. Main Grid Layout */
+    .ftx-dftr-main {
+        max-width: 1400px; /* Limit width on ultra-wide screens */
+        margin: 0 auto;
+    }
+
+    /* Row 1: Socials */
+    .ftx-dftr-social-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid var(--ftx-dftr-border);
+        border-bottom: 1px solid var(--ftx-dftr-border);
+    }
+
+    .ftx-dftr-social-item {
+        padding: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--ftx-dftr-text-white);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-right: 1px solid var(--ftx-dftr-border);
+        transition: background-color 0.3s ease;
+    }
+
+        .ftx-dftr-social-item:hover {
+            background-color: var(--ftx-dftr-hover-bg);
+        }
+
+    .ftx-dftr-social-name {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .ftx-dftr-arrow {
+        font-family: monospace; /* For a clean exact arrow look */
+        transition: transform 0.3s ease;
+    }
+
+    .ftx-dftr-social-item:hover .ftx-dftr-arrow {
+        transform: translateX(5px);
+    }
+
+    /* Row 2: Directory Links */
+    .ftx-dftr-links-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-bottom: 1px solid var(--ftx-dftr-border);
+    }
+
+    .ftx-dftr-link-col {
+        padding: 40px 30px 80px 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        border-right: 1px solid var(--ftx-dftr-border);
+    }
+
+    .ftx-dftr-col-title {
+        color: var(--ftx-dftr-text-muted);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .ftx-dftr-link {
+        color: var(--ftx-dftr-text-white);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+    }
+
+        .ftx-dftr-link:hover {
+            color: var(--ftx-dftr-text-muted);
+        }
+
+    /* Row 3: Bottom Bar */
+    .ftx-dftr-bottom-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 50px 30px;
+    }
+
+    .ftx-dftr-brand-info {
+        max-width: 400px;
+    }
+
+    .ftx-dftr-brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        margin-bottom: 16px;
+    }
+
+    .ftx-dftr-desc {
+        color: var(--ftx-dftr-text-muted);
+        font-size: 0.85rem;
+        line-height: 1.6;
+    }
+
+    /* Subscribe Input Group */
+    .ftx-dftr-form {
+        display: flex;
+        height: 45px;
+    }
+
+    .ftx-dftr-input {
+        background-color: #FFFFFF;
+        border: none;
+        padding: 0 20px;
+        width: 250px;
+        font-family: var(--ftx-dftr-font);
+        font-size: 0.8rem;
+        color: #000;
+        outline: none;
+    }
+
+        .ftx-dftr-input::placeholder {
+            color: #666;
+            letter-spacing: 1px;
+        }
+
+    .ftx-dftr-submit {
+        background-color: #1A1A1A;
+        color: #FFFFFF;
+        border: 1px solid #1A1A1A;
+        padding: 0 24px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .ftx-dftr-submit:hover {
+            background-color: #333333;
+        }
+
+    /* Utility to remove right border from last columns */
+    .ftx-dftr-no-border-right {
+        border-right: none !important;
+    }
+
+    /* Responsive Rules */
+    @media (max-width: 1024px) {
+        .ftx-dftr-social-row, .ftx-dftr-links-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .ftx-dftr-social-item:nth-child(2), .ftx-dftr-link-col:nth-child(2) {
+            border-right: none;
+        }
+
+        .ftx-dftr-social-item:nth-child(1), .ftx-dftr-social-item:nth-child(2) {
+            border-bottom: 1px solid var(--ftx-dftr-border);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ftx-dftr-cta-title {
+            font-size: 2.5rem;
+        }
+
+        .ftx-dftr-social-row, .ftx-dftr-links-row {
+            grid-template-columns: 1fr;
+        }
+
+        .ftx-dftr-social-item, .ftx-dftr-link-col {
+            border-right: none !important;
+            border-bottom: 1px solid var(--ftx-dftr-border);
+        }
+
+        .ftx-dftr-link-col {
+            padding: 30px;
+        }
+
+        .ftx-dftr-bottom-row {
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .ftx-dftr-input {
+            width: 200px;
+        }
+    }
+
+    /* =========================================
+   FTX DASHBOARD (LIME & GRIDLINES THEME)
+   ========================================= */
+
+    :root {
+        --ftx-dash-bg: #eaecdf; /* Light greenish beige */
+        --ftx-dash-grid: #E1E4D8; /* Gridline color */
+        --ftx-dash-dark: #111111; /* Deep black for sidebar */
+        --ftx-dash-lime: #C7EF4E; /* Vibrant Lime Green */
+        --ftx-dash-white: #FFFFFF;
+        --ftx-dash-text: #1C1C1C;
+        --ftx-dash-text-muted: #8E8E8E;
+        --ftx-radius: 28px;
+    }
+
+    /* Base Layout */
+    .ftx-dash-all {
+        margin: 0;
+        padding: 0;
+        background-color: var(--ftx-dash-bg);
+        border-radius: 30px;
+    }
+
+    .ftx-dash-layout {
+        display: flex;
+        /* FIX: Top navbar ki wajah se aane wale double scroll ko rokne ke liye */
+        min-height: 100vh;
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* Sidebar */
+    .ftx-dash-sidebar {
+        width: 80px;
+        background-color: var(--ftx-dash-dark);
+        border-radius: 0px 30px 30px 0px;
+        display: flex;
+        flex-direction: column;
+        
+        align-items: center;
+        padding: 30px 20px;
+        z-index: 10;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.05);
+    }
+
+    .ftx-dash-logo-circle {
+        width: 36px;
+        height: 36px;
+        border: 3px solid var(--ftx-dash-lime);
+        border-radius: 50%;
+        margin-bottom: 60px;
+    }
+
+    .ftx-dash-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .ftx-dash-nav-item {
+        color: #666;
+        transition: color 0.3s;
+    }
+
+        .ftx-dash-nav-item svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .ftx-dash-nav-item:hover, .ftx-dash-nav-item.active {
+            color: var(--ftx-dash-white);
+        }
+
+    /* Main Content Area + GRIDLINES BACKGROUND */
+    .ftx-dash-main {
+        flex-grow: 1; /* Main content ko bachi hui space lene de */
+        padding: 30px; /* Sidebar aur edges se thora distance */
+        background-color: #F4F6F0; /* Base color */
+        background-image: linear-gradient(#E6EADF 1px, transparent 1px), linear-gradient(90deg, #E6EADF 1px, transparent 1px);
+        background-size: 20px 20px;
+        overflow-y: auto; /* Agar content lamba ho jaye toh scroll aye */
+    }
+
+    /* Header */
+    .ftx-dash-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+
+    .ftx-dash-title-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+        .ftx-dash-title-group h1 {
+            font-size: 5rem;
+            
+
+            color: var(--ftx-dash-text);
+            margin: 0;
+        }
+
+    .ftx-dash-select {
+        background: var(--ftx-dash-white);
+        border: 1px solid #E0E0E0;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .ftx-dash-user-group {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .ftx-dash-icon-btn {
+        background: var(--ftx-dash-white);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+
+        .ftx-dash-icon-btn svg {
+            width: 18px;
+            color: var(--ftx-dash-text);
+        }
+
+    .ftx-dash-profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 500;
+    }
+
+    .ftx-dash-avatar img {
+        width: 40px;
+        height: 40px;        
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+    }
+
+    /* ==========================================
+   BENTO GRID SYSTEM (UPDATED LAYOUT)
+   ========================================== */
+    .ftx-dash-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 0.7fr;
+        grid-auto-rows: minmax(min-content, auto);
+        gap: 24px;
+    }
+
+    /* Placement of specific cards in the grid */
+    .ftx-card-transactions {
+        grid-column: 1 / 2;
+        grid-row: 1 / 3;
+    }
+
+    .ftx-card-spending {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+    }
+
+    .ftx-card-transfer {
+        grid-column: 3 / 4;
+        grid-row: 1 / 2;
+    }
+
+    .ftx-credit-card {
+        grid-column: 1 / 2;
+        grid-row: 3 / 4;
+        justify-content: space-between;
+    }
+
+    .ftx-card-budget {
+        grid-column: 2 / 3;
+        grid-row: 2 / 4;
+    }
+
+    .ftx-promo {
+        grid-column: 3 / 4;
+        grid-row: 2 / 3;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* New Cards */
+    .ftx-card-summary {
+        grid-column: 3 / 4;
+        grid-row: 3 / 4;
+    }
+
+    .ftx-card-goal {
+        grid-column: 1 / 4;
+        grid-row: 4 / 5;
+    }
+
+    /* Cards Base */
+    .ftx-card {
+        background: var(--ftx-dash-white);
+        border-radius: var(--ftx-radius);
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        display: flex;
+        flex-direction: column;
+        /* FIX: Cards grid space poori lein aur corners rounded rahein */
+        height: 100%;
+        overflow: hidden;
+        transition:0.3s;
+        box-sizing: border-box;
+    }
+
+        .ftx-card:hover {
+            transform: translateY(-4px),scale(1.1);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08); /* Thora deep shadow */
+        }
+
+    .ftx-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .ftx-card-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+    .ftx-card-lime-bg {
+        background-color: var(--ftx-dash-lime);
+        color: var(--ftx-dash-dark);
+    }
+
+    /* Chart Container Wrapper */
+    .ftx-chart-wrapper {
+        position: relative;
+        /* FIX: Chart overflow rokne aur proper height ke liye */
+        flex-grow: 1;
+        min-height: 150px;
+        width: 100%;
+    }
+
+    /* ==========================================
+   Card Internal Elements
+   ========================================== */
+    .ftx-btn-dark-small {
+        background: var(--ftx-dash-dark);
+        color: var(--ftx-dash-white);
+        padding: 6px 14px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .ftx-transaction-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .ftx-t-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 15px;
+    }
+
+    .ftx-t-details h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+
+    .ftx-t-details span {
+        font-size: 0.8rem;
+        color: var(--ftx-dash-text-muted);
+    }
+
+    .ftx-t-amount {
+        margin-left: auto;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .ftx-legend {
+        font-size: 0.8rem;
+        color: var(--ftx-dash-text-muted);
+    }
+
+    .ftx-dot-lime {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: var(--ftx-dash-lime);
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+    .ftx-avatars-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        margin-top: 15px;
+    }
+
+    .ftx-avatar-sm {
+        width: 36px;
+        height: 36px;
+        background: #eee;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+    }
+
+        .ftx-avatar-sm.add-btn {
+            background: var(--ftx-dash-white);
+            border: 1px dashed #ccc;
+            cursor: pointer;
+        }
+
+    .ftx-input-grey {
+        background: #F4F6F0;
+        border: none;
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        outline: none;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .ftx-btn-dark-full {
+        background: var(--ftx-dash-dark);
+        color: var(--ftx-dash-white);
+        border: none;
+        padding: 14px;
+        border-radius: 16px;
+        width: 100%;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: auto;
+    }
+
+    .ftx-cc-top {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        color: #555;
+    }
+
+    .ftx-cc-chip {
+        width: 30px;
+        height: 20px;
+        background: rgba(0,0,0,0.1);
+        border-radius: 4px;
+    }
+
+    .ftx-cc-balance {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-top: 30px;
+        color: var(--ftx-dash-dark);
+    }
+
+    .ftx-promo h2 {
+        font-size: 1.8rem;
+        line-height: 1.2;
+        margin: 0;
+    }
+
+        .ftx-promo h2 span {
+            border: 2px solid var(--ftx-dash-dark);
+            border-radius: 20px;
+            padding: 0 8px;
+            display: inline-block;
+        }
+
+    /* New Elements Styling (Summary & Goal) */
+    .stat-box h4 {
+        margin: 5px 0 0 0;
+        font-size: 1.4rem;
+    }
+
+    .mt-2 {
+        margin-top: 10px;
+    }
+
+    .mt-3 {
+        margin-top: 15px;
+    }
+
+    .ftx-progress-bg {
+        background: #E6EADF;
+        height: 12px;
+        border-radius: 10px;
+        margin-top: 10px;
+        overflow: hidden;
+    }
+
+    .ftx-progress-fill {
+        background: var(--ftx-dash-lime);
+        height: 100%;
+        width: 33%; /* Default 33% */
+        border-right: 2px solid #111;
+    }
+
+    /* ==========================================
+   Responsive Breakpoints
+   ========================================== */
+    @media (max-width: 1100px) {
+        .ftx-dash-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .ftx-card-transactions {
+            grid-column: 1 / 2;
+            grid-row: 1 / 3;
+        }
+
+        .ftx-card-spending {
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+        }
+
+        .ftx-card-budget {
+            grid-column: 2 / 3;
+            grid-row: 2 / 3;
+        }
+
+        .ftx-credit-card {
+            grid-column: 1 / 2;
+            grid-row: 3 / 4;
+        }
+
+        .ftx-card-transfer {
+            grid-column: 2 / 3;
+            grid-row: 3 / 4;
+        }
+
+        .ftx-promo {
+            grid-column: 1 / 2;
+            grid-row: 4 / 5;
+        }
+
+        .ftx-card-summary {
+            grid-column: 2 / 3;
+            grid-row: 4 / 5;
+        }
+
+        .ftx-card-goal {
+            grid-column: 1 / 3;
+            grid-row: 5 / 6;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ftx-dash-layout {
+            flex-direction: column;
+            /* FIX: Mobile pe bottom nav ke liye neechay thori jagah chori hai */
+            padding-bottom: 80px;
+        }
+
+        .ftx-dash-sidebar {
+            width: 100%;
+            /* FIX: Mobile Sidebar ko Bottom Fixed Nav banaya gaya hai */
+            border-radius: 20px 20px 0 0;
+            flex-direction: row;
+            justify-content: space-evenly;
+            padding: 15px 10px;
+            margin: 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 999;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+
+        .ftx-dash-logo-circle {
+            display: none; /* Mobile view mein nav clear rakhne ke liye logo hide kiya hai */
+        }
+
+        .ftx-dash-nav {
+            flex-direction: row;
+            gap: 0;
+            width: 100%;
+            justify-content: space-around;
+        }
+
+        .ftx-dash-main {
+            padding: 15px;
+        }
+
+        .ftx-dash-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .ftx-dash-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .ftx-card {
+            grid-column: 1 / -1 !important;
+            grid-row: auto !important;
+        }
+    }
+
+/* Profile Dropdown Styling */
+.ftx-dash-profile-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding-bottom: 10px; /* Hover area cover karne ke liye */
+    margin-bottom: -10px;
+}
+
+.ftx-profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    min-width: 180px;
+    padding: 8px 0;
+    z-index: 100;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+/* Hover karne par dropdown show hoga */
+.ftx-dash-profile-wrapper:hover .ftx-profile-dropdown {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.ftx-profile-dropdown a, .ftx-profile-dropdown button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 20px;
+    color: #1e293b;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+    .ftx-profile-dropdown a:hover, .ftx-profile-dropdown button:hover {
+        background: #f8fafc;
+        color: #f15e36; /* Brand color */
+    }
+
+.ftx-profile-dropdown .text-danger:hover {
+    color: #dc3545 !important;
+    background: #fef2f2;
+}
+
+.ftx-dropdown-divider {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 6px 0;
+}
+
+/* =========================================
+   FinTrack Custom Grid Layout & Styling
+   ========================================= */
+
+/* Update this class in your CSS */
+.ft-dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Ab sirf 1 column hai jo full width lega */
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+/* Responsive Grid for Mobile/Tablets */
+@media (max-width: 992px) {
+    .ft-dashboard-grid {
+        grid-template-columns: 1fr; /* Single column on smaller screens */
+    }
+}
+
+/* Reusable Card Styling */
+.ft-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.ft-card-header {
+    background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+    color: white;
+    padding: 16px 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.ft-card-body {
+    padding: 24px;
+}
+
+/* Custom Form Styling */
+.ft-form-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ft-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.ft-input {
+    padding: 12px 16px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+    .ft-input:focus {
+        outline: none;
+        border-color: #198754;
+        background-color: #fff;
+        box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.2);
+    }
+
+.ft-btn-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: #198754;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+    .ft-btn-submit:hover {
+        background-color: #146c43;
+    }
+
+/* Custom Table Layout */
+.ft-table-wrapper {
+    max-height: 814px;
+    overflow-y: auto;
+    border-radius: 0 0 12px 12px;
+}
+
+.ft-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+    .ft-table th, .ft-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #eaedf1;
+    }
+
+    .ft-table th {
+        background-color: #f8f9fa;
+        color: #6c757d;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .ft-table tr:hover {
+        background-color: #fdfdfd;
+    }
+
+/* Custom Badges */
+.ft-badge {
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+}
+
+.ft-badge-income {
+    background-color: rgba(25, 135, 84, 0.1);
+    color: #198754;
+    border: 1px solid rgba(25, 135, 84, 0.2);
+}
+
+.ft-badge-expense {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+/* Custom Scrollbar for the table */
+.ft-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ft-table-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.ft-table-wrapper::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+    .ft-table-wrapper::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+
+
+/* =========================================
+   Summary Cards Grid
+   ========================================= */
+.ft-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 barabar columns */
+    gap: 24px;
+    font-family: 'Inter', -apple-system;
+    margin-bottom: 24px;
+}
+
+.ft-stat-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    font-family: 'Inter', -apple-system;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 6px solid; /* Card ke left par color line */
+    transition: transform 0.3s ease;
+}
+
+    .ft-stat-card:hover {
+        transform: translateY(-5px); /* Hover karne par thora upar uthega */
+    }
+
+    /* Colors for specific cards */
+    .ft-stat-card.income {
+        border-left-color: #198754;
+    }
+
+    .ft-stat-card.expense {
+        border-left-color: orange;
+    }
+
+    .ft-stat-card.balance {
+        border-left-color: #0d6efd;
+    }
+
+.ft-stat-title {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.ft-stat-amount {
+    font-size: 2rem;    
+    font-weight: 800;
+    color: #2c3e50;
+    margin: 0;
+}
+
+/* Mobile ke liye Summary Grid ko 1 column kar do */
+@media (max-width: 768px) {
+    .ft-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================
+     FinTrack Custom Auth Page Styles
+========================================= */
+.ft-auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    padding: 20px;
+}
+
+.ft-auth-container {
+    background: linear-gradient(a0a0a0,10%, white 90%);
+    border-radius: 24px;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+    display: flex;
+    max-width: 1500px;
+    width: 100%;
+    overflow: hidden;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* --- Left Side: Form --- */
+.ft-auth-form-side {
+    flex: 1;
+    padding: 40px 40px 20px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ft-auth-logo svg {
+    width: 24px;
+    height: 24px;
+    color: #f15e36;
+    margin-bottom: 20px;
+}
+
+.ft-auth-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 10px 0;
+}
+
+.ft-auth-subtitle {
+    color: #999;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+.ft-form-group {
+    margin-bottom: 20px;
+}
+
+.ft-form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #777;
+    margin-bottom: 8px;
+}
+
+.ft-form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+    .ft-form-input:focus {
+        border-color: #f15e36;
+        box-shadow: 0 0 0 3px rgba(241, 94, 54, 0.1);
+    }
+
+.ft-btn-primary {
+    width: 100%;
+    background-color: #f15e36;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+    .ft-btn-primary:hover {
+        background-color: #d94d28;
+    }
+
+/* Social Divider */
+.ft-auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 24px 0;
+    color: #999;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+    .ft-auth-divider::before, .ft-auth-divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #eee;
+    }
+
+    .ft-auth-divider:not(:empty)::before {
+        margin-right: .25em;
+    }
+
+    .ft-auth-divider:not(:empty)::after {
+        margin-left: .25em;
+    }
+
+/* Social Buttons Container */
+.ft-social-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+/* Button Base Styling */
+.ft-btn-social {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e0e0e0; /* Border wapas lagaya taake pehle acha lage */
+    color: #4b5563; /* Text ka normal color */
+    font-size: 15px;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Icon aur text ke beech ka fasla */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth transition */
+}
+
+    /* Hover Effect - The Google Magic */
+    .ft-btn-social:hover {
+        background: linear-gradient(45deg, #4285F4, #EA4335, #FBBC05, #34A853);
+        border-color: transparent; /* Hover par border gayab */
+        color: #ffffff; /* Hover par text white ho jayega */
+        box-shadow: 0 4px 15px rgba(66, 133, 244, 0.4); /* Thoda sa glowing shadow */
+    }
+
+    /* Google Icon Styling */
+    .ft-btn-social img {
+        background: transparent;
+        border-radius: 50%;
+        padding: 2px;
+        transition: all 0.3s ease;
+    }
+
+    /* Jab button par hover ho, toh image ke peeche white circle aa jaye taake colors clash na hon */
+    .ft-btn-social:hover img {
+        background: #ffffff;
+    }
+
+.ft-auth-footer {
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+}
+
+    .ft-auth-footer a {
+        color: #f15e36;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+/* --- Right Side: Slider/Image --- */
+.ft-auth-slider-side {
+    flex: 1;
+    background: url('https://i.pinimg.com/1200x/55/9a/bd/559abdad0730885d88271bd36e527630.jpg'); /* FinTrack Theme Gradient */
+    background-size:cover;
+    background-position:center;
+    border-radius: 16px;
+    position: relative;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: white;
+    min-height: 500px;
+}
+
+.ft-slider-tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.ft-tag {
+    background: #1A1A1A;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    box-shadow: 0 0 30px black;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.ft-slider-quote {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 24px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ft-slider-author {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.ft-slider-role {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.ft-slider-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    box-shadow: 0 0 100px black;
+    background: #ffffff;
+    padding: 6px;
+    border-radius: 12px;
+}
+
+.ft-slider-btn {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #1a1a1a;
+    transition: 0.2s;
+}
+
+    .ft-slider-btn:hover {
+        background: #f0f0f0;
+    }
+
+/* Validation Error Stylings */
+.text-danger {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border: 1px solid #f5c2c7;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+    .ft-auth-container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .ft-auth-form-side {
+        padding: 20px;
+    }
+
+    .ft-auth-slider-side {
+        display: none; /* Choti screen par slider hide kar diya taake form clear dikhe */
+    }
+}
+
+/* Modern Hover Animations */
+        .ftx-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, box-shadow;
+        }
+
+            .ftx-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            }
+
+        /* Subtle scaling for transaction items */
+        .ftx-transaction-item {
+            transition: all 0.2s ease-in-out;
+            padding: 8px; /* Added slight padding for hover effect bounds */
+            border-radius: 8px;
+        }
+
+            .ftx-transaction-item:hover {
+                transform: scale(1.02) translateX(4px);
+                background-color: rgba(0, 0, 0, 0.02);
+            }
+
+        /* Avatar pop effect */
+        .ftx-avatar-sm {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+            .ftx-avatar-sm:hover {
+                transform: scale(1.15) rotate(5deg);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+        /* Button float effects */
+        .ftx-btn-dark-small, .ftx-btn-dark-full {
+            transition: all 0.2s ease;
+        }
+
+            .ftx-btn-dark-small:hover, .ftx-btn-dark-full:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(17, 17, 17, 0.2);
+                opacity: 0.9;
+            }
+
+        /* Bill items highlight */
+        .ftx-bill-item {
+            transition: background 0.2s ease, padding-left 0.2s ease;
+            border-radius: 6px;
+        }
+
+            .ftx-bill-item:hover {
+                background: #fafafa;
+                padding-left: 8px;
+            }
+
+
+/* =========================================
+           1. HAMSTER LOADER & SCREEN
+           ========================================= */
+#ftx-loader-screen {
+    position: fixed;
+    inset: 0;
+    background-color: #000; /* Dark background to match the theme */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#loader-welcome-text {
+    display: none;
+    opacity: 0;
+    /* ✨ Purana wala text gradient ✨ */
+    background: linear-gradient(135deg, #fff, #97C9E1, #0789D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    text-align: center;
+}
+
+/* From Uiverse.io by Nawsome - Modified with Gradients */
+.wheel-and-hamster {
+    --dur: 1s;
+    position: relative;
+    width: 12em;
+    height: 12em;
+    font-size: 14px;
+}
+
+.wheel, .hamster, .hamster div, .spoke {
+    position: absolute;
+}
+
+.wheel, .spoke {
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ✨ ADDED GRADIENTS TO THE WHEEL ✨ */
+.wheel {
+    background: radial-gradient(100% 100% at center, transparent 47.8%, #2563eb 48%, #8b5cf6 52%);
+    z-index: 2;
+}
+
+/* ✨ ADDED GRADIENTS TO THE SPOKES ✨ */
+.spoke {
+    animation: spoke var(--dur) linear infinite;
+    background: radial-gradient(100% 100% at center, #3b82f6 4.8%, transparent 5%), linear-gradient(transparent 46.9%, #fff 47% 52.9%, transparent 53%) 50% 50% / 99% 99% no-repeat;
+}
+
+.hamster {
+    animation: hamster var(--dur) ease-in-out infinite;
+    top: 50%;
+    left: calc(50% - 3.5em);
+    width: 7em;
+    height: 3.75em;
+    transform: rotate(4deg) translate(-0.8em,1.85em);
+    transform-origin: 50% 0;
+    z-index: 1;
+}
+
+.hamster__head {
+    animation: hamsterHead var(--dur) ease-in-out infinite;
+    background: hsl(30,90%,55%);
+    border-radius: 70% 30% 0 100% / 40% 25% 25% 60%;
+    box-shadow: 0 -0.25em 0 hsl(30,90%,80%) inset, 0.75em -1.55em 0 hsl(30,90%,90%) inset;
+    top: 0;
+    left: -2em;
+    width: 2.75em;
+    height: 2.5em;
+    transform-origin: 100% 50%;
+}
+
+.hamster__ear {
+    animation: hamsterEar var(--dur) ease-in-out infinite;
+    background: hsl(0,90%,85%);
+    border-radius: 50%;
+    box-shadow: -0.25em 0 hsl(30,90%,55%) inset;
+    top: -0.25em;
+    right: -0.25em;
+    width: 0.75em;
+    height: 0.75em;
+    transform-origin: 50% 75%;
+}
+
+.hamster__eye {
+    animation: hamsterEye var(--dur) linear infinite;
+    background-color: hsl(0,0%,0%);
+    border-radius: 50%;
+    top: 0.375em;
+    left: 1.25em;
+    width: 0.5em;
+    height: 0.5em;
+}
+
+.hamster__nose {
+    background: hsl(0,90%,75%);
+    border-radius: 35% 65% 85% 15% / 70% 50% 50% 30%;
+    top: 0.75em;
+    left: 0;
+    width: 0.2em;
+    height: 0.25em;
+}
+
+.hamster__body {
+    animation: hamsterBody var(--dur) ease-in-out infinite;
+    background: hsl(30,90%,90%);
+    border-radius: 50% 30% 50% 30% / 15% 60% 40% 40%;
+    box-shadow: 0.1em 0.75em 0 hsl(30,90%,55%) inset, 0.15em -0.5em 0 hsl(30,90%,80%) inset;
+    top: 0.25em;
+    left: 2em;
+    width: 4.5em;
+    height: 3em;
+    transform-origin: 17% 50%;
+    transform-style: preserve-3d;
+}
+
+.hamster__limb--fr, .hamster__limb--fl {
+    clip-path: polygon(0 0,100% 0,70% 80%,60% 100%,0% 100%,40% 80%);
+    top: 2em;
+    left: 0.5em;
+    width: 1em;
+    height: 1.5em;
+    transform-origin: 50% 0;
+}
+
+.hamster__limb--fr {
+    animation: hamsterFRLimb var(--dur) linear infinite;
+    background: linear-gradient(hsl(30,90%,80%) 80%,hsl(0,90%,75%) 80%);
+    transform: rotate(15deg) translateZ(-1px);
+}
+
+.hamster__limb--fl {
+    animation: hamsterFLLimb var(--dur) linear infinite;
+    background: linear-gradient(hsl(30,90%,90%) 80%,hsl(0,90%,85%) 80%);
+    transform: rotate(15deg);
+}
+
+.hamster__limb--br, .hamster__limb--bl {
+    border-radius: 0.75em 0.75em 0 0;
+    clip-path: polygon(0 0,100% 0,100% 30%,70% 90%,70% 100%,30% 100%,40% 90%,0% 30%);
+    top: 1em;
+    left: 2.8em;
+    width: 1.5em;
+    height: 2.5em;
+    transform-origin: 50% 30%;
+}
+
+.hamster__limb--br {
+    animation: hamsterBRLimb var(--dur) linear infinite;
+    background: linear-gradient(hsl(30,90%,80%) 90%,hsl(0,90%,75%) 90%);
+    transform: rotate(-25deg) translateZ(-1px);
+}
+
+.hamster__limb--bl {
+    animation: hamsterBLLimb var(--dur) linear infinite;
+    background: linear-gradient(hsl(30,90%,90%) 90%,hsl(0,90%,85%) 90%);
+    transform: rotate(-25deg);
+}
+
+.hamster__tail {
+    animation: hamsterTail var(--dur) linear infinite;
+    background: hsl(0,90%,85%);
+    border-radius: 0.25em 50% 50% 0.25em;
+    box-shadow: 0 -0.2em 0 hsl(0,90%,75%) inset;
+    top: 1.5em;
+    right: -0.5em;
+    width: 1em;
+    height: 0.5em;
+    transform: rotate(30deg) translateZ(-1px);
+    transform-origin: 0.25em 0.25em;
+}
+
+/* Hamster Animations */
+@keyframes hamster {
+    from, to {
+        transform: rotate(4deg) translate(-0.8em,1.85em);
+    }
+
+    50% {
+        transform: rotate(0) translate(-0.8em,1.85em);
+    }
+}
+
+@keyframes hamsterHead {
+    from, 25%, 50%, 75%, to {
+        transform: rotate(0);
+    }
+
+    12.5%, 37.5%, 62.5%, 87.5% {
+        transform: rotate(8deg);
+    }
+}
+
+@keyframes hamsterEye {
+    from, 90%, to {
+        transform: scaleY(1);
+    }
+
+    95% {
+        transform: scaleY(0);
+    }
+}
+
+@keyframes hamsterEar {
+    from, 25%, 50%, 75%, to {
+        transform: rotate(0);
+    }
+
+    12.5%, 37.5%, 62.5%, 87.5% {
+        transform: rotate(12deg);
+    }
+}
+
+@keyframes hamsterBody {
+    from, 25%, 50%, 75%, to {
+        transform: rotate(0);
+    }
+
+    12.5%, 37.5%, 62.5%, 87.5% {
+        transform: rotate(-2deg);
+    }
+}
+
+@keyframes hamsterFRLimb {
+    from, 25%, 50%, 75%, to {
+        transform: rotate(50deg) translateZ(-1px);
+    }
+
+    12.5%, 37.5%, 62.5%, 87.5% {
+        transform: rotate(-30deg) translateZ(-1px);
+    }
+}
+
+@keyframes hamsterFLLimb {
+    from, 25%, 50%, 75%, to {
+        transform: rotate(-30deg);
+    }
+
+    12.5%, 37.5%, 62.5%, 87.5% {
+        transform: rotate(50deg);
+    }
+}
+
+@keyframes hamsterBRLimb {
+    from, 25%, 50%, 75%, to {
+        transform: rotate(-60deg) translateZ(-1px);
+    }
+
+    12.5%, 37.5%, 62.5%, 87.5% {
+        transform: rotate(20deg) translateZ(-1px);
+    }
+}
+
+@keyframes hamsterBLLimb {
+    from, 25%, 50%, 75%, to {
+        transform: rotate(20deg);
+    }
+
+    12.5%, 37.5%, 62.5%, 87.5% {
+        transform: rotate(-60deg);
+    }
+}
+
+@keyframes hamsterTail {
+    from, 25%, 50%, 75%, to {
+        transform: rotate(30deg) translateZ(-1px);
+    }
+
+    12.5%, 37.5%, 62.5%, 87.5% {
+        transform: rotate(10deg) translateZ(-1px);
+    }
+}
+
+@keyframes spoke {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(-1turn);
+    }
+}
+
+/* =========================================
+       FINTRACK PRO - HERO SECTION
+       ========================================= */
+
+.ftx-hero-wrapper {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 20px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #000000; /* Black Text as requested */
+    background: transparent; /* No background color */
+}
+
+/* --- Top Row Layout --- */
+.ftx-hero-top-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    margin-bottom: 3rem;
+}
+
+.ftx-hero-left {
+    flex: 1;
+    min-width: 300px;
+    max-width: 600px;
+}
+
+.ftx-hero-right {
+   
+    min-width: 300px;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 50px;
+}
+
+/* --- Left Side Typography --- */
+.ftx-version-badge {
+    display: inline-block;
+    border: 1px solid #999;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.ftx-main-heading {
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin: 0;
+    color: #fff;
+}
+/* =========================================
+       HOLOGRAPHIC 3D ICON (Next to "with")
+       ========================================= */
+
+.ftx-holo-icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 1.4em; /* Width of the icon relative to text */
+    height: 0.8em; /* Height of the icon */
+    border-radius: 50px; /* Rounded pill shape */
+    /* Mix of light blue, pink, and cyan to match the image */
+    background: linear-gradient(120deg, #c7d2fe 0%, #fbcfe8 50%, #bae6fd 100%);
+    /* Multiple inner shadows to give it a 3D glass look */
+    box-shadow: inset 4px 4px 8px rgba(255, 255, 255, 0.9), inset -4px -4px 12px rgba(139, 92, 246, 0.3), 3px 5px 15px rgba(0, 0, 0, 0.05);
+    position: relative;
+    margin-right: 10px; /* Space between icon and "with" */
+    margin-bottom: 8px; /* Tweak to vertically center it */
+    overflow: hidden;
+}
+
+    /* Adding a glossy white reflection over it */
+    .ftx-holo-icon::before {
+        content: '';
+        position: absolute;
+        top: -20%;
+        left: -10%;
+        width: 80%;
+        height: 120%;
+        background: radial-gradient(ellipse, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+        transform: rotate(30deg);
+    }
+
+    /* Adding a deep blue inner curve effect */
+    .ftx-holo-icon::after {
+        content: '';
+        position: absolute;
+        bottom: -10%;
+        right: -10%;
+        width: 70%;
+        height: 70%;
+        background: radial-gradient(ellipse, rgba(56, 189, 248, 0.5) 0%, rgba(56, 189, 248, 0) 70%);
+        border-radius: 50%;
+    }
+
+
+.ftx-hero-box {
+    background: linear-gradient(135deg, #fff, #97C9E1, #0789D6);
+    width: 150px;
+    height: 50px;
+    border-radius: 20px;
+}
+
+.ftx-text-gradient {
+    background: linear-gradient(135deg, #fff, #97C9E1, #0789D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+}
+
+/* --- Right Side Typography & Buttons --- */
+.ftx-hero-description {
+    font-size: 1rem;
+    color: #fff;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.ftx-hero-checkmarks {
+    display: flex;
+    gap: 20px;
+    font-size: 0.95rem;
+    color: #fff;
+    font-weight: 500;
+}
+
+    .ftx-hero-checkmarks i {
+        color: #10b981; /* Green Check */
+        margin-right: 5px;
+    }
+
+.ftx-btn-black {
+    background-color: #fff;
+    color: #0f0f0f;
+    padding: 16px 40px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    width: fit-content;
+    transition: 0.5s ;
+}
+
+    .ftx-btn-black:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        color: #000;
+        background: linear-gradient(135deg, #fff, #97C9E1, #0789D6);
+    }
+
+/* --- Dashboard Showcase Box --- */
+.ftx-dashboard-showcase {
+    position: relative;
+    width: 100%;
+    height: 700px;
+    border-radius: 30px;
+    background-color: #f3f4f6; /* Placeholder light grey background */
+    /* Yahan apni dashboard image ka link lagayen: */
+    background-image: url('https://i.pinimg.com/1200x/f5/82/a0/f582a0fd4c17ac3276cc0951d1f6ccfa.jpg');
+    background-size: cover;
+    background-position: top;
+    border: 1px solid #e5e7eb;
+}
+
+/* --- Floating Elements --- */
+.ftx-floating-users {
+    position: absolute;
+    bottom: 0;
+    left: 40px;
+    background: #ffffff;
+    padding: 12px 24px;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+}
+
+.ftx-avatars {
+    display: flex;
+}
+
+    .ftx-avatars img {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        margin-left: -10px;
+    }
+
+        .ftx-avatars img:first-child {
+            margin-left: 0;
+        }
+
+.ftx-users-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #111;
+}
+
+.ftx-floating-card {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    width: 320px;
+   
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+.ftx-card-title {
+    font-size: 3.5rem;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1;
+    color: #000;
+}
+
+.ftx-card-subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 10px 0 15px 0;
+    color: #111;
+}
+
+.ftx-card-desc {
+    font-size: 0.85rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .ftx-hero-top-row {
+        flex-direction: column;
+    }
+
+    .ftx-hero-right {
+        max-width: 100%;
+    }
+
+    .ftx-dashboard-showcase {
+        height: 600px;
+    }
+
+    .ftx-floating-card {
+        position: relative;
+        top: 20px;
+        right: auto;
+        left: 20px;
+        width: calc(100% - 40px);
+    }
+}
+
+/* ==========================================
+   CUSTOM GRADIENT SCROLLBAR
+   ========================================== */
+
+/* 1. Scrollbar ki overall width */
+::-webkit-scrollbar {
+    width: 14px; /* Thora sleek aur modern size */
+}
+
+/* 2. Scrollbar ka Track (Peeche wala background) */
+::-webkit-scrollbar-track {
+    background: #0a0a0a; /* Aapke dark theme ke hisaab se almost black */
+    border-left: 1px solid #1f1f1f; /* Halki si line taake track alag dikhe */
+}
+
+/* 3. Scrollbar ka Thumb (Jo hissa aap drag karte hain) */
+::-webkit-scrollbar-thumb {
+    /* Yahan gradient color lagaya hai - Blue se pastel Green tak */
+    background: linear-gradient(180deg, #97C9E1 0%, #a4c4a1 100%);
+    border-radius: 10px; /* Rounded corners */
+    /* Ye border transparent/track-color ki hai, is se thumb thora chota aur padded lagta hai */
+    border: 3px solid #0a0a0a;
+}
+
+    /* 4. Hover Effect (Jab mouse scrollbar par aaye) */
+    ::-webkit-scrollbar-thumb:hover {
+        /* Hover karne par colors thore bright ho jayenge */
+        background: linear-gradient(180deg, #ffffff 0%, #97C9E1 100%);
+    }
+
+/* =========================================
+           HOW IT WORKS SECTION
+           ========================================= */
+
+/* =========================================
+   DECORATIVE ANIME CHARACTERS
+========================================= */
+
+/* 1. GOJO FLOAT */
+.ftx-gojo_float img {
+    position: absolute;
+    top: 10%;
+    /* clamp() se ye responsive ho jayega: (min-size, preferred-size, max-size) */
+    right: clamp(5%, 15vw, 30%);
+    width: clamp(150px, 20vw, 320px);
+    z-index: 1; /* z-index -1 se hata kar 1 kiya taake hover kaam kare */
+    animation: anime_float 3s ease-in-out infinite;
+    cursor: pointer;
+    transition: 0.3s ease; /* Smooth transition for hover effects */
+}
+
+    .ftx-gojo_float img:hover {
+        animation-play-state: paused;
+        rotate: 10deg; /* Hover par thora rotate bhi ho jaye */
+    }
+
+/* 2. GOJO BOTTOM */
+.ftx-gojo img {
+    position: absolute;
+    bottom: 0px;
+    left: clamp(2%, 10vw, 15%);
+    width: clamp(150px, 20vw, 320px);
+    z-index: 1;
+    animation: anime_moving 4s ease-in-out infinite;
+    cursor: pointer;
+}
+
+    .ftx-gojo img:hover {
+        animation-play-state: paused;
+        
+    }
+
+/* 3. GETO BOTTOM */
+.ftx-geto img {
+    position: absolute;
+    bottom: 0px;
+    right: clamp(2%, 10vw, 15%);
+    width: clamp(130px, 18vw, 280px);
+    z-index: 1;
+    animation: anime_moving 4s ease-in-out infinite;
+    cursor: pointer;
+}
+
+    .ftx-geto img:hover {
+        animation-play-state: paused;
+    }
+
+/* =========================================
+   ANIMATION KEYFRAMES 
+   (Transform ke andar hi rotate use karein taake theek se chale)
+========================================= */
+@keyframes anime_float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(5deg);
+    }
+}
+
+@keyframes anime_moving {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(20px);
+    }
+}
+
+/* =========================================
+   MOBILE & TABLET RESPONSIVE FIXES
+========================================= */
+
+/* Tablet Screens (Ipad etc) */
+@media (max-width: 992px) {
+    .ftx-gojo_float img,
+    .ftx-gojo img,
+    .ftx-geto img {
+        /* Tablet par opacity kam kardi taake text padhne me masla na ho */
+        
+        z-index: -1; /* Tablet pe hover zaroori nahi, isliye peeche bhej diya */
+    }
+
+    .ftx-gojo_float img {
+        top: 5%;
+        right: 5%;
+    }
+
+    .ftx-gojo img {
+        left: -5%;
+    }
+
+    .ftx-geto img {
+        right: -5%;
+    }
+}
+
+/* Mobile Screens (Phones) */
+@media (max-width: 768px) {
+    .ftx-gojo_float img,
+    .ftx-gojo img,
+    .ftx-geto img {
+        /* Mobile par jagah kam hoti hai, isliye inko hide karna best practice hai */
+        display: none;
+    }
+}
+
+
+.ftx-hiw-section {
+    background-color: #ffffff; /* White background to match image */
+    padding: 6rem 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.ftx-hiw-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* --- Header Area --- */
+.ftx-hiw-header {
+    max-width: 500px;
+    position: relative;
+    z-index: 10;
+    margin-bottom: 2rem;
+}
+
+    .ftx-hiw-header .ftx-version-badge {
+        color: #374151; /* Dark text for badge on white bg */
+        border-color: #d1d5db;
+    }
+
+.ftx-hiw-title {
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 700;
+    color: #000;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+}
+
+.ftx-hiw-subtitle {
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.ftx-hand-arrow {
+    position: absolute;
+    right: -20px;
+    bottom: -10px;
+    transform: rotate(20deg);
+    opacity: 0.6;
+}
+
+/* --- Flow Wrapper & Dotted Line --- */
+.ftx-hiw-flow-wrapper {
+    position: relative;
+    min-height: 800px; /* Space for the scattered cards */
+    margin-top: 4rem;
+}
+
+.ftx-hiw-path {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* --- The Cards --- */
+.ftx-hiw-card {
+    position: absolute;
+    width: 300px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    border: 1px solid #f3f4f6;
+    z-index: 2;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .ftx-hiw-card:hover {
+        transform: translateY(-5px) scale(1.02) !important; /* Slight lift on hover */
+        box-shadow: 0 25px 45px rgba(0,0,0,0.12);
+        z-index: 5;
+    }
+
+/* The little "pin/hole" at the top of the card */
+.ftx-card-pin {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: #d1d5db;
+    border-radius: 50%;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+    .ftx-card-pin::after {
+        content: '';
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        border: 1px solid #e5e7eb;
+        border-radius: 50%;
+    }
+
+/* Card Typography */
+.ftx-step-num {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.ftx-step-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 15px;
+}
+
+.ftx-step-desc {
+    font-size: 0.9rem;
+    color: #6b7280;
+    line-height: 1.5;
+    background: #f9fafb; /* Light grey box inside card */
+    padding: 15px;
+    border-radius: 12px;
+    margin: 0;
+}
+
+/* --- Positioning the Cards (Scattered Effect) --- */
+/* Position 1: Top Right */
+.ftx-card-1 {
+    top: -50px;
+    right: 10%;
+    transform: rotate(8deg);
+}
+
+/* Position 2: Middle Left */
+.ftx-card-2 {
+    top: 250px;
+    left: 5%;
+    transform: rotate(-5deg);
+}
+
+/* Position 3: Bottom Right */
+.ftx-card-3 {
+    top: 500px;
+    right: 15%;
+    transform: rotate(3deg);
+}
+
+/* --- Bottom Note --- */
+.ftx-hiw-bottom-note {
+    position: absolute;
+    bottom: -20px;
+    left: 30%;
+    transform: rotate(-10deg);
+    font-size: 1.2rem;
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* Playful font for note */
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- Responsive Fixes --- */
+@media (max-width: 900px) {
+    .ftx-hiw-flow-wrapper {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        margin-top: 2rem;
+    }
+
+    .ftx-hiw-card {
+        position: relative;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important; /* Remove rotation on mobile */
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .ftx-hiw-path, .ftx-hiw-bottom-note, .ftx-hand-arrow {
+        display: none; /* Hide background line and playful elements on mobile for clean look */
+    }
+}
+
+/* =========================================
+           FEATURES SECTION (Scrollytelling)
+           ========================================= */
+
+
+
+.ftx-features-section {
+    /* Initial Background Color - Changes via JS */
+    --grad-color-1: #eef2ff;
+    --grad-color-2: #c7d2fe;
+    /* Variables ko use karke gradient banaya */    
+    background: linear-gradient(135deg, var(--grad-color-1) 20%, var(--grad-color-2) 100%);
+    transition: background-color 0.8s ease;
+    padding: 0 20px;
+    position: relative;
+}
+
+.ftx-feat-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 60px;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* --- Left Side (Sticky Image) --- */
+.ftx-feat-left {
+    width: 45%;
+    /* Yeh property image ko scroll hone se rokti hai */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform;
+}
+
+.ftx-img-wrapper {
+    width: 100%;
+    aspect-ratio: 4/5; /* Portrait shape card */
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+}
+
+.ftx-feat-img {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0; /* Hidden by default */
+    transform: scale(0.95);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* --- Right Side (Scrolling Text) --- */
+.ftx-feat-right {
+    width: 55%;
+    padding: 0 20px;
+}
+
+.ftx-feat-spacer {
+    height: 40vh; /* Adds empty space top and bottom for smooth scrolling feel */
+}
+
+.ftx-feat-item {
+    min-height: 80vh; /* Spacing between features */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0.15; /* Inactive text looks faded like the green image */
+    transition: opacity 0.5s ease;
+}
+
+.ftx-feat-title {
+    font-size: clamp(3rem, 5vw, 4.5rem); /* Huge Typography */
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: #000;
+    margin-bottom: 20px;
+    line-height: 1.1;
+}
+
+    .ftx-feat-title i {
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        vertical-align: middle;
+        margin-right: 15px;
+        color: rgba(0,0,0,0.7);
+    }
+
+.ftx-feat-desc {
+    font-size: 1.25rem;
+    color: #374151;
+    line-height: 1.6;
+    max-width: 500px;
+    font-weight: 500;
+}
+
+/* --- Mobile Fixes --- */
+@media (max-width: 992px) {
+    .ftx-feat-container {
+        flex-direction: column;
+    }
+
+    .ftx-feat-left {
+        width: 100%;
+        height: 45vh;
+        position: sticky;
+        top: 60px;
+        z-index: 10;
+    }
+
+    .ftx-img-wrapper {
+        aspect-ratio: 16/9; /* Landscape on mobile */
+    }
+
+    .ftx-feat-right {
+        width: 100%;
+    }
+
+    .ftx-feat-item {
+        min-height: 60vh;
+    }
+}
+.ftx-feature-svg-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Poori width cover karega */
+    height: 100%; /* Poori height cover karega */
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden; /* Extra curve screen se bahar na jaye */
+}
+
+.ftx-feature-scroll-path {
+   
+    will-change: stroke-dashoffset; /* Yeh line add karein */
+}
+
+/* Mobile par isko chupa dein ya side pe kar dein */
+@media (max-width: 992px) {
+    .ftx-feature-svg-wrapper {
+        display: none; /* Mobile par clean UI ke liye hide karna behtar hai */
+    }
+}
+
+/* =========================================
+           TRUST & TESTIMONIALS SECTION
+           ========================================= */
+.ftx-trust-section {
+    /* Ek dark background, agar aapki puri website dark hai to isko hata bhi sakte hain */
+    background-color: #0b0f19;
+    color: #ffffff;
+    padding: 100px 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+.ftx-trust-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.ftx-trust-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+    .ftx-trust-header h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 15px 0;
+    }
+
+    .ftx-trust-header p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+    }
+
+.ftx-badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #a78bfa; /* Light purple tint */
+}
+
+/* --- Glassmorphism Box --- */
+.glass-dark-box {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+/* --- Layout --- */
+.ftx-testimonial-wrapper {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+/* Left Nav */
+.ftx-testi-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 120px;
+}
+
+.ftx-user-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    filter: grayscale(100%);
+}
+
+    .ftx-user-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .ftx-user-img:hover {
+        opacity: 0.8;
+    }
+
+    /* Active Image Styling */
+    .ftx-user-img.active {
+        opacity: 1;
+        filter: grayscale(0%);
+        border: 2px solid #a78bfa; /* Accent color border */
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(167, 139, 250, 0.2);
+    }
+
+/* Right Content */
+.ftx-testi-content {
+    flex: 1;
+    padding: 50px;
+    position: relative;
+}
+
+.ftx-quote-icon {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 5rem;
+    color: rgba(255, 255, 255, 0.05);
+    line-height: 1;
+}
+
+#ftx-testi-headline {
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+#ftx-testi-desc {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.ftx-author-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+}
+
+#ftx-testi-name {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+#ftx-testi-role {
+    color: #a78bfa;
+    font-size: 0.9rem;
+}
+
+.ftx-stars {
+    color: #fbbf24; /* Yellow stars */
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+/* --- Security Banner --- */
+.ftx-security-banner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 30px;
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.ftx-sec-icon i {
+    font-size: 2.5rem;
+    color: #34d399; /* Green safe icon */
+}
+
+.ftx-sec-text {
+    display: flex;
+    flex-direction: column;
+}
+
+    .ftx-sec-text strong {
+        font-size: 1.1rem;
+    }
+
+    .ftx-sec-text span {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .ftx-testimonial-wrapper {
+        flex-direction: column;
+    }
+
+    .ftx-testi-nav {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .ftx-user-img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .ftx-testi-content {
+        padding: 30px;
+    }
+
+    #ftx-testi-headline {
+        font-size: 1.4rem;
+    }
+
+    .ftx-author-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+/* =========================================
+           INFINITE MARQUEE STRIP
+           ========================================= */
+.ftx-marquee-section {
+    /* Aapka bataya hua gradient background */
+    background: linear-gradient(135deg, #fff, #97C9E1, #0789D6);
+    padding: 20px 0;
+    overflow: hidden; /* Bahar nikalta hua text chupa dega */
+    display: flex;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    white-space: nowrap;
+}
+
+.ftx-marquee-track {
+    display: flex;
+    width: max-content;
+    /* Yeh animation 25 second mein ek chakar poora karegi */
+    animation: ftxMarqueeScroll 25s linear infinite;
+}
+
+/* Agar user mouse upar laye toh pause ho jaye (optional but good for UX) */
+.ftx-marquee-section:hover .ftx-marquee-track {
+    animation-play-state: paused;
+}
+
+.ftx-marquee-content {
+    display: flex;
+    align-items: center;
+    gap: 40px; /* Text items ke darmiyan space */
+    padding-right: 40px;
+}
+
+.ftx-marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    color: #000; /* Black text */
+    font-family: 'Inter', sans-serif; /* Aapka font */
+    font-size: 1.5rem; /* Bada aur wazeh text */
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+    /* SVG Asterisk Icon Styling */
+    .ftx-marquee-item svg {
+        width: 32px;
+        height: 32px;
+        color: #000; /* Black color icon ke liye */
+    }
+
+/* Infinite Scroll Keyframes */
+@keyframes ftxMarqueeScroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        /* 50% ka matlab hai first block complete scroll ho kar gayab hoga, aur second block uski jagah lay lega smoothly */
+        transform: translateX(-50%);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .ftx-marquee-section {
+        padding: 15px 0;
+    }
+
+    .ftx-marquee-item {
+        font-size: 1.2rem;
+        gap: 25px;
+    }
+
+    .ftx-marquee-content {
+        gap: 25px;
+        padding-right: 25px;
+    }
+
+    .ftx-marquee-item svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* =========================================
+           TEXT REVEAL MASKING CSS
+           ========================================= */
+.reveal-wrap {
+    display: inline-block;
+    overflow: hidden; /* Text jab neeche hoga toh chhup jayega */
+    vertical-align: bottom;
+}
+
+.reveal-text {
+    display: inline-block;
+    transform: translateY(100%); /* Shuru mein text ko dabey ke neeche rakhein */
+}
+
+/* =========================================
+           TRUST & TEAM SECTION CSS
+   ========================================= */
+.ftx-team-section {
+    padding: 100px 5%;
+    background-color: #050505; /* Deep pure dark background */
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 🔦 SPOTLIGHT EFFECT (OFF by default) */
+.ftx-spotlight {
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    width: 90vw;
+    max-width: 1000px;
+    height: 150%;
+    /* Purple and Blue mixture like the reference image */
+    background: radial-gradient(ellipse at top, rgba(147, 51, 234, 0.4) 0%, rgba(59, 130, 246, 0.15) 40%, transparent 70%);
+    filter: blur(80px); /* Progressive blur effect */
+    opacity: 0; /* Light shuru mein off hogi */
+    pointer-events: none;
+    z-index: 0;
+    /* Smooth transition jab ON/OFF ho */
+    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 🟢 JAB LIGHT ON HOGI (JS class add karega) */
+.ftx-team-section.light-is-on .ftx-spotlight {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+/* Z-index taake text light ke upar rahay */
+.ftx-content-wrapper {
+    position: relative;
+    z-index: 2;
+}
+
+/* Stats Container - Dark Glass Effect */
+.ftx-stats-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 100px;
+    padding: 50px;
+    background: rgba(255, 255, 255, 0.03); /* Glassy dark */
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ftx-stat-box {
+    text-align: center;
+    min-width: 200px;
+}
+
+.ftx-stat-number {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+    /* Neon Gradient Text for Dark Mode */
+    background: linear-gradient(90deg, #ffffff, #a855f7, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.ftx-stat-label {
+    font-size: 1.1rem;
+    color: #94a3b8; /* Lighter text for dark mode */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Team Section Typography */
+.ftx-team-container {
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.ftx-badge {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.ftx-main-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.ftx-subtitle {
+    color: #94a3b8;
+}
+
+.ftx-team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+/* Team Cards - Dark Glass Effect */
+.ftx-team-card {
+    background: rgba(15, 23, 42, 0.4); /* Dark translucent background */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 40px 20px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    text-align: center;
+}
+
+    .ftx-team-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(147, 51, 234, 0.15); /* Purple/Blue shadow */
+        background: rgba(15, 23, 42, 0.8);
+        border-color: rgba(147, 51, 234, 0.3);
+    }
+
+/* Images & Text inside Cards */
+.ftx-team-img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 20px;
+    border: 4px solid rgba(255,255,255,0.1);
+    transition: all 0.4s ease;
+}
+
+.ftx-team-card:hover .ftx-team-img {
+    transform: scale(1.05);
+    border-color: #a855f7;
+}
+
+.ftx-team-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.ftx-team-role {
+    font-size: 1rem;
+    color: #a855f7; /* Matching the purple spotlight */
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.ftx-team-social a {
+    color: #64748b;
+    font-size: 1.3rem;
+    margin: 0 10px;
+    transition: color 0.3s, transform 0.3s;
+    display: inline-block;
+}
+
+.ftx-team-card:hover .ftx-team-social a:hover {
+    color: #ffffff;
+    transform: translateY(-3px);
+}
+
+/* =========================================
+   TEAM CARDS - MOVING BLOBS HOVER EFFECT
+   ========================================= */
+
+    /* Card ke andar ka content upar rakhna zaroori hai taaki blobs text ke peeche rahein */
+    .ftx-team-card > * {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* 🔵 Left Niche Wala Blob (Light Blue) */
+    .ftx-team-card::before {
+        content: "";
+        position: absolute;
+        bottom: -50px;
+        left: -50px;
+        width: 200px;
+        height: 200px;
+        background: #97C9E1;
+        border-radius: 50%;
+        filter: blur(40px); /* Ise soft blob banata hai */
+        z-index: 0;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        pointer-events: none;
+    }
+
+    /* 🟦 Right Niche Wala Blob (Dark Blue) */
+    .ftx-team-card::after {
+        content: "";
+        position: absolute;
+        bottom: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        background: #0789D6;
+        border-radius: 50%;
+        filter: blur(40px); /* Ise soft blob banata hai */
+        z-index: 0;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        pointer-events: none;
+    }
+
+    /* Hover Effects */
+    .ftx-team-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(7, 137, 214, 0.15); /* Subtle shadow matching your colors */
+        border-color: transparent;
+    }
+
+        /* Hover par blobs show hon aur animate karein */
+        .ftx-team-card:hover::before {
+            opacity: 0.6; /* 100% opacity pe text parhna mushkil ho sakta hai, isliye 0.6 rakha hai */
+            animation: ftxBlobLeft 4s infinite alternate ease-in-out;
+        }
+
+        .ftx-team-card:hover::after {
+            opacity: 0.6;
+            animation: ftxBlobRight 4s infinite alternate ease-in-out;
+        }
+
+        /* Image par thora bounce effect */
+        .ftx-team-card:hover .ftx-team-img {
+            transform: scale(1.05);
+            border-color: #ffffff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+.ftx-team-img {
+    border-radius: 50%; /* Make sure image is round */
+    transition: all 0.4s ease;
+    border: 3px solid transparent; /* Border space for hover effect */
+}
+
+/* =========================================
+         🌀 KEYFRAMES FOR ORGANIC MOVEMENT
+   ========================================= */
+
+/* Movement mein thora curve aur rotation add kiya */
+@keyframes ftxBlobLeft {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(40px, 30px) scale(1.1);
+    }
+
+    100% {
+        transform: translate(80px, -20px) scale(1);
+    }
+}
+
+@keyframes ftxBlobRight {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(-50px, -30px) scale(1.15);
+    }
+
+    100% {
+        transform: translate(-20px, -60px) scale(1);
+    }
+}
+
+
+/* Import a clean geometric sans-serif font to match the design */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+/* =========================================
+         CONTACT WRAPPER
+========================================= */
+.ftx-contact-wrapper {
+    color: #fff;
+    background-color: black;
+    padding: 60px 40px;
+    margin: 0 auto;
+    /* 🔴 YEH DO LINES BOHAT ZAROORI HAIN */
+    position: relative;
+    overflow: hidden;
+}
+
+/* 🟦 Left Top Wala Blob (Soft Light Blue) */
+.ftx-blob-left {
+    position: absolute;
+    top: -10%; /* Upar ki taraf set kiya */
+    left: -10%; /* Left ki taraf set kiya */
+    width: 450px; /* Size thora chota kiya taake overwhelming na ho */
+    height: 450px;
+    background: #97C9E1;
+    border-radius: 50%; /* Pura gol rakha soft look ke liye */
+    filter: blur(120px); /* 🌟 Premium Glow Effect ke liye blur bohat barha diya */
+    z-index: 11; /* Text/Form ke peechay bhejne ke liye */
+    opacity: 0.35; /* Subtle look ke liye opacity kam ki */
+    pointer-events: none; /* Taake user galti se isay click na kare */
+    animation: ftxBlobLeft 8s infinite alternate ease-in-out; /* Animation slow aur smooth ki */
+}
+
+/* 🟦 Right Bottom Wala Blob (Deep Vibrant Blue) */
+.ftx-blob-right {
+    position: absolute;
+    bottom: -15%;
+    right: -10%;
+    width: 550px;
+    height: 550px;
+    background: #0789D6;
+    border-radius: 50%;
+    filter: blur(140px); /* 🌟 Soft Glow */
+    z-index: 11;
+    opacity: 0.4;
+    pointer-events: none;
+    animation: ftxBlobRight 10s infinite alternate ease-in-out; /* Iski timing alag rakhi taake natural lage */
+}
+
+.ftx-content-container {
+    position: relative;
+    z-index: 10;
+}
+
+/* =========================================
+   TOP HERO SECTION
+========================================= */
+.ftx-hero-header-wrapper {
+    position: relative;
+    margin-bottom: 80px;
+    display: flex;
+    flex-direction: column; /* Ab text ko block ki tarah upar-niche rakhega */
+    gap: 0px;
+}
+
+.ftx-hero-title {
+    font-size: clamp(60px, 10vw, 130px);
+    font-family: "Grit-ex", sans-serif;
+    background: linear-gradient(135deg, #fff, #97C9E1, #0789D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+/* Naya Wrapper: "Journey" aur SVG ko aamne-saamne rakhne ke liye */
+.ftx-journey-row {
+    display: flex;
+    flex-direction: row;
+    
+    flex-wrap: nowrap; /* Taki SVG neeche na gire */
+    gap: 30px; /* Text aur image ke darmiyan gap */
+}
+
+/* Graphics Container */
+.ftx-launch-graphics {
+    position: relative;
+    width: 350px;
+    height: 200px;
+    flex-shrink: 0; /* 🔥 Ye SVG ko screen choti hone par dabne ya chota hone se bachayega */
+}
+
+/* The Animated SVG Winding Line */
+.ftx-journey-path {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Rotating Stars Section */
+.ftx-rotating-stars {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 15px;
+    z-index: 2;
+}
+
+/* Star Circles (GSAP Handle karega rotation) */
+.ftx-star-circle {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .ftx-star-circle svg {
+        width: 45px;
+        height: 45px;
+    }
+
+.ftx-star-blue {
+    background-color: #a4b4c0;
+}
+
+.ftx-star-green {
+    background-color: #abbca5;
+}
+
+/* Mobile Screens ke liye (Jab screen choti ho tou SVG neechay aajaye) */
+@media (max-width: 992px) {
+    .ftx-hero-header-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .ftx-journey-row {
+        flex-direction: column;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+        .ftx-hero-title {
+            white-space: normal; /* Mobile par text ko naturally break hone dega */
+        }
+
+        .ftx-launch-graphics {
+            margin-left: 20px;
+            transform: scale(0.8);
+            transform-origin: left top;
+        }
+    }
+
+@media (max-width: 576px) {
+    .ftx-launch-graphics {
+        transform: scale(0.6);
+    }
+
+    .ftx-hero-title {
+        white-space: normal; /* Mobile par naturally wrap ho jaye */
+    }
+}
+
+/* =========================================
+         MAIN CONTENT (LEFT INFO & RIGHT FORM)
+         ========================================= */
+.ftx-content-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 120px;
+    flex-wrap: wrap;
+}
+
+/* --- Left Column Info --- */
+.ftx-info-col {
+    flex: 1;
+    min-width: 250px;
+    font-size: 13px;
+    color: white;
+    line-height: 1.6;
+}
+
+.ftx-info-block {
+    margin-bottom: 30px;
+}
+
+    .ftx-info-block p {
+        margin: 0;
+    }
+
+/* --- Right Column Form --- */
+.ftx-form-col {
+    flex: 2;
+    min-width: 300px;
+    max-width: 600px;
+}
+
+.ftx-form-group {
+    margin-bottom: 35px;
+}
+
+/* Split rows for First/Last name */
+.ftx-form-row {
+    display: flex;
+    gap: 30px;
+}
+
+    .ftx-form-row .ftx-form-group {
+        flex: 1;
+    }
+
+.ftx-label-main {
+    display: block;
+    font-weight: 700;
+    color: white;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.ftx-label-sub {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: white;
+}
+
+/* Input Fields */
+.ftx-input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #999;
+    background: transparent;
+    padding: 8px 0;
+    font-size: 14px;
+    font-family: inherit;
+    color: white;
+    outline: none;
+    border-radius: 0;
+    transition: border-color 0.3s ease;
+}
+
+    
+
+/* Select Field custom styling */
+.ftx-select-wrapper {
+    position: relative;
+    border-radius: 20px;
+}
+
+.ftx-select {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-color:black;
+   padding:10px;
+    color:white;
+}
+
+.ftx-select-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 12px;
+    height: 12px;
+}
+
+/* Checkbox styling */
+.ftx-checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: -10px;
+    margin-bottom: 35px;
+}
+
+.ftx-checkbox {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+}
+
+    .ftx-checkbox:checked::after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 8px;
+        height: 8px;
+        background: #fff;
+        border-radius: 50%;
+    }
+
+.ftx-checkbox-label {
+    font-size: 12px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Submit Button */
+.ftx-submit-btn {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .ftx-submit-btn:hover {
+        background-color: #333;
+    }
+
+/* =========================================
+         FOOTER SECTION
+         ========================================= */
+.ftx-footer {
+    border-top: 1px solid transparent; /* Keeps layout tight without actual line */
+}
+
+/* Huge Contact Info Row */
+.ftx-footer-huge {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.ftx-footer-email,
+.ftx-footer-phone {
+    font-size: clamp(30px, 5vw, 60px);
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.03em;
+    margin: 0;
+}
+
+/* Footer Details Grid */
+.ftx-footer-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 40px;
+    color: white;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+    .ftx-footer-details p {
+        margin: 0;
+        color: white;
+        line-height: 1.5;
+    }
+
+.ftx-links-right {
+    text-align: right;
+}
+
+.ftx-link {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.ftx-link-underline {
+    text-decoration: underline;
+}
+
+/* Footer Bottom Row (Copyright & Socials) */
+.ftx-footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-size: 11px;
+    border-top: 1px solid transparent;
+    padding-top: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.ftx-social-links {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ftx-social-icon {
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    color: #fff;
+}
+
+    .ftx-social-icon svg {
+        width: 18px;
+        height: 18px;
+        color: white;
+        vertical-align: middle;
+    }
+
+/* ==========================================
+   SERVICES HORIZONTAL SCROLL SECTION
+   ========================================== */
+.ftx-services-hscroll-section {
+    position: relative;
+    /* height: 1200px; ❌ Is fixed height ne mobile par khali jagah banayi thi */
+    min-height: 100vh; /* ✅ Desktop par screen jitni height lega */
+    background-color: #0a0a0a;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.ftx-sh-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+/* Header Styling */
+.ftx-sh-header {
+    padding: 0 5vw;
+    max-width: 800px;
+}
+
+    .ftx-sh-header .ftx-version-badge {
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #ccc;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+.ftx-sh-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
+
+.ftx-sh-subtitle {
+    font-size: clamp(1rem, 2vw, 1.2rem); /* Mobile par thora chota hoga */
+    color: #888;
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+/* Cards Window (The track that moves) */
+.ftx-sh-cards-window {
+    width: 100vw;
+    overflow: hidden;
+}
+
+.ftx-sh-cards-track {
+    display: flex;
+    gap: 30px;
+    padding: 0 5vw;
+    width: max-content;
+    will-change: transform;
+}
+
+/* Individual Card Styling */
+.ftx-sh-card {
+    /* clamp() width ko automatically adjust karega screen ke hisab se */
+    width: clamp(280px, 75vw, 380px);
+    min-height: 420px; /* Text badhne par card bara ho sakega */
+    height: auto;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
+    padding: clamp(25px, 4vw, 40px); /* Mobile par padding kam hogi */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: transform 0.4s ease, background 0.4s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    flex-shrink: 0;
+}
+
+    .ftx-sh-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+/* Icon Styles */
+.ftx-sh-icon {
+    width: clamp(50px, 8vw, 70px);
+    height: clamp(50px, 8vw, 70px);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(25px, 4vw, 35px);
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ftx-card-blue .ftx-sh-icon {
+    color: #97C9E1;
+}
+
+.ftx-card-pink .ftx-sh-icon {
+    color: #C1619E;
+}
+
+.ftx-card-green .ftx-sh-icon {
+    color: #a4c4a1;
+}
+
+.ftx-card-orange .ftx-sh-icon {
+    color: #e1b397;
+}
+
+/* Text Styles inside Card */
+.ftx-sh-card-title {
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.ftx-sh-card-desc {
+    font-size: clamp(0.95rem, 2vw, 1rem);
+    color: #999;
+    line-height: 1.6;
+}
+
+.ftx-sh-spacer {
+    width: 10vw;
+    flex-shrink: 0;
+}
+
+/* =========================================
+   MOBILE & TABLET RESPONSIVENESS
+   ========================================= */
+
+/* =========================================
+   SPECIFIC FIX FOR 1056px SCREENS
+   ========================================= */
+@media (max-width: 1056px) {
+    .ftx-services-hscroll-section {
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+
+    /* Header Styling */
+    .ftx-sh-header {
+        padding: 0 4vw;
+        max-width: 600px;
+    }
+
+    .ftx-sh-cards-track {
+        gap: 20px; /* Cards ke darmiyan ka gap thora kam kar diya */
+        padding: 0 4vw;
+    }
+
+    .ftx-sh-card {
+        /* Card ki width aur height specifically 1056px ke hisaab se set ki hai */
+        flex: 0 0 auto;
+        min-width: 320px !important;
+        width: 320px !important;
+        min-height: 380px;
+        padding: 30px;
+    }
+
+    .ftx-sh-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .ftx-sh-card-title {
+        font-size: 1.4rem;
+    }
+
+    
+}
+
+/* Tablets (iPad, etc) */
+@media (max-width: 992px) {
+    .ftx-services-hscroll-section {
+        padding-top: 80px;
+        padding-bottom: 80px;
+        min-height: auto; /* Tablet par height free kar di */
+    }
+
+    .ftx-sh-container {
+        gap: 40px;
+    }
+}
+
+/* Mobile Phones */
+@media (max-width: 768px) {
+    .ftx-services-hscroll-section {
+        padding-top: 60px;
+        padding-bottom: 60px;
+        height: auto; /* Mobile par massive khali jagah roknay ke liye */
+        min-height: auto;
+    }
+    /* Header Styling */
+    .ftx-sh-header {
+        padding: 0 3vw;
+        max-width: 400px;
+    }
+
+    .ftx-sh-container {
+        gap: 30px;
+    }
+
+    .ftx-sh-card {
+        min-height: 350px;
+    }
+
+    /* Mobile pe jab native scroll on ho jaye, toh scrollbar chupane ke liye */
+    .ftx-sh-cards-track::-webkit-scrollbar {
+        display: none;
+    }
+
+    .ftx-sh-cards-track {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+/* =========================================
+   TEXT GRADIENT HOVER SHINE EFFECT
+   ========================================= */
+#ftx-gradient-text,
+.ftx-hover-gradient {
+    /* Yahan maine shuru (0%, 15%) aur aakhir (85%, 100%) me color ko White rakha hai. 
+       Agar aapka text Black ya koi aur hai, toh #ffffff ki jagah apna color code likhein! */
+    background: linear-gradient(135deg, #ffffff 0%, #ffffff 15%, #97C9E1 40%, #0789D6 60%, #ffffff 85%, #ffffff 100%);
+    background-size: 300% 100%;
+    background-position: 0% 0%; /* Start position */
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* =========================================
+   ROTATING "L" SHAPE (FEATURES SECTION)
+   ========================================= */
+
+
+.ftx-L-lolide {
+    position: absolute;
+    top: 50px; /* Shuru mein thora upar hoga */
+    right: 10%; /* Left side se 10% andar (apni marzi se adjust kar lein) */
+    width: 320px; /* Image ka size (apni zaroorat ke mutabiq change kar lein) */
+    z-index: 0; /* Baqi content ke peeche rakhne ke liye */
+    opacity: 0.8; /* Thora transparent kar diya taake zyada over na lage */
+}
+
+    .ftx-L-lolide img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+/* Mobile par isko chota kar dete hain */
+@media (max-width: 768px) {
+    .ftx-L-lolide {
+        width: 80px;
+        right: 5%;
+    }
+}
+
+/* =========================================
+   NAGI SEISHIRO (TRUST SECTION)
+   ========================================= */
+.ftx-nagi {
+    position: absolute;
+    bottom: -20px; /* Thora sa neechay chupaya hai */
+    left: clamp(2%, 10vw, 15%);
+    width: clamp(250px, 35vw, 600px); /* Size ko thora balance kiya hai */
+    z-index: 0;
+    pointer-events: none; /* Text copy hone me masla na kare */
+    opacity: 0; /* GSAP animation ke liye shuru me hide rakha hai */
+}
+
+    .ftx-nagi img {
+        width: 100%;
+        height: auto;
+        filter: invert(50%);
+        display: block;
+    }
+
+/* =========================================
+   MOB (ABOUT SECTION) - CENTERED
+   ========================================= */
+.ftx-mob {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(300px, 45vw, 800px);
+    z-index: 0;
+    pointer-events: none;
+    /* Yahan se opacity hata di hai taake GSAP transform ko disturb na kare */
+}
+
+    .ftx-mob img {
+        width: 100%;
+        height: auto;
+        display: block;
+       
+
+    }
+
+
+/* =========================================
+   LUFFY (SERVICE SECTION) - FULL BACKGROUND
+   ========================================= */
+.ftx-luffy {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Poori width cover karega */
+    height: 100%; /* Poori height cover karega */
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden; /* Section se bahar nikalne se rokega */
+}
+
+    .ftx-luffy img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Jadoo yahan hai: Yeh image ko bina stretch kiye poora fill kar dega */
+        object-position: center; /* Image ko bilkul center mein focus rakhega */
+        filter: invert(50%);
+        display: block;
+        opacity: 0.15; /* Pro-Tip: Opacity thori kam rakhein taake aapka text easily parha ja sake */
+    }
+
+/* =========================================
+   MOBILE RESPONSIVENESS (Screens under 768px)
+   ========================================= */
+
+@media (max-width: 1024px) {
+    .ftx-mob {
+        top: auto !important; /* Top wali position hata di */
+        bottom: 0 !important; /* Neechay chipka diya */
+        transform: translateX(-50%) !important; /* Sirf left/right se center rakha, up/down wala hata diya */
+        width: 60%; /* Size thora chota kar diya */
+        opacity: 0.3 !important; /* Text read karne ke liye thora transparent kar diya */
+    }
+}
+
+@media (max-width: 768px) {
+    .ftx-nagi {
+        width: 180px; /* Mobile par chota size */
+        left: -10px; /* Screen ke kinare par */
+        opacity: 0.3 !important; /* Halki si opacity taake text parha ja sake */
+    }
+
+   
+
+    .ftx-luffy {
+        width: 85%; /* Mobile par poori width lega */
+        opacity: 0.15 !important; /* Background me zyada light rahega */
+    }
+}
+

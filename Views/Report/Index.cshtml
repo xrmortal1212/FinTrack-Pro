@@ -1,0 +1,525 @@
+﻿@model IEnumerable<FinTrack_Pro.Models.Investment>
+@{
+    ViewData["Title"] = "Financial Reports";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+
+    var netSavings = ViewBag.NetSavings ?? 0m;
+    var savingsColor = netSavings >= 0 ? "#10b981" : "#ef4444";
+    var savingsBg = netSavings >= 0 ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+    /* =========================================
+               ✨ FTX PREMIUM CUSTOM STYLES ✨
+               ========================================= */
+    .ftx-report-wrapper {
+       
+        color: #1e293b;
+    }
+
+    /* Header & Controls */
+    .ftx-page-title {
+        font-weight: 800;
+        font-size: 2rem;
+        color: #0f172a;
+        letter-spacing: -0.5px;
+        margin: 0;
+    }
+
+    .ftx-filter-select {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 10px 15px;
+        font-weight: 600;
+        color: #334155;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+        .ftx-filter-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+
+    .ftx-btn-export {
+        background: #fff;
+        border: 1px solid #cbd5e1;
+        color: #0f172a;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        will-change: transform;
+    }
+
+    /* Summary Cards */
+    .ftx-stat-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
+        position: relative;
+        overflow: hidden;
+        will-change: transform, box-shadow;
+    }
+
+    .ftx-stat-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        color: #64748b;
+        margin-bottom: 8px;
+        display: block;
+        position: relative;
+        z-index: 2;
+    }
+
+    .ftx-stat-value {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0;
+        letter-spacing: -1px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .ftx-icon-bg {
+        position: absolute;
+        right: -15px;
+        top: -15px;
+        font-size: 6rem;
+        opacity: 0.04;
+        transform: rotate(-15deg);
+        z-index: 1;
+        will-change: transform;
+    }
+
+    /* Accent Colors for Cards */
+    .ftx-card-income .ftx-stat-value {
+        color: #0f172a;
+    }
+
+    .ftx-card-income {
+        border-bottom: 4px solid #3b82f6;
+    }
+
+    .ftx-card-expense .ftx-stat-value {
+        color: #0f172a;
+    }
+
+    .ftx-card-expense {
+        border-bottom: 4px solid #f97316;
+    }
+
+    /* Top Spends List */
+    .ftx-spends-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .ftx-spend-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 10px;
+        border-bottom: 1px dashed #e2e8f0;
+        border-radius: 8px;
+        will-change: transform, background-color;
+    }
+
+        .ftx-spend-item:last-child {
+            border-bottom: none;
+        }
+
+    .ftx-spend-cat {
+        font-weight: 600;
+        color: #334155;
+        font-size: 1.05rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .ftx-spend-amt {
+        font-weight: 800;
+        color: #ef4444;
+        font-size: 1.1rem;
+    }
+
+    .ftx-cat-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #cbd5e1;
+        display: inline-block;
+        will-change: transform;
+    }
+
+    /* Tax Banner */
+    .ftx-tax-banner {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 24px;
+        padding: 40px;
+        color: #ffffff;
+        box-shadow: 0 15px 35px rgba(15,23,42,0.15);
+        border: 1px solid #334155;
+        position: relative;
+        overflow: hidden;
+        will-change: transform;
+    }
+
+    .ftx-tax-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #94a3b8;
+        margin-bottom: 30px;
+    }
+
+    .ftx-tax-label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #cbd5e1;
+        opacity: 0.8;
+        margin-bottom: 5px;
+    }
+
+    .ftx-tax-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .ftx-tax-divider {
+        width: 2px;
+        background: rgba(255,255,255,0.1);
+        margin: 0 20px;
+    }
+
+    /* Print Styles */
+    @@media print {
+        body {
+            background-color: #fff;
+        }
+
+        .d-print-none {
+            display: none !important;
+        }
+
+        .ftx-stat-card, .ftx-tax-banner {
+            box-shadow: none !important;
+            border: 1px solid #ddd !important;
+            background: #fff !important;
+            color: #000 !important;
+            transform: none !important;
+        }
+
+        .ftx-tax-title, .ftx-tax-label, .ftx-tax-value {
+            color: #000 !important;
+        }
+
+        canvas {
+            max-width: 100% !important;
+        }
+    }
+</style>
+
+<div class="container mt-4 ftx-report-wrapper">
+
+    <div class="d-flex justify-content-between align-items-center mb-2 d-print-none" data-aos="fade-down" data-aos-duration="600">
+        <h2 class="ftx-page-title">Analytics Dashboard</h2>
+
+        <div class="d-flex gap-3 align-items-center">
+            <form asp-action="Index" method="get" class="m-0">
+                <select name="filter" class="ftx-filter-select ftx-hover-scale" onchange="this.form.submit()">
+                    <option value="ThisMonth" selected="@(ViewBag.CurrentFilter == "ThisMonth" ? "selected" : null)">📅 This Month</option>
+                    <option value="LastMonth" selected="@(ViewBag.CurrentFilter == "LastMonth" ? "selected" : null)">⏮️ Last Month</option>
+                    <option value="ThisYear" selected="@(ViewBag.CurrentFilter == "ThisYear" ? "selected" : null)">📊 This Year</option>
+                </select>
+            </form>
+            <button onclick="window.print()" class="ftx-btn-export ftx-export-anim">
+                🖨️ Export PDF
+            </button>
+        </div>
+    </div>
+    <p class="text-muted d-print-none mb-4" data-aos="fade-in" data-aos-duration="800" data-aos-delay="200" style="font-weight: 500;">
+        Date Range: <span style="color: #3b82f6;">@ViewBag.StartDate - @ViewBag.EndDate</span>
+    </p>
+
+    <div class="row mb-5 g-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-duration="600" data-aos-delay="0">
+            <div class="ftx-stat-card ftx-card-income ftx-hover-card">
+                <div class="ftx-icon-bg">💵</div>
+                <span class="ftx-stat-label">Total Income</span>
+                <h3 class="ftx-stat-value">Rs. @ViewBag.TotalIncome.ToString("N0")</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+            <div class="ftx-stat-card ftx-card-expense ftx-hover-card">
+                <div class="ftx-icon-bg">💳</div>
+                <span class="ftx-stat-label">Total Expense</span>
+                <h3 class="ftx-stat-value">Rs. @ViewBag.TotalExpense.ToString("N0")</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+            <div class="ftx-stat-card ftx-hover-card" style="border-bottom: 4px solid @savingsColor; background-color: @savingsBg;">
+                <div class="ftx-icon-bg">🏦</div>
+                <span class="ftx-stat-label" style="color: #475569;">Net Savings</span>
+                <h3 class="ftx-stat-value" style="color: @savingsColor;">Rs. @ViewBag.NetSavings.ToString("N0")</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5 g-4">
+        <div class="col-md-7" data-aos="fade-right" data-aos-duration="700">
+            <div class="ftx-stat-card h-100 p-4 ftx-hover-card-light">
+                <h5 style="font-weight: 700; color: #1e293b; margin-bottom: 25px;">Expense Breakdown</h5>
+                <div style="height: 320px; position: relative;">
+                    <canvas id="expenseChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5" data-aos="fade-left" data-aos-duration="700">
+            <div class="ftx-stat-card h-100 p-4 ftx-hover-card-light">
+                <h5 style="font-weight: 700; color: #1e293b; margin-bottom: 25px;">🔥 Top Spending Categories</h5>
+
+                @if (ViewBag.TopExpenses != null && ViewBag.TopExpenses.Count > 0)
+                {
+                    <ul class="ftx-spends-list">
+                        @{
+                            string[] colors = { "#ef4444", "#f97316", "#eab308" };
+                            int i = 0;
+                        }
+                        @foreach (var item in ViewBag.TopExpenses)
+                        {
+                            var dotColor = i < colors.Length ? colors[i] : "#cbd5e1";
+                            <li class="ftx-spend-item">
+                                <span class="ftx-spend-cat">
+                                    <span class="ftx-cat-dot" style="background-color: @dotColor;"></span>
+                                    @item.CategoryName
+                                </span>
+                                <span class="ftx-spend-amt">Rs. @item.TotalAmount.ToString("N0")</span>
+                            </li>
+                            i++;
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <div class="text-center mt-5" style="opacity: 0.5;" data-aos="zoom-in" data-aos-delay="200">
+                        <h1 class="ftx-empty-bounce" style="font-size: 3rem; margin-bottom: 10px;">📉</h1>
+                        <p style="font-weight: 600;">No expenses yet.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mb-5" data-aos="zoom-in-up" data-aos-duration="800">
+        <div class="col-md-12">
+            <div class="ftx-tax-banner ftx-hover-tax">
+                <h4 class="ftx-tax-title">🧾 Annual Tax Estimation (@ViewBag.CurrentYear)</h4>
+
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">
+
+                    <div class="flex-grow-1">
+                        <div class="ftx-tax-label">Yearly Income (So far)</div>
+                        <div class="ftx-tax-value" style="color: #34d399;">Rs. @ViewBag.YearlyIncome.ToString("N0")</div>
+                    </div>
+
+                    <div class="ftx-tax-divider d-none d-md-block" style="height: 80px;"></div>
+
+                    <div class="flex-grow-1 text-md-end mt-4 mt-md-0">
+                        <div class="ftx-tax-label">Estimated Tax Liability</div>
+                        @if (ViewBag.EstimatedTax > 0)
+                        {
+                            <div class="ftx-tax-value" style="color: #f87171;">Rs. @ViewBag.EstimatedTax.ToString("N0")</div>
+                            <div style="font-size: 0.85rem; color: #94a3b8;">*Calculated at 5% for income exceeding Rs. 600,000/year</div>
+                        }
+                        else
+                        {
+                            <div class="ftx-tax-value" style="color: #34d399;">Rs. 0</div>
+                            <div style="font-size: 0.9rem; color: #e2e8f0;">🎉 Income is currently under the taxable limit.</div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // 1. Initialize AOS
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                once: true,
+                offset: 20
+            });
+        }
+
+        // 2. Chart.js Setup (No changes here, beautifully rendered)
+        var labels = @Html.Raw(ViewBag.ExpenseLabels ?? "[]");
+        var data = @Html.Raw(ViewBag.ExpenseData ?? "[]");
+
+        if (labels.length > 0) {
+            var ctx = document.getElementById('expenseChart').getContext('2d');
+            Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+            Chart.defaults.color = "#64748b";
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            '#ef4444', '#f97316', '#eab308',
+                            '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 1200,
+                        easing: "easeOutQuart"
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 20,
+                                font: { size: 13, weight: '600' },
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            padding: 12,
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 14, weight: 'bold' },
+                            callbacks: {
+                                label: function(context) {
+                                    return ' Rs. ' + context.raw.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            var chartContainer = document.getElementById('expenseChart');
+            if(chartContainer) {
+                 chartContainer.parentElement.innerHTML = '<div style="height:100%; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-weight:600;">No data to chart</div>';
+            }
+        }
+
+        // ==========================================
+        // 🌟 GSAP ANIMATIONS
+        // ==========================================
+
+        // 1. Hover on Main Stat Cards
+        const hoverCards = document.querySelectorAll('.ftx-hover-card');
+        hoverCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, { y: -8, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.08)", duration: 0.3, ease: "power2.out" });
+            });
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, { y: 0, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.03)", duration: 0.3, ease: "power2.out" });
+            });
+        });
+
+        // 2. Hover on Chart/List Cards (Lighter effect)
+        const lightCards = document.querySelectorAll('.ftx-hover-card-light');
+        lightCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, { y: -4, boxShadow: "0 15px 30px -5px rgba(0, 0, 0, 0.05)", duration: 0.3 });
+            });
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, { y: 0, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.03)", duration: 0.3 });
+            });
+        });
+
+        // 3. Floating Background Icons in Stat Cards
+        const bgIcons = document.querySelectorAll('.ftx-icon-bg');
+        bgIcons.forEach(icon => {
+            gsap.to(icon, {
+                y: -10,
+                rotation: "-=5",
+                repeat: -1,
+                yoyo: true,
+                duration: 2 + Math.random(), // Randomize slightly so they don't sync exactly
+                ease: "sine.inOut"
+            });
+        });
+
+        // 4. Hover effect on "Top Spend" List Items
+        const spendItems = document.querySelectorAll('.ftx-spend-item');
+        spendItems.forEach(item => {
+            const dot = item.querySelector('.ftx-cat-dot');
+            item.addEventListener('mouseenter', () => {
+                gsap.to(item, { x: 5, backgroundColor: "#f8fafc", duration: 0.2 });
+                if(dot) gsap.to(dot, { scale: 1.5, duration: 0.2, ease: "back.out(2)" });
+            });
+            item.addEventListener('mouseleave', () => {
+                gsap.to(item, { x: 0, backgroundColor: "transparent", duration: 0.2 });
+                if(dot) gsap.to(dot, { scale: 1, duration: 0.2 });
+            });
+        });
+
+        // 5. Hover on Export Button
+        const exportBtn = document.querySelector('.ftx-export-anim');
+        if(exportBtn) {
+            exportBtn.addEventListener('mouseenter', () => {
+                gsap.to(exportBtn, { y: -2, backgroundColor: "#f8fafc", borderColor: "#94a3b8", duration: 0.2 });
+            });
+            exportBtn.addEventListener('mouseleave', () => {
+                gsap.to(exportBtn, { y: 0, backgroundColor: "#fff", borderColor: "#cbd5e1", duration: 0.2 });
+            });
+        }
+
+        // 6. Hover on Tax Banner
+        const taxBanner = document.querySelector('.ftx-hover-tax');
+        if(taxBanner) {
+            taxBanner.addEventListener('mouseenter', () => {
+                gsap.to(taxBanner, { y: -5, boxShadow: "0 20px 40px rgba(15,23,42,0.25)", duration: 0.3 });
+            });
+            taxBanner.addEventListener('mouseleave', () => {
+                gsap.to(taxBanner, { y: 0, boxShadow: "0 15px 35px rgba(15,23,42,0.15)", duration: 0.3 });
+            });
+        }
+
+        // 7. Empty State Bouncing Graph
+        const emptyGraph = document.querySelector('.ftx-empty-bounce');
+        if(emptyGraph) {
+            gsap.to(emptyGraph, { y: -15, repeat: -1, yoyo: true, duration: 1.5, ease: "sine.inOut" });
+        }
+
+    });
+</script>

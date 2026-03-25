@@ -1,0 +1,502 @@
+﻿@model IEnumerable<FinTrack_Pro.Models.Transaction>
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+
+    <style>
+        /* Modern Hover Animations */
+        .ftx-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, box-shadow;
+        }
+
+        .ftx-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            z-index: 10; /* Hover karne pe card baqi cards ke oopar show ho */
+        }
+
+        /* Subtle scaling for transaction items */
+        .ftx-transaction-item {
+            transition: all 0.2s ease-in-out;
+            padding: 8px; /* Added slight padding for hover effect bounds */
+            border-radius: 8px;
+        }
+
+            .ftx-transaction-item:hover {
+                transform: scale(1.02) translateX(4px);
+                background-color: rgba(0, 0, 0, 0.02);
+            }
+
+        /* Avatar pop effect */
+        .ftx-avatar-sm {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+            .ftx-avatar-sm:hover {
+                transform: scale(1.15) rotate(5deg);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+        /* Button float effects */
+        .ftx-btn-dark-small, .ftx-btn-dark-full {
+            transition: all 0.2s ease;
+        }
+
+            .ftx-btn-dark-small:hover, .ftx-btn-dark-full:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(17, 17, 17, 0.2);
+                opacity: 0.9;
+            }
+
+        /* Bill items highlight */
+        .ftx-bill-item {
+            transition: background 0.2s ease, padding-left 0.2s ease;
+            border-radius: 6px;
+        }
+
+            .ftx-bill-item:hover {
+                background: #fafafa;
+                padding-left: 8px;
+            }
+    </style>
+
+
+<div class="ftx-dash-grid">
+
+    <div class="ftx-card ftx-card-transactions" data-aos="fade-up" data-aos-duration="600">
+        <div class="ftx-card-header">
+            <h3>Recent transactions</h3>
+            <a href="@Url.Action("Index", "Transaction")" class="ftx-btn-dark-small">View all ></a>
+        </div>
+        <div class="ftx-transaction-list">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    var isExpense = item.Category?.Type == "Expense";
+                    var iconColor = isExpense ? "color: #dc2626; background: #fee2e2;" : "color: #16a34a; background: #dcfce7;";
+                    var symbol = isExpense ? "-" : "+";
+
+                    <div class="ftx-transaction-item">
+                        <div class="ftx-t-icon" style="@iconColor">
+                            @(item.Category?.Title?.Substring(0, 1).ToUpper() ?? "T")
+                        </div>
+                        <div class="ftx-t-details">
+                            <h4>@(item.Category?.Title ?? "Unknown")</h4>
+                            <span>@item.Date.ToString("d MMM • hh:mm tt")</span>
+                        </div>
+                        <div class="ftx-t-amount" style="color: @(isExpense ? "#111" : "#16a34a")">
+                            @symbol$@item.Amount
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">No recent transactions.</p>
+            }
+        </div>
+    </div>
+
+    <div class="ftx-card ftx-card-spending" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+        <div class="ftx-card-header">
+            <h3>Spending</h3>
+            <div class="ftx-legend">
+                <span class="ftx-dot-lime"></span> This month
+            </div>
+        </div>
+        <div class="ftx-chart-wrapper">
+            <canvas id="radarChart"></canvas>
+        </div>
+    </div>
+
+    <div class="ftx-card ftx-card-transfer" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+        <h3>Quick transfer</h3>
+
+        <div class="ftx-avatars-row">
+            @if (ViewBag.RecentUsers != null)
+            {
+                foreach (var user in ViewBag.RecentUsers)
+                {
+                    <div class="ftx-avatar-sm" title="@user.FullName (@user.Email)" onclick="fillEmail('@user.Email')">
+                        @user.FullName.Substring(0, 1).ToUpper()
+                    </div>
+                }
+            }
+            <div class="ftx-avatar-sm add-btn" onclick="document.getElementById('transferEmail').focus()">+</div>
+        </div>
+
+        <form asp-controller="Transaction" asp-action="QuickTransfer" method="post">
+            <input type="email" id="transferEmail" name="ReceiverEmail" class="ftx-input-grey" placeholder="Enter User Email" required style="margin-bottom: 8px;">
+            <input type="number" name="Amount" class="ftx-input-grey" placeholder="$ Amount" min="1" step="0.01" required>
+            <button type="submit" class="ftx-btn-dark-full" style="margin-top: 10px;">Send</button>
+        </form>
+
+        @if (TempData["TransferMessage"] != null)
+        {
+            <p style="color: #16a34a; font-size: 0.8rem; margin-top: 5px;">@TempData["TransferMessage"]</p>
+        }
+        @if (TempData["TransferError"] != null)
+        {
+            <p style="color: red; font-size: 0.8rem; margin-top: 5px;">@TempData["TransferError"]</p>
+        }
+    </div>
+
+    <div class="ftx-card ftx-card-lime-bg ftx-credit-card" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="50">
+        <div class="ftx-cc-top">
+            <span>Current Balance</span>
+            <div class="ftx-cc-chip"></div>
+        </div>
+        <div class="ftx-cc-balance">
+            $@(ViewBag.Balance != null ? ViewBag.Balance : "0.00")
+        </div>
+    </div>
+
+    <div class="ftx-card ftx-card-budget" data-aos="fade-up" data-aos-duration="600" data-aos-delay="150">
+        <div class="ftx-card-header">
+            <h3>Budget Trend</h3>
+            <select class="ftx-dash-select-sm"><option>Month</option></select>
+        </div>
+        <div class="ftx-chart-wrapper">
+            <canvas id="lineChart"></canvas>
+        </div>
+    </div>
+
+    <div class="ftx-card ftx-card-lime-bg ftx-promo" data-aos="flip-up" data-aos-duration="600" data-aos-delay="250">
+        <h2>How to<br>reduce<br>expenses<br>by <span>25%</span> ?</h2>
+    </div>
+
+    <div class="ftx-card ftx-card-summary" data-aos="fade-left" data-aos-duration="600" data-aos-delay="100">
+        <h3>Cashflow Summary</h3>
+        <div class="ftx-summary-stats mt-3">
+            <div class="stat-box">
+                <span class="text-muted">Total Income</span>
+                <h4 style="color: #16a34a;">+$@(ViewBag.TotalIncome ?? "0")</h4>
+            </div>
+            <div class="stat-box mt-2">
+                <span class="text-muted">Total Expense</span>
+                <h4 style="color: #dc2626;">-$@(ViewBag.TotalExpense ?? "0")</h4>
+            </div>
+        </div>
+    </div>
+
+    @{
+        // C# logic to calculate percentage safely
+        double currentGoal = Convert.ToDouble(ViewBag.GoalCurrentAmount ?? 0);
+        double targetGoal = Convert.ToDouble(ViewBag.GoalTargetAmount ?? 1);
+
+        // Divide by zero se bachne ke liye logic
+        double goalPercentage = targetGoal > 0 ? (currentGoal / targetGoal) * 100 : 0;
+        if (goalPercentage > 100) goalPercentage = 100; // 100% se aage na barhe
+    }
+
+    <div class="ftx-card ftx-card-goal" data-aos="fade-left" data-aos-duration="600" data-aos-delay="200">
+        <h3>@(ViewBag.GoalTitle ?? "Savings Goal")</h3>
+        <p class="text-muted" style="font-size: 0.85rem;">$@currentGoal / $@targetGoal</p>
+        <div class="ftx-progress-bg">
+            <div class="ftx-progress-fill" style="width: @Math.Round(goalPercentage)%;"></div>
+        </div>
+    </div>
+
+    <div class="ftx-card ftx-card-bills" data-aos="fade-right" data-aos-duration="600" data-aos-delay="300">
+        <div class="ftx-card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>Upcoming Bills</h3>
+            <a asp-controller="Bill" asp-action="Index" class="ftx-btn-dark-small">View all ></a>
+        </div>
+
+        <div class="ftx-bills-list mt-3">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success" style="padding: 8px; font-size: 0.85rem; margin-bottom: 10px;">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            @if (ViewBag.UpcomingBills != null && ViewBag.UpcomingBills.Count > 0)
+            {
+                foreach (var bill in ViewBag.UpcomingBills)
+                {
+                    <div class="ftx-bill-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #e5e7eb;">
+                        <div>
+                            <span style="color: #666; display: block; font-weight: 600;">@bill.Title</span>
+                            <small style="color: #999;">Due: @bill.DueDate.ToString("MMM dd, yyyy")</small>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <strong style="color: #111;">$@bill.Amount</strong>
+                            <form asp-controller="Bill" asp-action="PayBill" method="post" class="m-0 p-0">
+                                <input type="hidden" name="id" value="@bill.Id" />
+                                <button type="submit" class="ftx-btn-dark-small" style="padding: 4px 10px; font-size: 0.75rem; border: none; cursor: pointer; background-color: #111; color: white; border-radius: 4px;">
+                                    Pay
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted" style="font-size: 0.85rem;">No upcoming bills. You are all caught up!</p>
+            }
+        </div>
+    </div>
+
+    <div class="ftx-card ftx-card-subs" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
+        <div class="ftx-card-header">
+            <h3>Active Subscriptions</h3>
+        </div>
+
+        <div class="mt-3" style="display: flex; gap: 8px; flex-wrap: wrap;">
+            @if (ViewBag.Subscriptions != null && ViewBag.Subscriptions.Count > 0)
+            {
+                foreach (var sub in ViewBag.Subscriptions)
+                {
+                    <span style="background: #f3f4f6; color: #111; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 500; border: 1px solid #e5e7eb; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        @sub
+                    </span>
+                }
+            }
+            else
+            {
+                <span class="text-muted" style="font-size: 0.85rem;">No active subscriptions.</span>
+            }
+        </div>
+
+        <div class="mt-4" style="border-top: 1px dashed #e5e7eb; padding-top: 15px;">
+            <span class="text-muted" style="font-size: 0.85rem;">Total Monthly Cost</span>
+            <h4 style="color: #111; margin-top: 5px; font-weight: bold;">$@(ViewBag.TotalSubscriptionAmount ?? "0.00")</h4>
+        </div>
+    </div>
+
+    <div class="ftx-card ftx-card-income" data-aos="fade-left" data-aos-duration="600" data-aos-delay="500">
+        <div class="ftx-card-header">
+            <h3>Income Breakdown</h3>
+            <div class="ftx-legend">
+                <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:#16a34a; margin-right:5px;"></span> This month
+            </div>
+        </div>
+        <div class="ftx-chart-wrapper">
+            <canvas id="incomeRadarChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // 1. Radar Chart (Spending)
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        const labels = @Html.Raw(Json.Serialize(ViewBag.ChartLabels ?? new string[] { "Food", "Bills", "Sporting goods", "Home goods", "Clothing", "Other" }));
+        const dataValues = @Html.Raw(Json.Serialize(ViewBag.ChartValues ?? new int[] { 300, 150, 100, 250, 120, 200 }));
+
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Spending',
+                    data: dataValues,
+                    backgroundColor: 'rgba(190, 243, 81, 0.7)',
+                    borderColor: '#111',
+                    pointBackgroundColor: '#111',
+                    borderWidth: 2,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(0,0,0,0.1)' },
+                        grid: { color: 'rgba(0,0,0,0.1)' },
+                        pointLabels: {
+                            font: { family: 'Inter', size: 11 },
+                            color: '#666'
+                        },
+                        ticks: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 2. Polar Area Chart (Income)
+        const incomeCtx = document.getElementById('incomeRadarChart').getContext('2d');
+        const incomeLabels = @Html.Raw(Json.Serialize(ViewBag.IncomeLabels ?? new string[] { }));
+        const incomeDataValues = @Html.Raw(Json.Serialize(ViewBag.IncomeValues ?? new decimal[] { }));
+
+        new Chart(incomeCtx, {
+            type: 'polarArea',
+            data: {
+                labels: incomeLabels,
+                datasets: [{
+                    label: 'Income Breakdown',
+                    data: incomeDataValues,
+                    backgroundColor: [
+                        'rgba(22, 163, 74, 0.9)',
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(74, 222, 128, 0.8)',
+                        'rgba(190, 243, 81, 0.8)',
+                        'rgba(217, 249, 157, 0.8)',
+                        'rgba(243, 244, 246, 0.8)'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: '#111',
+                        padding: 10,
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    r: {
+                        grid: { display: false },
+                        ticks: { display: false },
+                        angleLines: {
+                            display: true,
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 3. Line Chart (Budget Trend)
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        const trendLabels = @Html.Raw(Json.Serialize(ViewBag.BudgetTrendLabels ?? new string[] { "Sep", "Oct", "Nov", "Dec", "Jan", "Feb" }));
+        const trendBudgets = @Html.Raw(Json.Serialize(ViewBag.BudgetTrendLimits ?? new decimal[] { 5000, 5000, 5000, 6000, 6000, 6000 }));
+        const trendSpent = @Html.Raw(Json.Serialize(ViewBag.BudgetTrendSpent ?? new decimal[] { 4800, 5200, 4900, 6500, 5800, 5000 }));
+
+        new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: trendLabels,
+                datasets: [
+                    {
+                        label: ' Actual Spent',
+                        data: trendSpent,
+                        borderColor: '#111',
+                        borderWidth: 2,
+                        backgroundColor: '#111',
+                        pointBackgroundColor: '#bef351',
+                        pointBorderColor: '#111',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: ' Budget Limit',
+                        data: trendBudgets,
+                        borderColor: '#d1d5db',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            boxWidth: 8
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: '#111',
+                        titleFont: { family: 'inherit' },
+                        bodyFont: { family: 'inherit' }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'inherit', size: 12 },
+                            color: '#666'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f3f4f6',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            font: { family: 'inherit', size: 12 },
+                            color: '#666',
+                            callback: function(value) {
+                                return '$' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Email Auto-fill Function
+        function fillEmail(userEmail) {
+            document.getElementById('transferEmail').value = userEmail;
+        }
+
+        // Initialize AOS (Make sure AOS is linked in your Layout file)
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                once: true,     // whether animation should happen only once - while scrolling down
+                mirror: false,  // whether elements should animate out while scrolling past them
+                offset: 50      // offset (in px) from the original trigger point
+            });
+        }
+
+            // --- GSAP Hover Animations ---
+    const cards = document.querySelectorAll('.ftx-card');
+
+    cards.forEach(card => {
+        // Jab mouse card ke oopar aaye (Hover)
+        card.addEventListener('mouseenter', () => {
+            gsap.to(card, {
+                y: -5,                 // translateY(-5px)
+                scale: 1.02,           // scale(1.02)
+                boxShadow: "0 15px 30px rgba(0, 0, 0, 0.08)",
+                duration: 0.1,         // Animation speed
+                ease: "power2.out",    // Smooth easing
+                zIndex: 10
+            });
+        });
+
+        // Jab mouse card se hat jaye (Hover Out)
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, {
+                y: 0,
+                scale: 1,
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)", // Apki original card shadow yahan likhein (mene default lagayi hai)
+                duration: 0.1,
+                ease: "power2.out",
+                clearProps: "zIndex"   // z-index wapas normal kar dega
+            });
+        });
+    });
+    </script>

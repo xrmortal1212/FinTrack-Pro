@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FinTrack_Pro</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FinTrack_Pro.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/images/logo.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/solid.min.css" integrity="sha512-EHa6vH03/Ty92WahM0/tet1Qicl76zihDCkBnFhN3kFGQkC+mc86d7V+6y2ypiLbk3h0beZAGdUpzfMcb06cMg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="
+https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js
+"></script>
+    <link href="
+https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.min.css
+" rel="stylesheet">
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // Aapki EmailJS ki Public Key
+            emailjs.init("nu-HAUVXrdLdqUk72");
+        })();
+    </script>
+</head>
+<body>
+
+    <div class="ftx-moving-bg">
+        <div class="ftx-blob ftx-blob-orange"></div>
+        <div class="ftx-blob ftx-blob-blue"></div>
+        <div class="ftx-blob ftx-blob-purple"></div>
+    </div>
+
+    <header>
+    <nav class="ftx-nav-wrapper">
+        <div class="ftx-nav-container">
+
+            <a asp-controller="Home" asp-action="Index" class="ftx-nav-logo">
+                <span class="ftx-logo-text">FinTrack<span class="ftx-logo-dot">.</span></span>
+            </a>
+
+            <button class="ftx-mobile-toggle" id="menuToggleBtn" type="button" aria-label="Toggle Navigation">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="ftx-nav-collapse" id="mobileMenu">
+                <ul class="ftx-nav-links">
+                    <li class="ftx-nav-item">
+                        <a asp-controller="Home" asp-action="Index" asp-fragment="hero" class="ftx-nav-link">Home</a>
+                    </li>
+                    <li class="ftx-nav-item">
+                        <a asp-controller="Home" asp-action="Index" asp-fragment="teamSection" class="ftx-nav-link">About</a>
+                    </li>
+                    <li class="ftx-nav-item">
+                        <a asp-controller="Home" asp-action="Index" asp-fragment="contact" class="ftx-nav-link">Contact</a>
+                    </li>
+
+                    @if (User?.Identity?.IsAuthenticated == true)
+                    {
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="ftx-nav-item">
+                                <a asp-controller="Admin" asp-action="Index" class="ftx-nav-link" style="color: #d97706; font-weight: 700;">
+                                    Admin Panel
+                                </a>
+                            </li>
+                        }
+
+                        <li class="ftx-nav-item ftx-has-dropdown">
+                            <a asp-controller="Home" asp-action="Dashboard" class="ftx-nav-link">
+                                Dashboard
+                                <svg class="ftx-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                            <ul class="ftx-dropdown-menu">
+                                <li><a asp-controller="Category" asp-action="Index" class="ftx-dropdown-link">Categories</a></li>
+                                <li><a asp-controller="Transaction" asp-action="Index" class="ftx-dropdown-link">Transactions</a></li>
+                                <li><a asp-controller="Budget" asp-action="Index" class="ftx-dropdown-link">Budgets</a></li>
+                                <li><a asp-controller="Goal" asp-action="Index" class="ftx-dropdown-link">Saving Goals</a></li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+
+                <div class="ftx-nav-actions">
+                    @if (User?.Identity?.IsAuthenticated == true)
+                    {
+                        <a asp-controller="Profile" asp-action="Index" class="ftx-btn ftx-btn-dark">@User.Identity.Name!</a>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0 p-0 ftx-logout-form">
+                            <button type="submit" class="ftx-btn ftx-btn-light border-0">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="ftx-btn ftx-btn-dark">Sign In</a>
+                        <a asp-controller="Account" asp-action="Register" class="ftx-btn ftx-btn-light">Join Us</a>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </nav>
+</header>
+
+    <div style="margin-top:200px; padding-right: 0px; 
+     padding-left: 0px;" class="container-fluid">
+        <main role="main" >
+            @RenderBody()
+        </main>
+    </div>    
+
+    <footer class="ftx-dftr-wrapper">
+    
+    <div class="ftx-dftr-cta">
+            <h1 class="ftx-dftr-cta-title">Ready to transform<br>your financial life?</h1>
+        <p class="ftx-dftr-cta-sub">Future-ready tools for individuals moving at the speed of life.</p>
+            <a href="#" class="ftx-dftr-btn-white">CREATE FREE ACCOUNT</a>
+        
+        <div class="ftx-dftr-glow-shape"></div>
+    </div>
+
+    <div class="ftx-dftr-main">
+        
+        <div class="ftx-dftr-social-row">
+            <a href="https://github.com/xrmortal1212" class="ftx-dftr-social-item">
+                <span class="ftx-dftr-social-name">
+                    <i style="height:16px; width:16px;color:white;" class="bi bi-github"></i>
+                    Github
+                </span>
+                <span class="ftx-dftr-arrow">→</span>
+            </a>
+            <a href="https://x.com/raman2409e" class="ftx-dftr-social-item">
+                <span class="ftx-dftr-social-name">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    Twitter
+                </span>
+                <span class="ftx-dftr-arrow">→</span>
+            </a>
+            <a href="https://www.instagram.com/raman2409e/" class="ftx-dftr-social-item">
+                <span class="ftx-dftr-social-name">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    Instagram
+                </span>
+                <span class="ftx-dftr-arrow">→</span>
+            </a>
+            <a href="https://www.linkedin.com/in/raman-mukesh-6431982a4/" class="ftx-dftr-social-item ftx-dftr-no-border-right">
+                <span class="ftx-dftr-social-name">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    LinkedIn
+                </span>
+                <span class="ftx-dftr-arrow">→</span>
+            </a>
+        </div>
+
+        <div class="ftx-dftr-links-row">
+            <div class="ftx-dftr-link-col">
+                <h4 class="ftx-dftr-col-title">Product</h4>
+                <a asp-controller="Home" asp-action="Index" class="ftx-dftr-link">Dashboard</a>
+                <a asp-controller="Transaction" asp-action="Index" class="ftx-dftr-link">Transactions</a>
+                <a asp-controller="Budget" class="ftx-dftr-link">Budgets</a>
+                <a asp-controller="Goal" asp-action="Index" class="ftx-dftr-link">Saving Goals</a>
+            </div>
+            <div class="ftx-dftr-link-col">
+                
+            </div>
+            <div class="ftx-dftr-link-col">               
+            </div>
+            <div class="ftx-dftr-link-col ftx-dftr-no-border-right">
+                <h4 class="ftx-dftr-col-title">Go Back</h4>
+                <a asp-controller="Home" asp-action="Index" asp-fragment="hero" class="ftx-scroll-top-btn" aria-label="Scroll to top">
+                <i class="bi bi-arrow-up"></i>
+                </a>               
+            </div>
+        </div>
+
+        <div class="ftx-dftr-bottom-row">
+            <div class="ftx-dftr-brand-info">
+                <div class="ftx-dftr-brand-logo">
+                    <img src="~/images/logo.png" style="height:50px;width:50px;" alt="Alternate Text" />
+                    FINTRACK.
+                </div>
+                <p class="ftx-dftr-desc">In the new era of personal finance we look ahead in the future with certainty and pride for your financial freedom.</p>
+            </div>
+            
+            <div class="ftx-dftr-subscribe-box">
+                <form class="ftx-dftr-form" onsubmit="event.preventDefault();">
+                    <input type="email" placeholder="NAME@EMAIL.COM" class="ftx-dftr-input" required>
+                    <button type="submit" class="ftx-dftr-submit">SUBSCRIBE</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            // 1. Navbar Toggle Logic
+            const toggleBtn = document.getElementById("menuToggleBtn");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            if (toggleBtn && mobileMenu) {
+                toggleBtn.addEventListener("click", function () {
+                    mobileMenu.classList.toggle("show-menu"); // Yeh class CSS me honi chahiye
+                });
+            }
+        });
+
+           
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

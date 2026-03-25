@@ -1,0 +1,279 @@
+﻿@model FinTrack_Pro.Models.User
+@{
+    ViewData["Title"] = "System Settings";
+    Layout = "_AdminLayout";
+}
+
+<style>
+    /* ==============================================
+           SETTINGS PAGE STYLES (FIN AI THEME)
+           ============================================== */
+    .settings-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .page-title-box h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 5px;
+    }
+
+        .page-title-box h2 i {
+            color: var(--accent-green);
+        }
+
+    .settings-card {
+        background-color: var(--panel-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-top: 20px;
+    }
+
+    /* Banner & Avatar Section */
+    .banner-section {
+        height: 200px;
+        background-color: #1a1a20;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    .banner-section:hover .banner-overlay {
+        opacity: 1;
+    }
+
+    .avatar-wrapper {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: -60px 0 0 30px; /* Overlap effect */
+        border-radius: 50%;
+        border: 4px solid var(--panel-bg);
+        background: #1f1f23;
+        z-index: 2;
+    }
+
+    .avatar-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .avatar-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: 0.3s;
+        cursor: pointer;
+        color: var(--accent-green);
+    }
+
+    .avatar-wrapper:hover .avatar-overlay {
+        opacity: 1;
+    }
+
+    /* Form Fields */
+    .form-body {
+        padding: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .cyber-label {
+        display: block;
+        color: var(--text-muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .cyber-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 14px 18px;
+        border-radius: 12px;
+        font-family: inherit;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+        .cyber-input:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 15px rgba(209, 255, 39, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .cyber-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    .btn-save {
+        background: var(--accent-green);
+        color: #000;
+        border: none;
+        padding: 14px 35px;
+        border-radius: 30px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(209, 255, 39, 0.2);
+        }
+
+    .alert-success {
+        background: rgba(209, 255, 39, 0.1);
+        border: 1px solid var(--accent-green);
+        color: var(--accent-green);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="settings-container gsap-settings">
+    <div class="page-title-box mb-4">
+        <h2><i class="bi bi-gear-fill"></i> System Configuration</h2>
+        <p style="color: var(--text-muted);">Customize your digital identity within the FIN AI network.</p>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <form asp-action="Settings" method="post" enctype="multipart/form-data" class="settings-card">
+        <input type="hidden" name="Id" value="@Model.Id" />
+
+        <div class="banner-section" id="bannerPreview" style="background-image: url('@(string.IsNullOrEmpty(Model.BannerPath) ? "https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?auto=format&fit=crop&q=80" : Model.BannerPath)');">
+            <label class="banner-overlay" for="bannerInput">
+                <i class="bi bi-camera fs-2 text-white"></i>
+            </label>
+            <input type="file" id="bannerInput" name="BannerImage" accept="image/*" style="display: none;" onchange="previewImage(event, 'bannerPreview', 'bg')" />
+        </div>
+
+        <div class="avatar-wrapper">
+            <img src="@(string.IsNullOrEmpty(Model.ProfilePicturePath) ? "https://ui-avatars.com/api/?name=" + Model.FullName + "&background=d1ff27&color=000" : Model.ProfilePicturePath)" class="avatar-img" id="avatarPreviewImg" />
+            <label class="avatar-overlay" for="avatarInput">
+                <i class="bi bi-cloud-upload fs-3"></i>
+            </label>
+            <input type="file" id="avatarInput" name="ProfileImage" accept="image/*" style="display: none;" onchange="previewImage(event, 'avatarPreviewImg', 'src')" />
+        </div>
+
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label class="cyber-label">System Identity (Email)</label>
+                    <input type="email" class="cyber-input" value="@Model.Email" disabled />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label class="cyber-label">Access Level</label>
+                    <input type="text" class="cyber-input" value="@Model.Role" disabled style="color: var(--accent-green); border-color: rgba(209, 255, 39, 0.3);" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label class="cyber-label">Full Name</label>
+                    <input type="text" name="FullName" class="cyber-input" value="@Model.FullName" required />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label class="cyber-label">Profession / Designation</label>
+                    <input type="text" name="Profession" class="cyber-input" value="@Model.Profession" placeholder="e.g. Chief AI Officer" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="cyber-label">Contact Node (Phone)</label>
+                <input type="text" name="PhoneNumber" class="cyber-input" value="@Model.PhoneNumber" placeholder="+92 300 0000000" />
+            </div>
+
+            <div class="form-group">
+                <label class="cyber-label">Digital Bio</label>
+                <textarea name="Bio" class="cyber-input" rows="3" placeholder="Describe your role in the matrix...">@Model.Bio</textarea>
+            </div>
+
+            <button type="submit" class="btn-save">
+                <i class="bi bi-hdd-network"></i> Initialize Sync & Save
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (typeof gsap !== 'undefined') {
+                gsap.from(".gsap-settings", {
+                    y: 40,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+            }
+        });
+
+        // Live Image Preview Function
+        function previewImage(event, targetId, type) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const target = document.getElementById(targetId);
+                    if (type === 'bg') {
+                        target.style.backgroundImage = `url(${e.target.result})`;
+                    } else {
+                        target.src = e.target.result;
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+}

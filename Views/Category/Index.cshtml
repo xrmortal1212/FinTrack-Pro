@@ -1,0 +1,203 @@
+﻿@model IEnumerable<FinTrack_Pro.Models.Category>
+@{
+    ViewData["Title"] = "My Categories";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="row mb-4">
+        <div class="col-md-4 ftx-hover-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="0">
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-left: 4px solid #3b82f6; will-change: transform, box-shadow;">
+                <p style="color: #666; font-size: 0.85rem; margin-bottom: 5px; font-weight: 600; text-transform: uppercase;">Total Categories</p>
+                <h3 style="margin: 0; color: #111;">@ViewBag.TotalCategories</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4 ftx-hover-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-left: 4px solid #22c55e; will-change: transform, box-shadow;">
+                <p style="color: #666; font-size: 0.85rem; margin-bottom: 5px; font-weight: 600; text-transform: uppercase;">Income Categories</p>
+                <h3 style="margin: 0; color: #111;">@ViewBag.IncomeCount</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4 ftx-hover-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-left: 4px solid #ef4444; will-change: transform, box-shadow;">
+                <p style="color: #666; font-size: 0.85rem; margin-bottom: 5px; font-weight: 600; text-transform: uppercase;">Expense Categories</p>
+                <h3 style="margin: 0; color: #111;">@ViewBag.ExpenseCount</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="ftx-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300" style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0;">My Categories</h3>
+            <a asp-controller="Category" asp-action="Create" class="ftx-btn ftx-btn-dark ftx-btn-hover" style="text-decoration: none; padding: 8px 15px; border-radius: 6px; background: #111; color: #fff; display: inline-block; will-change: transform;">
+                + Add New Category
+            </a>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" data-aos="zoom-in" data-aos-duration="400" style="padding: 10px; font-size: 0.9rem; border-radius: 6px;">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" data-aos="zoom-in" data-aos-duration="400" style="padding: 10px; font-size: 0.9rem; border-radius: 6px; background-color: #fee2e2; color: #991b1b; border: none;">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr style="color: #666; font-size: 0.85rem; border-bottom: 2px solid #eee;">
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int delay = 0;
+                        }
+                        @foreach (var item in Model)
+                        {
+                            <tr class="ftx-table-row" data-aos="fade-left" data-aos-duration="400" data-aos-delay="@delay" style="border-bottom: 1px solid #f5f5f5; transition: background-color 0.2s;">
+                                <td style="font-weight: 600; color: #111; font-size: 0.95rem;">@item.Title</td>
+
+                                <td>
+                                    @if (item.Type.Equals("Income", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span style="background-color: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Income</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="background-color: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Expense</span>
+                                    }
+                                </td>
+
+                                <td style="display: flex; gap: 8px; align-items: center;">
+                                    <a asp-action="Edit" asp-route-id="@item.CategoryId" class="ftx-edit-btn" style="padding: 5px 12px; font-size: 0.75rem; text-decoration: none; border: 1px solid #e5e5e5; background-color: #f9f9f9; color: #333; border-radius: 4px; display: inline-block; will-change: transform;">
+                                        Edit
+                                    </a>
+
+                                    <a asp-action="Delete" asp-route-id="@item.CategoryId" class="ftx-delete-btn" title="Delete Category" style="padding: 5px 10px; font-size: 0.85rem; border: 1px solid #fee2e2; cursor: pointer; background-color: #fef2f2; color: #ef4444; border-radius: 4px; text-decoration: none; display: inline-block; will-change: transform;">
+                                        ✖
+                                    </a>
+                                </td>
+                            </tr>
+                            delay += 50; // Stagger effect ke liye
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center" data-aos="fade-in" data-aos-duration="600" style="padding: 40px 0; background: #fafafa; border-radius: 8px; border: 1px dashed #ddd;">
+                <p style="color: #666; margin-bottom: 15px;">You don't have any categories yet.</p>
+                <a asp-controller="Category" asp-action="Create" class="ftx-btn-dark-small ftx-btn-hover" style="text-decoration: none; padding: 8px 15px; background: #111; color: white; border-radius: 4px; display: inline-block; will-change: transform;">Create First Category</a>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // 1. Initialize AOS
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                once: true,
+                offset: 20
+            });
+        }
+
+        // 2. GSAP Hover for Top Stats Cards
+        const hoverCards = document.querySelectorAll('.ftx-hover-card > div');
+        hoverCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    y: -5,
+                    scale: 1.02,
+                    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.08)",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    y: 0,
+                    scale: 1,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+        });
+
+        // 3. GSAP Hover for Primary Buttons ("Add New Category" etc.)
+        const mainButtons = document.querySelectorAll('.ftx-btn-hover');
+        mainButtons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(btn, {
+                    y: -2,
+                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)",
+                    duration: 0.2,
+                    ease: "power1.out"
+                });
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, {
+                    y: 0,
+                    boxShadow: "none",
+                    duration: 0.2,
+                    ease: "power1.out"
+                });
+            });
+        });
+
+        // 4. GSAP Hover for Table Rows
+        const tableRows = document.querySelectorAll('.ftx-table-row');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                gsap.to(row, { backgroundColor: "#fafafa", duration: 0.2 });
+            });
+            row.addEventListener('mouseleave', () => {
+                gsap.to(row, { backgroundColor: "transparent", duration: 0.2 });
+            });
+        });
+
+        // 5. GSAP Hover for Edit Buttons
+        const editBtns = document.querySelectorAll('.ftx-edit-btn');
+        editBtns.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(btn, { backgroundColor: "#eee", scale: 1.05, duration: 0.2 });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { backgroundColor: "#f9f9f9", scale: 1, duration: 0.2 });
+            });
+        });
+
+        // 6. GSAP Hover for Delete Buttons
+        const deleteBtns = document.querySelectorAll('.ftx-delete-btn');
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(btn, { backgroundColor: "#ef4444", color: "white", scale: 1.05, duration: 0.2 });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { backgroundColor: "#fef2f2", color: "#ef4444", scale: 1, duration: 0.2 });
+            });
+        });
+
+    });
+</script>

@@ -1,0 +1,225 @@
+﻿@model IEnumerable<FinTrack_Pro.Models.Investment>
+@{
+    ViewData["Title"] = "My Portfolio";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+
+    decimal totalInvested = ViewBag.TotalInvested ?? 0m;
+    decimal totalCurrentValue = ViewBag.TotalCurrentValue ?? 0m;
+    decimal totalProfit = ViewBag.TotalProfit ?? 0m;
+
+    var overallProfitClass = totalProfit >= 0 ? "#22c55e" : "#ef4444";
+}
+
+<div class="container mt-4">
+
+    <div class="row mb-4">
+        <div class="col-md-4 ftx-hover-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="0">
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-left: 4px solid #3b82f6; will-change: transform, box-shadow;">
+                <p style="color: #666; font-size: 0.85rem; margin-bottom: 5px; font-weight: 600; text-transform: uppercase;">Total Invested</p>
+                <h3 style="margin: 0; color: #111;">Rs. @totalInvested.ToString("N0")</h3>
+            </div>
+        </div>
+        <div class="col-md-4 ftx-hover-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-left: 4px solid #8b5cf6; will-change: transform, box-shadow;">
+                <p style="color: #666; font-size: 0.85rem; margin-bottom: 5px; font-weight: 600; text-transform: uppercase;">Current Portfolio Value</p>
+                <h3 style="margin: 0; color: #111;">Rs. @totalCurrentValue.ToString("N0")</h3>
+            </div>
+        </div>
+        <div class="col-md-4 ftx-hover-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-left: 4px solid @overallProfitClass; will-change: transform, box-shadow;">
+                <p style="color: #666; font-size: 0.85rem; margin-bottom: 5px; font-weight: 600; text-transform: uppercase;">Total Returns</p>
+                <h3 style="margin: 0; color: @overallProfitClass;">
+                    @(totalProfit >= 0 ? "+" : "")Rs. @totalProfit.ToString("N0")
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;" data-aos="fade-in" data-aos-duration="800" data-aos-delay="300">
+        <h3 style="margin: 0;">My Investments 📈</h3>
+        <a asp-action="Create" class="ftx-btn-hover" style="text-decoration: none; padding: 8px 15px; border-radius: 6px; background: #111; color: #fff; display: inline-block; will-change: transform;">
+            + Add Asset
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" data-aos="zoom-in" data-aos-duration="400" style="padding: 10px; font-size: 0.9rem; border-radius: 6px;">@TempData["SuccessMessage"]</div>
+    }
+
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center" data-aos="fade-in" data-aos-duration="600" style="padding: 40px 0; background: #fafafa; border-radius: 8px; border: 1px dashed #ddd;">
+                <p style="color: #666; font-size: 1.1rem;">No investments yet. Time to grow your wealth! 🚀</p>
+            </div>
+        }
+        else
+        {
+            int delay = 200; // Staggered loading effect ke liye delay
+            @foreach (var item in Model)
+            {
+                var difference = item.CurrentValue - item.InvestedAmount;
+                var percentage = item.InvestedAmount > 0 ? (difference / item.InvestedAmount) * 100 : 0;
+                var isProfit = difference >= 0;
+                var colorClass = isProfit ? "#16a34a" : "#dc2626";
+                var bgClass = isProfit ? "#dcfce7" : "#fee2e2";
+                var icon = isProfit ? "▲" : "▼";
+
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-duration="500" data-aos-delay="@delay">
+                    <div class="ftx-investment-card" style="background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; will-change: transform, box-shadow;">
+
+                        <form asp-action="Delete" method="post" onsubmit="return confirm('Are you sure you want to remove this investment?');" style="position: absolute; top: 15px; right: 15px; z-index: 10;">
+                            <input type="hidden" name="id" value="@item.InvestmentId" />
+                            <button type="submit" class="ftx-delete-btn" style="background: #fef2f2; border: 1px solid #fee2e2; color: #ef4444; width: 30px; height: 30px; border-radius: 50%; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; will-change: transform;">✖</button>
+                        </form>
+
+                        <h5 style="font-weight: 700; color: #111; margin-bottom: 15px; display: flex; align-items: center; padding-right: 30px;">
+                            @item.AssetName
+                            <span style="background: #f1f5f9; color: #475569; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; margin-left: 10px; font-weight: 700; border: 1px solid #e2e8f0; text-transform: uppercase;">
+                                @item.Category
+                                @if (!string.IsNullOrEmpty(item.Symbol))
+                                {
+                                    <text>(@item.Symbol)</text>
+                                }
+                            </span>
+                        </h5>
+
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+                            <div>
+                                <p style="font-size: 0.8rem; color: #666; margin: 0;">Invested</p>
+                                <strong style="color: #111;">Rs. @item.InvestedAmount.ToString("N0")</strong>
+                            </div>
+                            <div style="text-align: right;">
+                                <p style="font-size: 0.8rem; color: #666; margin: 0;">Current Value</p>
+                                <strong style="color: #111;">Rs. @item.CurrentValue.ToString("N0")</strong>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 15px; display: inline-block;">
+                            <span class="ftx-profit-badge" style="background: @bgClass; color: @colorClass; padding: 5px 10px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; display: inline-block; will-change: transform;">
+                                @icon Rs. @Math.Abs(difference).ToString("N0") (@Math.Round(percentage, 2)%)
+                            </span>
+                        </div>
+
+                        <div style="background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <p style="font-size: 0.8rem; margin-bottom: 5px; color: #475569; font-weight: 600;">Update Current Value:</p>
+                            <form asp-action="UpdateValue" method="post" style="display: flex; gap: 8px;">
+                                <input type="hidden" name="InvestmentId" value="@item.InvestmentId" />
+                                <input type="number" name="NewValue" step="0.01" style="flex: 1; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; outline: none;" placeholder="New Price..." required />
+                                <button type="submit" class="ftx-update-btn" style="background: #3b82f6; color: white; border: none; padding: 6px 15px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; will-change: transform;">Update</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+                delay += 100;
+            }
+        }
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // 1. Initialize AOS
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                once: true,
+                offset: 20
+            });
+        }
+
+        // 2. GSAP Hover for Top Stats Cards
+        const hoverCards = document.querySelectorAll('.ftx-hover-card > div');
+        hoverCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    y: -5,
+                    scale: 1.02,
+                    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.08)",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    y: 0,
+                    scale: 1,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+        });
+
+        // 3. GSAP Hover for "+ Add Asset" Button
+        const mainButtons = document.querySelectorAll('.ftx-btn-hover');
+        mainButtons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(btn, { y: -2, boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)", duration: 0.2 });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { y: 0, boxShadow: "none", duration: 0.2 });
+            });
+        });
+
+        // 4. GSAP Hover for Investment Cards
+        const investCards = document.querySelectorAll('.ftx-investment-card');
+        investCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    y: -4,
+                    boxShadow: "0 12px 24px rgba(0,0,0,0.08)",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    y: 0,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+        });
+
+        // 5. GSAP Hover for Delete Buttons (Circular)
+        const deleteBtns = document.querySelectorAll('.ftx-delete-btn');
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(btn, { backgroundColor: "#ef4444", color: "white", scale: 1.15, duration: 0.2, ease: "back.out(2)" });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { backgroundColor: "#fef2f2", color: "#ef4444", scale: 1, duration: 0.2, ease: "power1.out" });
+            });
+        });
+
+        // 6. GSAP Hover for "Update" Price Buttons
+        const updateBtns = document.querySelectorAll('.ftx-update-btn');
+        updateBtns.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(btn, { backgroundColor: "#2563eb", scale: 1.05, duration: 0.2 });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { backgroundColor: "#3b82f6", scale: 1, duration: 0.2 });
+            });
+        });
+
+        // Optional: Subtly pop the profit/loss badge on hover
+        const profitBadges = document.querySelectorAll('.ftx-profit-badge');
+        profitBadges.forEach(badge => {
+            badge.addEventListener('mouseenter', () => {
+                gsap.to(badge, { scale: 1.05, duration: 0.2, ease: "back.out(2)" });
+            });
+            badge.addEventListener('mouseleave', () => {
+                gsap.to(badge, { scale: 1, duration: 0.2, ease: "power1.out" });
+            });
+        });
+
+    });
+</script>

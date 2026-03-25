@@ -1,0 +1,251 @@
+﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+a {
+  color: #0077cc;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
+
+/* =========================================
+   FTX UNIQUE NAVBAR STYLES 
+   ========================================= */
+
+:root {
+    /* Colors strictly matching the image */
+    --ftx-bg-main: #1C1C1E; /* Dark pill background */
+    --ftx-bg-dropdown: #2C2C2E;
+    --ftx-bg-btn-dark: #333336;
+    --ftx-bg-btn-light: #FFFFFF;
+    --ftx-text-muted: #A1A1A6;
+    --ftx-text-white: #FFFFFF;
+    --ftx-text-black: #000000;
+    --ftx-border-color: rgba(255, 255, 255, 0.08);
+    --ftx-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Wrapper to center the floating pill */
+.ftx-nav-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 10px;
+    position: fixed; /* Fix to top */
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    font-family: 'Inter', -apple-system, sans-serif; /* Modern font */
+}
+
+/* The Dark Pill Container */
+.ftx-nav-container {
+    background-color: var(--ftx-bg-main);
+    border: 1px solid var(--ftx-border-color);
+    border-radius: 50px;
+    padding: 8px 12px 8px 24px;
+    display: flex;
+    align-items: center;
+    gap: 32px; /* Space between logo, links, and buttons */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* Logo Styling */
+.ftx-nav-logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.ftx-logo-text {
+    color: var(--ftx-text-white);
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.ftx-logo-dot {
+    color: #4BC0C0; /* Teal dot for a pop of modern finance feel */
+}
+
+/* Links List */
+.ftx-nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.ftx-nav-item {
+    position: relative;
+}
+
+.ftx-nav-link {
+    color: var(--ftx-text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--ftx-transition);
+}
+
+    .ftx-nav-link:hover {
+        color: var(--ftx-text-white);
+    }
+
+.ftx-chevron {
+    transition: var(--ftx-transition);
+}
+
+/* Dropdown Magic (CSS Only, No JS) */
+.ftx-dropdown-menu {
+    position: absolute;
+    top: 150%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background-color: var(--ftx-bg-dropdown);
+    border: 1px solid var(--ftx-border-color);
+    border-radius: 12px;
+    list-style: none;
+    padding: 8px;
+    min-width: 160px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    /* Animation hidden states */
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--ftx-transition);
+}
+
+/* The Invisible Hover Bridge */
+.ftx-has-dropdown::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    bottom: -20px;
+    left: 0;
+}
+
+/* Show dropdown on hover */
+.ftx-has-dropdown:hover .ftx-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Rotate chevron on hover */
+.ftx-has-dropdown:hover .ftx-chevron {
+    transform: rotate(180deg);
+}
+
+.ftx-dropdown-link {
+    display: block;
+    color: var(--ftx-text-muted);
+    text-decoration: none;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    transition: var(--ftx-transition);
+}
+
+    .ftx-dropdown-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--ftx-text-white);
+    }
+
+/* Action Buttons Container */
+.ftx-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Button Base */
+.ftx-btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: var(--ftx-transition);
+}
+
+/* "Sign In" / "Log In" Button */
+.ftx-btn-dark {
+    background-color: var(--ftx-bg-btn-dark);
+    color: var(--ftx-text-white);
+}
+
+    .ftx-btn-dark:hover {
+        background-color: #444446;
+    }
+
+/* "Join Us" Button */
+.ftx-btn-light {
+    background-color: var(--ftx-bg-btn-light);
+    color: var(--ftx-text-black);
+}
+
+    .ftx-btn-light:hover {
+        transform: scale(1.05); /* Slight pop effect */
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    }
+
+/* Responsive (Mobile View Adjustment) */
+@media (max-width: 768px) {
+    .ftx-nav-container {
+        padding: 8px 16px;
+        gap: 16px;
+    }
+
+    .ftx-nav-links {
+        display: none; /* Hide links on mobile for now, can implement hamburger later */
+    }
+
+    .ftx-btn-dark {
+        display: none; /* Hide sign in, just keep main action button */
+    }
+}

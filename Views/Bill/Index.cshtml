@@ -1,0 +1,226 @@
+﻿@model IEnumerable<FinTrack_Pro.Models.Bill>
+@{
+    ViewData["Title"] = "All Bills";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="row mb-4">
+        <div class="col-md-4 ftx-hover-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="0">
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-left: 4px solid #ef4444; will-change: transform, box-shadow;">
+                <p style="color: #666; font-size: 0.85rem; margin-bottom: 5px; font-weight: 600; text-transform: uppercase;">Total Unpaid</p>
+                <h3 style="margin: 0; color: #111;">Rs. @ViewBag.TotalUnpaidAmount</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4 ftx-hover-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-left: 4px solid #22c55e; will-change: transform, box-shadow;">
+                <p style="color: #666; font-size: 0.85rem; margin-bottom: 5px; font-weight: 600; text-transform: uppercase;">Paid This Month</p>
+                <h3 style="margin: 0; color: #111;">@ViewBag.PaidBillsCount Bills</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4 ftx-hover-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-left: 4px solid #eab308; will-change: transform, box-shadow;">
+                <p style="color: #666; font-size: 0.85rem; margin-bottom: 5px; font-weight: 600; text-transform: uppercase;">Next Due</p>
+                <h4 style="margin: 0; color: #111;">
+                    @if (ViewBag.NextBillDays == 0)
+                    {
+                        <span>@ViewBag.NextBillTitle (Today!)</span>
+                    }
+                    else if (ViewBag.NextBillDays > 0)
+                    {
+                        <span>@ViewBag.NextBillTitle (In @ViewBag.NextBillDays Days)</span>
+                    }
+                    else
+                    {
+                        <span style="color: #999; font-size: 1rem;">No upcoming bills</span>
+                    }
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="ftx-card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300" style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0;">My Bills</h3>
+            <a asp-controller="Bill" asp-action="Add" class="ftx-btn ftx-btn-dark ftx-btn-hover" style="text-decoration: none; padding: 8px 15px; border-radius: 6px; background: #111; color: #fff; display: inline-block; will-change: transform;">
+                + Add New Bill
+            </a>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" data-aos="zoom-in" data-aos-duration="400" style="padding: 10px; font-size: 0.9rem; border-radius: 6px;">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr style="color: #666; font-size: 0.85rem; border-bottom: 2px solid #eee;">
+                            <th>Title</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                            <th>Repeats</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int delay = 0;
+                        }
+                        @foreach (var bill in Model)
+                        {
+                            <tr class="ftx-table-row" data-aos="fade-left" data-aos-duration="400" data-aos-delay="@delay" style="border-bottom: 1px solid #f5f5f5; transition: background-color 0.2s;">
+                                <td style="font-weight: 600; color: #111;">@bill.Title</td>
+                                <td style="color: #444;">Rs. @bill.Amount</td>
+                                <td style="color: #666;">@bill.DueDate.ToString("MMM dd, yyyy")</td>
+                                <td>
+                                    @if (bill.IsRecurring && bill.RecurringFrequency != "None" && !string.IsNullOrEmpty(bill.RecurringFrequency))
+                                    {
+                                        <span style="background-color: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="23 4 23 10 17 10"></polyline>
+                                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                            </svg>
+                                            @bill.RecurringFrequency
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: #999; font-size: 0.8rem;">Once</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (bill.IsPaid)
+                                    {
+                                        <span style="background-color: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Paid</span>
+                                    }
+                                    else if (bill.DueDate.Date < DateTime.Today)
+                                    {
+                                        <span style="background-color: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Overdue</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="background-color: #fef9c3; color: #854d0e; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">Pending</span>
+                                    }
+                                </td>
+                                <td style="display: flex; gap: 8px; align-items: center;">
+                                    @if (!bill.IsPaid)
+                                    {
+                                        <form asp-controller="Bill" asp-action="PayBill" method="post" class="m-0 p-0">
+                                            <input type="hidden" name="id" value="@bill.Id" />
+                                            <button type="submit" class="ftx-btn-hover" style="padding: 5px 12px; font-size: 0.75rem; border: none; cursor: pointer; background-color: #111; color: white; border-radius: 4px; will-change: transform;">
+                                                Pay Now
+                                            </button>
+                                        </form>
+                                    }
+                                    <form asp-controller="Bill" asp-action="Delete" method="post" class="m-0 p-0" onsubmit="return confirm('Are you sure you want to delete this bill?');">
+                                        <input type="hidden" name="id" value="@bill.Id" />
+                                        <button type="submit" title="Delete Bill" class="ftx-btn-hover" style="padding: 4px 8px; font-size: 0.85rem; border: 1px solid #fee2e2; cursor: pointer; background-color: #fef2f2; color: #ef4444; border-radius: 4px; will-change: transform;" onmouseover="this.style.backgroundColor='#ef4444'; this.style.color='white';" onmouseout="this.style.backgroundColor='#fef2f2'; this.style.color='#ef4444';">
+                                            ✖
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            delay += 50; // Stagger effect for table rows
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center" data-aos="fade-in" data-aos-duration="600" style="padding: 40px 0; background: #fafafa; border-radius: 8px; border: 1px dashed #ddd;">
+                <p style="color: #666; margin-bottom: 15px;">You don't have any bills yet.</p>
+                <a asp-controller="Bill" asp-action="Add" class="ftx-btn-dark-small ftx-btn-hover" style="text-decoration: none; padding: 8px 15px; background: #111; color: white; border-radius: 4px; display: inline-block; will-change: transform;">Create Your First Bill</a>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // 1. Initialize AOS (Agar layout mein pehle se hai toh isko hata sakte hain)
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                once: true,
+                offset: 20
+            });
+        }
+
+        // 2. GSAP Hover for Top Stats Cards
+        const hoverCards = document.querySelectorAll('.ftx-hover-card > div');
+        hoverCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    y: -5,
+                    scale: 1.02,
+                    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.08)",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    y: 0,
+                    scale: 1,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+        });
+
+        // 3. GSAP Hover for Buttons
+        const buttons = document.querySelectorAll('.ftx-btn-hover');
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(btn, {
+                    y: -2,
+                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)",
+                    duration: 0.2,
+                    ease: "power1.out"
+                });
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, {
+                    y: 0,
+                    boxShadow: "none",
+                    duration: 0.2,
+                    ease: "power1.out"
+                });
+            });
+        });
+
+        // 4. GSAP Hover for Table Rows (Subtle background effect)
+        const tableRows = document.querySelectorAll('.ftx-table-row');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                gsap.to(row, {
+                    backgroundColor: "#fafafa", // Light grey on hover
+                    duration: 0.2
+                });
+            });
+
+            row.addEventListener('mouseleave', () => {
+                gsap.to(row, {
+                    backgroundColor: "transparent",
+                    duration: 0.2
+                });
+            });
+        });
+
+    });
+</script>

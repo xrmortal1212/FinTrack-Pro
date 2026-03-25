@@ -1,0 +1,159 @@
+﻿@model FinTrack_Pro.Models.User
+@{
+    ViewData["Title"] = "Edit Profile";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+
+}
+
+<style>
+    .ft-edit-wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 15px;
+    }
+
+    .ft-glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+        border-radius: 24px;
+        padding: 40px;
+    }
+
+    .ft-glass-header h4 {
+        color: #1e293b;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .ft-glass-header p {
+        color: #64748b;
+        margin-bottom: 30px;
+    }
+
+    .ft-form-label {
+        font-weight: 600;
+        color: #334155;
+        font-size: 14px;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .ft-glass-input, .ft-glass-textarea, .ft-file-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        color: #1e293b;
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        outline: none;
+        margin-bottom: 20px;
+    }
+
+    .ft-glass-textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+        .ft-glass-input:focus, .ft-glass-textarea:focus {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #f15e36;
+            box-shadow: 0 0 0 4px rgba(241, 94, 54, 0.1);
+        }
+
+    /* File Input Styling */
+    .ft-file-input {
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+        .ft-file-input::file-selector-button {
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-right: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            .ft-file-input::file-selector-button:hover {
+                background: #0f172a;
+            }
+
+    .ft-btn-save {
+        background: #f15e36;
+        color: white;
+        border: none;
+        padding: 14px 30px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+    }
+
+        .ft-btn-save:hover {
+            background: #d94d28;
+            transform: translateY(-2px);
+        }
+
+    .text-danger {
+        font-size: 12px;
+        margin-top: -15px;
+        margin-bottom: 15px;
+        display: block;
+    }
+</style>
+
+<div class="ft-edit-wrapper">
+    <div class="ft-glass-card">
+        <div class="ft-glass-header">
+            <h4>Update Profile</h4>
+            <p>Personalize your FinTrack experience.</p>
+        </div>
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="ft-form-label">Profile Picture</label>
+                    <input type="file" name="profilePicture" class="ft-file-input" accept="image/*" />
+                </div>
+                <div class="col-md-6">
+                    <label class="ft-form-label">Cover Banner</label>
+                    <input type="file" name="bannerImage" class="ft-file-input" accept="image/*" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="ft-form-label">Full Name</label>
+                    <input asp-for="FullName" class="ft-glass-input" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="ft-form-label">Profession</label>
+                    <input asp-for="Profession" class="ft-glass-input" placeholder="e.g. Software Engineer" />
+                </div>
+            </div>
+
+            <label class="ft-form-label">Phone Number</label>
+            <input asp-for="PhoneNumber" class="ft-glass-input" placeholder="+92 3XX XXXXXXX" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+            <label class="ft-form-label">Bio</label>
+            <textarea asp-for="Bio" class="ft-glass-textarea" placeholder="Tell us a little about yourself..."></textarea>
+            <span asp-validation-for="Bio" class="text-danger"></span>
+
+            <button type="submit" class="ft-btn-save">Save Changes</button>
+            <a asp-action="Index" class="btn btn-link text-secondary w-100 mt-3" style="text-decoration: none; font-weight: 500;">Cancel</a>
+        </form>
+    </div>
+</div>

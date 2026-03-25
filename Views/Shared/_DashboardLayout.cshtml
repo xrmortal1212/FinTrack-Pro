@@ -1,0 +1,410 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FinTrack Pro</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* Sidebar Menu Items Hover */
+        .ftx-dash-nav-item {
+            transition: all 0.3s ease;
+        }
+
+            .ftx-dash-nav-item:hover {
+                transform: translateX(6px); /* Right shift on hover */
+                opacity: 0.9;
+            }
+
+        /* Back to Website Button Hover */
+        .ftx-back-btn {
+            transition: all 0.3s ease !important;
+        }
+
+            .ftx-back-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                background-color: #e2e6ea !important;
+            }
+
+        /* Notification Bell Hover & Dropdown Animation */
+        .ftx-dash-icon-btn {
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            cursor: pointer;
+        }
+
+            .ftx-dash-icon-btn:hover {
+                transform: scale(1.1) rotate(5deg); /* Slight pop and tilt */
+            }
+
+        .ftx-noti-dropdown {
+            animation: fadeInDown 0.3s ease-out; /* Dropdown smooth entrance */
+        }
+
+        /* Notification List Items Hover */
+        .ftx-noti-body a {
+            transition: background-color 0.2s ease, transform 0.2s ease !important;
+        }
+
+            .ftx-noti-body a:hover {
+                transform: translateX(4px); /* Shift right slightly */
+                background-color: #f1f3f5 !important;
+            }
+
+        /* Profile Hover */
+        .ftx-dash-profile {
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+
+            .ftx-dash-profile:hover {
+                transform: scale(1.02);
+            }
+
+        /* Profile Dropdown Links Hover */
+        .ftx-profile-dropdown a, .ftx-profile-dropdown button {
+            transition: all 0.2s ease;
+        }
+
+            .ftx-profile-dropdown a:hover, .ftx-profile-dropdown button:hover {
+                padding-left: 20px !important; /* Move text slightly to the right */
+                background-color: #f8f9fa;
+            }
+
+        /* Keyframe for Dropdowns */
+        @@keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    @using System.Security.Claims
+    @using Microsoft.AspNetCore.Http
+    @inject FinTrack_Pro.Data.ApplicationDbContext _context
+    @inject IHttpContextAccessor HttpContextAccessor
+
+    @{
+        Layout = null;
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+        // 1. CLAIMS KE ZARIYE USER ID NIKALNA (Ye sahi tareeqa hai)
+        int currentUserId = 0;
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                currentUserId = int.Parse(claim.Value);
+            }
+        }
+
+        // 2. USER KI PROFILE NIKALNA
+        var currentUser = _context.Users.FirstOrDefault(u => u.Id == currentUserId);
+
+        // 3. NOTIFICATIONS NIKALNA
+        var recentNotifications = new List<FinTrack_Pro.Models.Notification>();
+        int unreadCount = 0;
+
+        if (currentUserId > 0)
+        {
+            recentNotifications = _context.Notifications
+            .Where(n => n.UserId == currentUserId)
+            .OrderByDescending(n => n.CreatedAt)
+            .Take(5) // <--- YAHAN TAKE(5) LIKHA HAI (Sirf 5 aayengi)
+            .ToList();
+
+            unreadCount = _context.Notifications
+            .Count(n => n.UserId == currentUserId && !n.IsRead);
+        }
+    }
+
+    <div class="ftx-dash-all container-fluid" style="padding: 0;">
+        <div class="ftx-dash-layout">
+
+            <aside class="ftx-dash-sidebar" data-aos="fade-right" data-aos-duration="600" data-aos-once="true">
+                <div class="ftx-dash-logo">
+                    <a asp-controller="Home" asp-action="Dashboard">
+                        <div class="ftx-dash-logo-circle"></div>
+                    </a>
+                </div>
+                <nav class="ftx-dash-nav">
+
+                    <a asp-controller="Home" asp-action="Dashboard" class="ftx-dash-nav-item @(currentController == "Home" && currentAction == "Dashboard" ? "active" : "")" title="Dashboard">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                    </a>
+
+                    <a asp-controller="Transaction" asp-action="Index" class="ftx-dash-nav-item @(currentController == "Transaction" ? "active" : "")" title="Transactions">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    </a>
+
+                    <a asp-controller="Budget" asp-action="Index" class="ftx-dash-nav-item @(currentController == "Budget" ? "active" : "")" title="Budgets">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    </a>
+
+                    <a asp-controller="Bill" asp-action="Index" class="ftx-dash-nav-item @(currentController == "Bill" ? "active" : "")" title="Bills">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </a>
+
+                    <a asp-controller="Category" asp-action="Index" class="ftx-dash-nav-item @(currentController == "Category" ? "active" : "")" title="Categories">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                    </a>
+
+                    <a asp-controller="Debt" asp-action="Index" class="ftx-dash-nav-item @(currentController == "Debt" ? "active" : "")" title="Debt Management">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+                    </a>
+
+                    <a asp-controller="Goal" asp-action="Index" class="ftx-dash-nav-item @(currentController == "Goal" ? "active" : "")" title="Financial Goals">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                    </a>
+
+                    <a asp-controller="Investment" asp-action="Index" class="ftx-dash-nav-item @(currentController == "Investment" ? "active" : "")" title="Investments">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                    </a>
+
+                    <a asp-controller="Report" asp-action="Index" class="ftx-dash-nav-item @(currentController == "Report" ? "active" : "")" title="Reports">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    </a>
+
+                    <a asp-controller="Dash_Profile" asp-action="Index" class="ftx-dash-nav-item @(currentController == "Dash_Profile" ? "active" : "")" title="My Profile">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+
+                </nav>
+            </aside>
+
+            <main class="ftx-dash-main">
+
+                <header class="ftx-dash-header" data-aos="fade-down" data-aos-duration="600" data-aos-delay="100" data-aos-once="true" style="display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1050;">
+                    <div class="ftx-dash-title-group" style="display: flex; align-items: center; gap: 20px;">
+                        <h1 class="ftx-dash-title" style="margin: 0;">Dashboard</h1>
+
+                        <a asp-controller="Home" asp-action="Index" class="ftx-back-btn" style="background-color: #f8f9fa; color: #495057; border: 1px solid #ced4da; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            Back to Website
+                        </a>
+                    </div>
+
+                    <div class="ftx-dash-user-group" style="display: flex; gap: 15px; align-items: center;">
+
+                        <div class="ftx-noti-wrapper" style="position: relative;">
+                            <button class="ftx-dash-icon-btn" id="notiBell" style="background:transparent; border:none; padding:8px;">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                </svg>
+                                @if (unreadCount > 0)
+                                {
+                                    <span class="ftx-noti-dot" style="position: absolute; top: 5px; right: 5px; background: #ff4757; color: white; font-size: 10px; font-weight: bold; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #fff;">
+                                        @unreadCount
+                                    </span>
+                                }
+                            </button>
+
+                            <style>
+                                .ftx-noti-dropdown{
+                                    position: relative;
+                                    z-index: 9999;
+                                }
+                            </style>
+
+                            <div class="ftx-noti-dropdown shadow" id="notiDropdown" style="display: none; position: absolute; top: 50px; right: 0; width: 320px; background: #fff; border-radius: 12px; z-index: 9999; border: 1px solid #eee;">
+                                <div class="ftx-noti-header" style="padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-weight: 600; font-size: 14px;">Notifications</span>
+                                    @if (unreadCount > 0)
+                                    {
+                                        <a href="/Notification/MarkAllRead" style="font-size: 12px; color: #f15e36; text-decoration: none;">Mark all as read</a>
+                                    }
+                                </div>
+
+                                <div class="ftx-noti-body" style="max-height: 300px; overflow-y: auto;">
+                                    @if (recentNotifications.Any())
+                                    {
+                                        foreach (var noti in recentNotifications)
+                                        {
+                                            string bgClass = noti.IsRead ? "#fff" : "#fff8f6";
+                                            <a href="@noti.ActionUrl" style="display: flex; gap: 12px; padding: 12px 15px; text-decoration: none; border-bottom: 1px solid #f8f9fa; background: @bgClass;">
+                                                <div style="width: 35px; height: 35px; border-radius: 50%; background: @noti.Color; opacity: 0.8; display: flex; justify-content: center; align-items: center; color: white; flex-shrink: 0;">
+                                                    <i class="bi @noti.Icon" style="font-size: 16px;"></i>
+                                                </div>
+                                                <div style="flex: 1;">
+                                                    <p style="margin: 0; font-size: 13px; font-weight: 600; color: #333;">@noti.Title</p>
+                                                    <p style="margin: 2px 0 0 0; font-size: 11px; color: #666; line-height: 1.3;">@noti.Message</p>
+                                                    <span style="font-size: 10px; color: #aaa; margin-top: 4px; display: block;">@noti.CreatedAt.ToString("MMM dd, hh:mm tt")</span>
+                                                </div>
+                                            </a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div style="padding: 20px; text-align: center; color: #aaa;">
+                                            <p style="margin: 0; font-size: 13px;">No new notifications</p>
+                                        </div>
+                                    }
+                                </div>
+                                <a asp-controller="Notification" asp-action="Index" style="display: block; text-align: center; padding: 12px; font-size: 13px; font-weight: 600; color: #555; text-decoration: none; border-top: 1px solid #eee; background: #f8f9fa; border-radius: 0 0 12px 12px;">View All Notifications</a>
+                            </div>
+                        </div>
+
+                        <div class="ftx-dash-profile-wrapper" style="position: relative;">
+                            <div class="ftx-dash-profile" id="profileBtn" style="display: flex; align-items: center; gap: 10px;">
+                                <span>@User.Identity?.Name</span>
+                                <div class="ftx-dash-avatar-wrapper">
+                                    @if (currentUser != null && !string.IsNullOrEmpty(currentUser.ProfilePicturePath))
+                                    {
+                                        <img src="@currentUser.ProfilePicturePath" class="ftx-dash-pfp-img" alt="Profile" />
+                                    }
+                                    else
+                                    {
+                                        <div class="ftx-dash-avatar-initials">
+                                            @(currentUser != null ? currentUser.FullName.Substring(0, 1).ToUpper() : "U")
+                                        </div>
+                                    }
+                                </div>
+
+                                <style>
+                                    .ftx-dash-avatar-wrapper {
+                                        width: 45px;
+                                        height: 45px;
+                                        border-radius: 50%;
+                                        overflow: hidden;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        background: #fff;
+                                        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                                    }
+
+                                    .ftx-dash-pfp-img {
+                                        width: 100%;
+                                        height: 100%;
+                                        object-fit: cover;
+                                    }
+
+                                    .ftx-dash-avatar-initials {
+                                        font-weight: 800;
+                                        color: greenyellow;
+                                    }
+
+                                    /* Profile Dropdown Hover Logic */
+                                    .ftx-profile-dropdown {
+                                        display: none; /* Default hidden */
+                                    }
+
+                                    .ftx-dash-profile-wrapper:hover .ftx-profile-dropdown {
+                                        display: block !important;
+                                        animation: fadeInDown 0.3s ease-out;
+                                    }
+
+                                    /* Profile Dropdown Styling */
+                                    .ftx-profile-dropdown a {
+                                        display: block;
+                                        padding: 10px 15px;
+                                        text-decoration: none;
+                                        color: #333;
+                                        font-size: 14px;
+                                    }
+                                </style>
+                            </div>
+
+                            <div class="ftx-profile-dropdown shadow-sm" id="profileDropdown" style="position: absolute; top: 60px; right: 0; width: 200px; background: #fff; border-radius: 12px; z-index: 9999; border: 1px solid #eee; padding: 10px 0;">
+                                <a asp-controller="Dash_Profile" asp-action="Index">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; margin-bottom: 2px; display: inline-block;">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    View Profile
+                                </a>
+                                <a asp-controller="Dash_Profile" asp-action="Edit">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; margin-bottom: 2px; display: inline-block;">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    Edit Profile
+                                </a>
+
+                                <div class="ftx-dropdown-divider" style="border-top: 1px solid #eee; margin: 8px 0;"></div>
+
+                                <form asp-controller="Account" asp-action="Logout" method="post" style="margin: 0;">
+                                    <button type="submit" class="text-danger" style="background:none; border:none; width:100%; text-align:left; padding:10px 15px; font-size: 14px; cursor:pointer;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; margin-bottom: 2px; display: inline-block;">
+                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                            <polyline points="16 17 21 12 16 7"></polyline>
+                                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                                        </svg>
+                                        Logout
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </header>
+
+                <div data-aos="fade-in" data-aos-duration="800" data-aos-delay="200" data-aos-once="true">
+                    @RenderBody()
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // ✨ Initialize AOS
+            AOS.init();
+
+            // Notification Elements
+            const bellBtn = document.getElementById("notiBell");
+            const notiDropdown = document.getElementById("notiDropdown");
+
+            // Notification Click Logic
+            if(bellBtn && notiDropdown) {
+                bellBtn.addEventListener("click", function(e) {
+                    e.stopPropagation();
+                    if (notiDropdown.style.display === "none" || notiDropdown.style.display === "") {
+                        notiDropdown.style.display = "block";
+                    } else {
+                        notiDropdown.style.display = "none";
+                    }
+                });
+            }
+
+            // Click outside to close Notification dropdown
+            document.addEventListener("click", function(e) {
+                if(notiDropdown && !notiDropdown.contains(e.target) && e.target !== bellBtn) {
+                    notiDropdown.style.display = "none";
+                }
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,60 @@
+﻿@model FinTrack_Pro.Models.Bill
+@{
+    ViewData["Title"] = "Add New Bill";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="ftx-card">
+                <h3 style="margin-bottom: 5px;">Add Upcoming Bill</h3>
+                <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 20px;">Keep track of your future payments.</p>
+
+                <form asp-controller="Bill" asp-action="Add" method="post">
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: #444;">Bill Title</label>
+                        <input asp-for="Title" class="ftx-input-grey" placeholder="e.g., Netflix, Electricity" required />
+                        <span asp-validation-for="Title" class="text-danger" style="font-size: 0.8rem;"></span>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: #444;">Amount ($)</label>
+                        <input asp-for="Amount" type="number" step="0.01" min="0.1" class="ftx-input-grey" placeholder="0.00" required />
+                        <span asp-validation-for="Amount" class="text-danger" style="font-size: 0.8rem;"></span>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: #444;">Due Date</label>
+                        <input asp-for="DueDate" type="date" class="ftx-input-grey" required />
+                        <span asp-validation-for="DueDate" class="text-danger" style="font-size: 0.8rem;"></span>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: #444;">Repeat This Bill?</label>
+                        <select asp-for="RecurringFrequency" class="ftx-input-grey" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+                            <option value="None">No, Just Once</option>
+                            <option value="Daily">Every Day</option>
+                            <option value="Weekly">Every Week</option>
+                            <option value="Monthly">Every Month</option>
+                            <option value="Yearly">Every Year</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="ftx-btn-dark-full">Save Bill</button>
+
+                    <div class="text-center mt-3">
+                        <a asp-controller="Home" asp-action="Dashboard" style="color: #666; font-size: 0.85rem; text-decoration: none;">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

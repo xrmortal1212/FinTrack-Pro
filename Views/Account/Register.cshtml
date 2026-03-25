@@ -1,0 +1,85 @@
+﻿@model FinTrack_Pro.Models.User
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="ft-auth-wrapper">
+    <div class="ft-auth-container">
+
+        <div class="ft-auth-form-side">
+
+            <div class="ft-auth-logo">
+                <img src="~/images/logo.png" style="height:50px;width:50px;" alt="Alternate Text" />
+            </div>
+
+            <h1 class="ft-auth-title">Create an account</h1>
+            <p class="ft-auth-subtitle">Start tracking and managing all your personal finances efficiently with FinTrack Pro.</p>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-danger">@ViewBag.Error</div>
+            }
+
+            <form asp-action="Register" method="post">
+
+                <div class="ft-form-group">
+                    <label class="ft-form-label" asp-for="FullName">Name</label>
+                    <input asp-for="FullName" class="ft-form-input" placeholder="Your name" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="ft-form-group">
+                    <label class="ft-form-label" asp-for="Email">Email</label>
+                    <input asp-for="Email" type="email" class="ft-form-input" placeholder="Your email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="ft-form-group">
+                    <label class="ft-form-label" asp-for="PasswordHash">Password</label>
+                    <input asp-for="PasswordHash" type="password" class="ft-form-input" placeholder="Create a password" />
+                    <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="ft-btn-primary">Create account</button>
+            </form>
+
+            <div class="ft-auth-divider"> OR CONTINUE WITH </div>
+
+            <div class="ft-social-group">
+                <form asp-controller="Account" asp-action="GoogleLogin" method="post" style="width: 100%;">
+                    <button type="submit" class="ft-btn-social" style="width: 100%;">
+                        <img src="~/images/google_svg.png" width="25" alt="Google" />
+                    </button>
+                </form>
+            </div>
+
+            <div class="ft-auth-footer">
+                Already have an account? <a asp-controller="Account" asp-action="Login">Log in</a>
+            </div>
+
+        </div>
+
+        <div class="ft-auth-slider-side">
+            <div class="ft-slider-tags">
+                <span class="ft-tag">Smart Tracking</span>
+                <span class="ft-tag">Financial Goals</span>
+            </div>
+
+            <div class="ft-slider-quote">
+                "I was able to track my hidden expenses and increase my monthly savings by 35% using the FinTrack platform."
+            </div>
+
+            <div>
+                <div class="ft-slider-author">Raman Mukesh</div>
+                <div class="ft-slider-role">Tech Enthusiact</div>
+            </div>
+
+            
+        </div>
+
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

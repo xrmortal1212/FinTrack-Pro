@@ -1,0 +1,147 @@
+﻿@model IEnumerable<FinTrack_Pro.Models.Notification>
+
+@{
+    ViewData["Title"] = "All Notifications";
+    // Yahan aapka default Dashboard Layout khud apply ho jayega
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container-fluid" style="padding: 20px;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;" data-aos="fade-down" data-aos-duration="600">
+        <h2 style="font-weight: 700; color: #1e293b; margin: 0;">Notifications History</h2>
+
+        <a asp-controller="Notification" asp-action="MarkAllRead" class="btn btn-outline-primary shadow-sm ftx-mark-read-btn" style="border-radius: 8px; font-weight: 600; will-change: transform;">
+            <i class="bi bi-check2-all" style="margin-right: 5px;"></i> Mark All as Read
+        </a>
+    </div>
+
+    <div class="bg-white shadow-sm" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100" style="border-radius: 12px; overflow: hidden; border: 1px solid #eee;">
+
+        @if (Model.Any())
+        {
+            int delay = 100; // Staggered list effect
+            foreach (var noti in Model)
+            {
+                // Agar notification unread hai toh background thora light-gray hoga
+                string bgClass = noti.IsRead ? "background: #ffffff;" : "background: #f8f9fa;";
+                string fontWeight = noti.IsRead ? "font-weight: 600;" : "font-weight: 800;";
+
+                <div class="ftx-noti-row" data-aos="fade-right" data-aos-duration="500" data-aos-delay="@delay" style="display: flex; align-items: center; padding: 20px; border-bottom: 1px solid #eee; @bgClass gap: 20px; will-change: transform, background-color, box-shadow; transition: background-color 0.3s ease;">
+
+                    <div class="ftx-noti-icon" style="width: 50px; height: 50px; border-radius: 50%; background: @noti.Color; opacity: 0.85; display: flex; justify-content: center; align-items: center; color: white; flex-shrink: 0; will-change: transform;">
+                        <i class="bi @noti.Icon" style="font-size: 22px;"></i>
+                    </div>
+
+                    <div style="flex: 1;">
+                        <h6 style="margin: 0; color: #333; font-size: 16px; @fontWeight">@noti.Title</h6>
+                        <p style="margin: 4px 0 0 0; color: #555; font-size: 14px; line-height: 1.5;">@noti.Message</p>
+                        <small style="color: #999; display: block; margin-top: 5px; font-size: 12px;">
+                            <i class="bi bi-clock"></i> @noti.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                        </small>
+                    </div>
+
+                    <div>
+                        <a href="@noti.ActionUrl" class="btn btn-sm ftx-view-btn" style="background: #eef2f6; color: #1e293b; font-weight: 600; border-radius: 6px; display: inline-flex; align-items: center; will-change: transform;">
+                            View Details <i class="bi bi-arrow-right-short ftx-arrow-icon" style="font-size: 1.2rem; margin-left: 2px;"></i>
+                        </a>
+                    </div>
+                </div>
+                delay += 100;
+            }
+        }
+        else
+        {
+            <div style="padding: 60px 20px; text-align: center; color: #94a3b8;" data-aos="zoom-in" data-aos-duration="600">
+                <i class="bi bi-bell-slash ftx-empty-icon" style="font-size: 50px; color: #cbd5e1; display: inline-block;"></i>
+                <h5 style="margin-top: 15px; font-weight: 600; color: #64748b;">No Notifications Yet</h5>
+                <p style="font-size: 14px;">When you make transactions, alerts will appear here.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // 1. Initialize AOS
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                once: true,
+                offset: 20
+            });
+        }
+
+        // 2. GSAP Hover for Top "Mark All as Read" Button
+        const markReadBtn = document.querySelector('.ftx-mark-read-btn');
+        if (markReadBtn) {
+            markReadBtn.addEventListener('mouseenter', () => {
+                gsap.to(markReadBtn, { y: -2, boxShadow: "0 4px 12px rgba(13, 110, 253, 0.2)", duration: 0.2 });
+            });
+            markReadBtn.addEventListener('mouseleave', () => {
+                gsap.to(markReadBtn, { y: 0, boxShadow: "0 2px 4px rgba(0,0,0,0.05)", duration: 0.2 });
+            });
+        }
+
+        // 3. GSAP Hover for Notification Rows (Slide Right Effect)
+        const notiRows = document.querySelectorAll('.ftx-noti-row');
+        notiRows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                gsap.to(row, {
+                    x: 6, // List item smoothly slides to the right
+                    backgroundColor: "#f8fafc",
+                    boxShadow: "-4px 0px 0px 0px #3b82f6 inset", // Left side par ek blue border effect
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+                // Icon ko halka sa pop aur rotate karein
+                const icon = row.querySelector('.ftx-noti-icon');
+                if (icon) {
+                    gsap.to(icon, { scale: 1.1, rotation: 5, duration: 0.3, ease: "back.out(2)" });
+                }
+            });
+
+            row.addEventListener('mouseleave', () => {
+                gsap.to(row, {
+                    x: 0,
+                    backgroundColor: row.style.backgroundColor, // Revert to original inline background
+                    boxShadow: "none",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+                const icon = row.querySelector('.ftx-noti-icon');
+                if (icon) {
+                    gsap.to(icon, { scale: 1, rotation: 0, duration: 0.3, ease: "power1.out" });
+                }
+            });
+        });
+
+        // 4. GSAP Hover for "View Details" Buttons
+        const viewBtns = document.querySelectorAll('.ftx-view-btn');
+        viewBtns.forEach(btn => {
+            const arrow = btn.querySelector('.ftx-arrow-icon');
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(btn, { backgroundColor: "#e2e8f0", scale: 1.03, duration: 0.2 });
+                if(arrow) gsap.to(arrow, { x: 4, duration: 0.2 }); // Arrow aage slide hogi
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { backgroundColor: "#eef2f6", scale: 1, duration: 0.2 });
+                if(arrow) gsap.to(arrow, { x: 0, duration: 0.2 });
+            });
+        });
+
+        // 5. GSAP Gentle Float for Empty State Icon
+        const emptyIcon = document.querySelector('.ftx-empty-icon');
+        if (emptyIcon) {
+            gsap.to(emptyIcon, {
+                y: -10,
+                repeat: -1,
+                yoyo: true,
+                duration: 1.5,
+                ease: "sine.inOut"
+            });
+        }
+    });
+</script>

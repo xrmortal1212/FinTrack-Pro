@@ -1,0 +1,1475 @@
+﻿@{
+    ViewData["Title"] = "Welcome to FinTrackPro";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+
+
+<div id="ftx-loader-screen">
+    <div id="loader-animation-box">
+        <div aria-label="Orange and tan hamster running in a metal wheel" role="img" class="wheel-and-hamster">
+            <div class="wheel"></div>
+            <div class="hamster">
+                <div class="hamster__body">
+                    <div class="hamster__head">
+                        <div class="hamster__ear"></div>
+                        <div class="hamster__eye"></div>
+                        <div class="hamster__nose"></div>
+                    </div>
+                    <div class="hamster__limb hamster__limb--fr"></div>
+                    <div class="hamster__limb hamster__limb--fl"></div>
+                    <div class="hamster__limb hamster__limb--br"></div>
+                    <div class="hamster__limb hamster__limb--bl"></div>
+                    <div class="hamster__tail"></div>
+                </div>
+            </div>
+            <div class="spoke"></div>
+        </div>
+    </div>
+    <div id="loader-welcome-text">
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <span>Hi, <strong>@(User.Identity.Name?.Split('@')[0] ?? "User")</strong></span>
+        }
+        else
+        {
+            <span>Welcome to <strong>FinTrack</strong></span>
+        }
+    </div>
+</div>
+@* 
+======================================
+           ⭐ Hero Section ⭐
+======================================
+*@
+
+<section class="ftx-hero-section gsap-fade-anim" id="hero">
+
+    <div class="ftx-hero-wrapper">
+        <div class="ftx-hero-top-row">
+
+            <div class="ftx-hero-left">
+                <span class="ftx-version-badge gsap-hero-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="ftx-spin-icon" x="0px" y="0px" width="13px" height="13px" viewBox="0 0 13 13" fill="currentColor">
+                        <path fill="currentColor" d="M5.6,12.6c-0.5-0.8-0.7-2.4-1.7-3.5c-1-1-2.7-1.2-3.5-1.7C-0.1,7-0.1,6,0.4,5.6c0.8-0.5,2.3-0.6,3.5-1.8 C5,2.8,5.1,1.2,5.6,0.4C6-0.1,7-0.1,7.4,0.4c0.5,0.8,0.7,2.4,1.8,3.5c1.2,1.2,2.6,1.2,3.5,1.7c0.6,0.4,0.6,1.4,0,1.7 C11.8,7.9,10.2,8,9.1,9.1c-1,1-1.2,2.7-1.7,3.5C7,13.1,6,13.1,5.6,12.6z" />
+                    </svg>
+                    <span class="ms-1">Hero Section</span>
+                </span>
+
+                <h1 class="ftx-main-heading">
+                    <span class="reveal-wrap"><span class="reveal-text">Master Your Money</span></span> <br>
+                    <span class="reveal-wrap"><span class="reveal-text"><span class="ftx-holo-icon"></span> with</span></span> <br>
+                    <span class="reveal-wrap">
+                        <span class="reveal-text">
+                            <span class="ftx-text-gradient">FinTrack Pro</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ftx-spin-icon" width="25px" height="25px" viewBox="0 0 13 13" fill="currentColor">
+                                <path fill="currentColor" d="M5.6,12.6c-0.5-0.8-0.7-2.4-1.7-3.5c-1-1-2.7-1.2-3.5-1.7C-0.1,7-0.1,6,0.4,5.6c0.8-0.5,2.3-0.6,3.5-1.8 C5,2.8,5.1,1.2,5.6,0.4C6-0.1,7-0.1,7.4,0.4c0.5,0.8,0.7,2.4,1.8,3.5c1.2,1.2,2.6,1.2,3.5,1.7c0.6,0.4,0.6,1.4,0,1.7 C11.8,7.9,10.2,8,9.1,9.1c-1,1-1.2,2.7-1.7,3.5C7,13.1,6,13.1,5.6,12.6z" />
+                            </svg>
+                        </span>
+                    </span>
+                </h1>
+            </div>
+
+            <div class="ftx-hero-right">
+                <p class="ftx-hero-description gsap-hero-desc">
+                    Our smart platform offers intuitive expense tracking, advanced tax estimation, and automated budget management, setting a new standard in personal finance.
+                </p>
+                <div class="ftx-hero-checkmarks gsap-hero-check">
+                    <span><i class="bi bi-check2 text-success"></i> Based on data</span>
+                    <span><i class="bi bi-check2 text-success"></i> 100% Secure</span>
+                </div>
+                <div class="gsap-hero-btn">
+                    <a asp-controller="Account" asp-action="Register" class="ftx-btn-black">Get Started</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="ftx-marquee-wrapper gsap-fade-anim">
+            <div class="ftx-marquee-track">
+                <div class="ftx-marquee-content">
+                    <span class="ftx-mq-light">EXPENSE TRACKING</span>
+                    <span class="ftx-mq-arrow">─────⟶</span>
+                    <span class="ftx-mq-bold">SMART BUDGETS</span>
+                    <span class="ftx-mq-star">✺</span>
+                    <span class="ftx-mq-light">TAX ESTIMATION</span>
+                    <span class="ftx-mq-plus">+</span>
+                    <span class="ftx-mq-bold">FINANCIAL FREEDOM</span>
+                    <span class="ftx-mq-arrow">⟵─────⟶</span>
+                    <span class="ftx-mq-light">REAL-TIME ANALYTICS</span>
+                    <span class="ftx-mq-star">✺</span>
+                </div>
+                <div class="ftx-marquee-content">
+                    <span class="ftx-mq-light">EXPENSE TRACKING</span>
+                    <span class="ftx-mq-arrow">─────⟶</span>
+                    <span class="ftx-mq-bold">SMART BUDGETS</span>
+                    <span class="ftx-mq-star">✺</span>
+                    <span class="ftx-mq-light">TAX ESTIMATION</span>
+                    <span class="ftx-mq-plus">+</span>
+                    <span class="ftx-mq-bold">FINANCIAL FREEDOM</span>
+                    <span class="ftx-mq-arrow">⟵─────⟶</span>
+                    <span class="ftx-mq-light">REAL-TIME ANALYTICS</span>
+                    <span class="ftx-mq-star">✺</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="ftx-dashboard-showcase gsap-hero-showcase">
+            <div class="ftx-floating-users">
+                <div class="ftx-avatars">
+                    <img src="https://i.pravatar.cc/100?img=1" alt="User" />
+                    <img src="https://i.pravatar.cc/100?img=2" alt="User" />
+                    <img src="https://i.pravatar.cc/100?img=3" alt="User" />
+                </div>
+                <span class="ftx-users-text">Used by 240,000+ People</span>
+            </div>
+
+            <div class="ftx-floating-card gsap-float-card">
+                <h3 class="ftx-card-title">• 90x</h3>
+                <h4 class="ftx-card-subtitle">More Accurate & Precise</h4>
+                <p class="ftx-card-desc">
+                    Our smart platform offers intuitive expense tracking, advanced tax estimation, and automated budget management, setting a new standard in personal finance.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* 
+======================================
+           ⭐ Features Section ⭐
+======================================
+*@
+
+<section class="ftx-features-section gsap-fade-anim" id="features">
+    
+    <div class="ftx-L-lolide">
+        <img src="~/images/L_svg.png" alt="L_rotating" />
+    </div>
+
+    <div class="ftx-feature-svg-wrapper">
+        <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" width="100%" height="100%">
+            <path class="ftx-feature-scroll-path"
+                  d="M 500 0
+                 C 900 250, 900 450, 500 500
+                 C 100 550, 100 750, 500 1000"
+                  fill="none"
+                  stroke="#a3e635"
+                  stroke-width="20"
+                  stroke-linecap="round"
+                  vector-effect="non-scaling-stroke" />
+        </svg>
+    </div>
+   
+
+    <div class="ftx-feat-container">
+        <div class="ftx-feat-left">
+            <div class="ftx-img-wrapper">
+                <div class="ftx-feat-img" style="background-image: url('https://i.pinimg.com/736x/d5/bc/d0/d5bcd059fb43f6bc7ee43ab5490074b0.jpg');"></div>
+                <div class="ftx-feat-img" style="background-image: url('https://i.pinimg.com/1200x/55/3d/d3/553dd33c3d8440cfd8ad5bb94378df50.jpg');"></div>
+                <div class="ftx-feat-img" style="background-image: url('https://i.pinimg.com/1200x/73/05/58/7305580cbf436013438cce90dfb22416.jpg');"></div>
+                <div class="ftx-feat-img" style="background-image: url('https://i.pinimg.com/736x/af/83/ac/af83acf78a1965d7c86e16e0eb723a13.jpg');"></div>
+            </div>
+        </div>
+
+        <div class="ftx-feat-right">
+            <div class="ftx-feat-spacer"></div>
+
+            <div class="ftx-feat-item">
+                <h2 class="ftx-feat-title "><i class="bi bi-bar-chart-fill"></i> Visual Analytics</h2>
+                <p class="ftx-feat-desc">Get a bird's-eye view of your finances. Our dynamic charts and graphs make it easy to understand where your money goes every month.</p>
+            </div>
+
+            <div class="ftx-feat-item">
+                <h2 class="ftx-feat-title"><i class="bi bi-lightning-charge-fill"></i> Instant Tracking</h2>
+                <p class="ftx-feat-desc">Log your expenses on the go. Sync your accounts to automatically categorize and track your transactions in real-time.</p>
+            </div>
+
+            <div class="ftx-feat-item">
+                <h2 class="ftx-feat-title"><i class="bi bi-receipt"></i> Smart Tax Estimation</h2>
+                <p class="ftx-feat-desc">Never get caught off guard during tax season. Our smart algorithm estimates your tax liabilities based on your income and expenses.</p>
+            </div>
+
+            <div class="ftx-feat-item">
+                <h2 class="ftx-feat-title"><i class="bi bi-shield-lock-fill"></i> Secure & Private</h2>
+                <p class="ftx-feat-desc">Your financial data is encrypted and stored securely. We use bank-level security to ensure your information remains 100% private.</p>
+            </div>
+
+            <div class="ftx-feat-spacer"></div>
+        </div>
+    </div>
+</section>
+
+@*
+======================================
+           ⭐ How It Works ⭐
+======================================
+*@
+<section class="ftx-hiw-section gsap-fade-anim">
+    <div class="ftx-gojo_float">
+        <img src="~/images/gojo_float_svg.png" alt="Gojo_float" />
+    </div>
+    <div class="ftx-gojo">
+        <img src="~/images/gojo_svg.png" alt="Gojo" />
+    </div>
+    <div class="ftx-geto">
+        <img src="~/images/geto_svg.png" alt="Geto" />
+    </div>
+    
+    <div class="ftx-hiw-container">
+        <div class="ftx-hiw-header">
+            <span class="ftx-version-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" class="ftx-spin-icon" width="13px" height="13px" viewBox="0 0 13 13"
+                     fill="black">
+                    <path fill="currentColor" d="M5.6,12.6c-0.5-0.8-0.7-2.4-1.7-3.5c-1-1-2.7-1.2-3.5-1.7C-0.1,7-0.1,6,0.4,5.6c0.8-0.5,2.3-0.6,3.5-1.8
+                  C5,2.8,5.1,1.2,5.6,0.4C6-0.1,7-0.1,7.4,0.4c0.5,0.8,0.7,2.4,1.8,3.5c1.2,1.2,2.6,1.2,3.5,1.7c0.6,0.4,0.6,1.4,0,1.7
+                  C11.8,7.9,10.2,8,9.1,9.1c-1,1-1.2,2.7-1.7,3.5C7,13.1,6,13.1,5.6,12.6z" />
+                </svg> How we work
+            </span>
+            <h2 class="ftx-hiw-title">
+                Let us show you how we drive <br> your brand to new heights
+            </h2>
+            <p class="ftx-hiw-subtitle">
+                Simple, fast, and secure. Follow these three simple steps to take control of your financial journey today.
+            </p>
+            <svg class="ftx-hand-arrow" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12C9 12 11 16 19 16" stroke="#000" stroke-width="2" stroke-linecap="round" />
+                <path d="M15 12L19 16L15 20" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </div>
+
+        <div class="ftx-hiw-flow-wrapper">
+
+            <svg class="ftx-hiw-path" width="100%" height="100%" viewBox="0 0 800 600" preserveAspectRatio="none">
+                <path d="M 150 100 C 300 50, 450 200, 600 150 C 700 100, 650 350, 500 450 C 350 550, 150 400, 200 600"
+                      fill="none" stroke="#d1d5db" stroke-width="2" stroke-dasharray="8 8" />
+            </svg>
+
+            <div class="ftx-hiw-card ftx-card-1">
+                <div class="ftx-card-pin"></div>
+                <span class="ftx-step-num">01</span>
+                <h3 class="ftx-step-title">Create Account</h3>
+                <p class="ftx-step-desc">
+                    Sign up in seconds. All you need is your email to get access to your personalized dashboard.
+                </p>
+            </div>
+
+            <div class="ftx-hiw-card ftx-card-2">
+                <div class="ftx-card-pin"></div>
+                <span class="ftx-step-num">02</span>
+                <h3 class="ftx-step-title">Log Transactions</h3>
+                <p class="ftx-step-desc">
+                    Easily input your daily expenses and income. Let our smart system categorize them for you.
+                </p>
+            </div>
+
+            <div class="ftx-hiw-card ftx-card-3">
+                <div class="ftx-card-pin"></div>
+                <span class="ftx-step-num">03</span>
+                <h3 class="ftx-step-title">Watch it Grow</h3>
+                <p class="ftx-step-desc">
+                    View detailed analytics, achieve your budget goals, and see your savings grow over time.
+                </p>
+            </div>
+
+            <div class="ftx-hiw-bottom-note">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+                Ready to be delivered!
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ======================================
+   ⭐ Social Proof / Trust Section ⭐
+======================================
+*@
+<section class="ftx-trust-section mb-0 gsap-fade-anim" id="testimonials">
+
+    <div class="ftx-nagi">
+        <img src="~/images/luffy_svg.png" alt="Luffy_sitting" />
+    </div>
+
+    <div class="ftx-trust-container">
+
+        <span class="ftx-version-badge" data-aos="fade-down" data-aos-duration="800">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ftx-spin-icon" x="0px" y="0px" width="13px" height="13px" viewBox="0 0 13 13" fill="currentColor">
+                <path fill="currentColor" d="M5.6,12.6c-0.5-0.8-0.7-2.4-1.7-3.5c-1-1-2.7-1.2-3.5-1.7C-0.1,7-0.1,6,0.4,5.6c0.8-0.5,2.3-0.6,3.5-1.8 C5,2.8,5.1,1.2,5.6,0.4C6-0.1,7-0.1,7.4,0.4c0.5,0.8,0.7,2.4,1.8,3.5c1.2,1.2,2.6,1.2,3.5,1.7c0.6,0.4,0.6,1.4,0,1.7 C11.8,7.9,10.2,8,9.1,9.1c-1,1-1.2,2.7-1.7,3.5C7,13.1,6,13.1,5.6,12.6z" />
+            </svg>
+            <span class="ms-1">Trust Section</span>
+        </span>
+
+        <div class="ftx-trust-header">
+            <span class="ftx-badge" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">
+                <i class="bi bi-star-fill"></i> Real User Feedback
+            </span>
+
+            <h2 data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">Loved by thousands of smart savers</h2>
+
+            <p data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">See how FinTrack Pro is transforming personal finance and helping people achieve their goals.</p>
+        </div>
+
+        <div class="ftx-testimonial-wrapper" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+
+            <div class="ftx-testi-nav">
+                <div class="ftx-user-img active" data-index="0">
+                    <img src="~/images/abdulmoiz.jpeg" alt="Abdul Moiz">
+                </div>
+                <div class="ftx-user-img" data-index="1">
+                    <img src="~/images/mehdi.jpeg" alt="Mehdi Abbas Mosani">
+                </div>
+                <div class="ftx-user-img" data-index="2">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuFRdkizw3rf_UCmRTY7wwhRhgTUUU85nM_Q&s" alt="Sooraj Kumar">
+                </div>
+            </div>
+
+            <div class="ftx-testi-content glass-dark-box">
+                <i class="bi bi-quote ftx-quote-icon"></i>
+
+                <div id="ftx-testi-text-wrapper">
+                    <h3 id="ftx-testi-headline">"My expenses are finally under control. The visual analytics are a game changer!"</h3>
+                    <p id="ftx-testi-desc">FinTrack Pro completely transformed how I manage my monthly budget. The tax estimation feature alone saved me hundreds of dollars. Highly recommended!</p>
+
+                    <div class="ftx-author-info">
+                        <div>
+                            <h4 id="ftx-testi-name">Abdul Moiz</h4>
+                            <span id="ftx-testi-role">Software Engineer</span>
+                        </div>
+                        <div class="ftx-stars" data-aos="zoom-in" data-aos-delay="600">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="ftx-security-banner glass-dark-box" data-aos="fade-up" data-aos-duration="800" data-aos-delay="500">
+            <div class="ftx-sec-icon">
+                <i class="bi bi-shield-lock-fill"></i>
+            </div>
+            <div class="ftx-sec-text">
+                <strong>Bank-Level 256-bit Security</strong>
+                <span>Your financial data is encrypted and strictly private. We never sell your data.</span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+@* ======================================
+            ⭐ TEAM SECTION ⭐
+====================================== *@
+<section class="ftx-team-section gsap-fade-anim" id="teamSection">
+
+    <div class="ftx-spotlight"></div>
+
+    <div class="ftx-mob">
+        <img src="~/images/mob_svg.png" alt="mob_svg" />
+    </div>
+
+    <div class="container ftx-content-wrapper">
+        <span class="ftx-version-badge" data-aos="fade-down" data-aos-duration="800">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ftx-spin-icon" x="0px" y="0px" width="13px" height="13px" viewBox="0 0 13 13" fill="currentColor">
+                <path fill="currentColor" d="M5.6,12.6c-0.5-0.8-0.7-2.4-1.7-3.5c-1-1-2.7-1.2-3.5-1.7C-0.1,7-0.1,6,0.4,5.6c0.8-0.5,2.3-0.6,3.5-1.8 C5,2.8,5.1,1.2,5.6,0.4C6-0.1,7-0.1,7.4,0.4c0.5,0.8,0.7,2.4,1.8,3.5c1.2,1.2,2.6,1.2,3.5,1.7c0.6,0.4,0.6,1.4,0,1.7 C11.8,7.9,10.2,8,9.1,9.1c-1,1-1.2,2.7-1.7,3.5C7,13.1,6,13.1,5.6,12.6z" />
+            </svg>
+            <span class="ms-1">About Section</span>
+        </span>
+
+        <div class="ftx-stats-container">
+            <div class="ftx-stat-box">
+                <h2 class="ftx-stat-number">
+                    <span class="gsap-counter" data-target="240000" data-suffix="+">0</span>
+                </h2>
+                <p class="ftx-stat-label">Active Users</p>
+            </div>
+            <div class="ftx-stat-box">
+                <h2 class="ftx-stat-number">
+                    <span class="gsap-counter" data-target="50" data-prefix="$" data-suffix="M+">0</span>
+                </h2>
+                <p class="ftx-stat-label">Transactions Tracked</p>
+            </div>
+            <div class="ftx-stat-box">
+                <h2 class="ftx-stat-number">
+                    <span class="gsap-counter" data-target="99" data-suffix="%">0</span>
+                </h2>
+                <p class="ftx-stat-label">System Uptime</p>
+            </div>
+        </div>
+
+        <div class="ftx-team-container">
+            <div class="ftx-section-header">
+                <span class="ftx-badge">Behind The Scenes</span>
+                <h2 class="ftx-main-title mt-2">Meet the Innovators</h2>
+                <p class="ftx-subtitle">A dedicated team of finance experts and tech enthusiasts on a mission to simplify your money management.</p>
+            </div>
+
+            <div class="ftx-team-grid">
+                <div class="ftx-team-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQr-BX4QVNExSGKxwK9snZ7qE_GOwYLGmo25g&s" alt="Founder" class="ftx-team-img">
+                    <h3 class="ftx-team-name">Samar Jafri</h3>
+                    <p class="ftx-team-role">Motivator & Singer</p>
+                    <div class="ftx-team-social">
+                        <a href="https://github.com/xrmortal1212"><i class="bi bi-github"></i></a>
+                        <a href="https://www.linkedin.com/in/raman-mukesh-6431982a4/"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="ftx-team-card">
+                    <img src="~/images/pfp.png" alt="Lead Dev" class="ftx-team-img">
+                    <h3 class="ftx-team-name">Raman .</h3>
+                    <p class="ftx-team-role">Lead Developer</p>
+                    <div class="ftx-team-social">
+                        <a href="https://github.com/xrmortal1212"><i class="bi bi-github"></i></a>
+                        <a href="https://www.linkedin.com/in/raman-mukesh-6431982a4/"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="ftx-team-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXUT12F__Ka3UmsEC8akUBHZCHAmbcMCtsug&s" alt="Designer" class="ftx-team-img">
+                    <h3 class="ftx-team-name">Aashir Wajahat</h3>
+                    <p class="ftx-team-role">Motivator & Singer</p>
+                    <div class="ftx-team-social">
+                        <a href="https://github.com/xrmortal1212"><i class="bi bi-github"></i></a>
+                        <a href="https://www.linkedin.com/in/raman-mukesh-6431982a4/"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ======================================
+           ⭐ SERVICES SECTION ⭐
+====================================== *@
+    <section class="ftx-services-hscroll-section" id="servicesHScroll">
+
+         <div class="ftx-luffy">
+        <img src="~/images/nagi_svg.png" alt="nagi_svg" />
+    </div>
+
+        <div class="ftx-sh-container">
+        
+            <div class="ftx-sh-header">
+                <span class="ftx-version-badge">Our Core Capabilities</span>
+                <h2 class="ftx-sh-title ftx-hover-gradient">Everything you need to <br><span class="ftx-text-gradient">master your money.</span></h2>
+                <p class="ftx-sh-subtitle">Track expenses, build budgets, and manage taxes all in one seamless platform without the headache.</p>
+            </div>
+
+            <div class="ftx-sh-cards-window">
+                <div class="ftx-sh-cards-track">
+                
+                    <div class="ftx-sh-card ftx-card-blue">
+                        <div class="ftx-sh-icon"><i class="ph ph-chart-pie-slice"></i></div>
+                        <h3 class="ftx-sh-card-title">Real-Time Expense Tracking</h3>
+                        <p class="ftx-sh-card-desc">Automatically track and categorize every transaction. Know exactly where your money is going at a glance.</p>
+                    </div>
+
+                    <div class="ftx-sh-card ftx-card-pink">
+                        <div class="ftx-sh-icon"><i class="ph ph-target"></i></div>
+                        <h3 class="ftx-sh-card-title">Smart Budgeting & Alerts</h3>
+                        <p class="ftx-sh-card-desc">Set custom monthly limits. Our smart system will notify you before you overspend so you stay on track.</p>
+                    </div>
+
+                    <div class="ftx-sh-card ftx-card-green">
+                        <div class="ftx-sh-icon"><i class="ph ph-receipt"></i></div>
+                        <h3 class="ftx-sh-card-title">Automated Tax Estimation</h3>
+                        <p class="ftx-sh-card-desc">End tax season stress. Get accurate tax estimates based on your income and expenses, and generate 1-click reports.</p>
+                    </div>
+
+                    <div class="ftx-sh-card ftx-card-orange">
+                        <div class="ftx-sh-icon"><i class="ph ph-lock-key"></i></div>
+                        <h3 class="ftx-sh-card-title">Bank-Level Security</h3>
+                        <p class="ftx-sh-card-desc">Your financial data is protected with 256-bit encryption. Securely sync your bank accounts with complete peace of mind.</p>
+                    </div>
+
+                    <div class="ftx-sh-spacer"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+ 
+@* ======================================
+           ⭐ Contact Section ⭐
+    ====================================== *@
+
+<section class="gsap-fade-anim" id="contact">
+    <div class="ftx-contact-wrapper">
+
+        <div class="ftx-blob-left"></div>
+        <div class="ftx-blob-right"></div>
+
+        <div class="container ftx-content-container">
+
+            <span class="ftx-version-badge gsap-hero-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" class="ftx-spin-icon" viewBox="0 0 13 13" fill="currentColor" width="13" height="13">
+                    <path fill="currentColor" d="M5.6,12.6c-0.5-0.8-0.7-2.4-1.7-3.5c-1-1-2.7-1.2-3.5-1.7C-0.1,7-0.1,6,0.4,5.6c0.8-0.5,2.3-0.6,3.5-1.8 C5,2.8,5.1,1.2,5.6,0.4C6-0.1,7-0.1,7.4,0.4c0.5,0.8,0.7,2.4,1.8,3.5c1.2,1.2,2.6,1.2,3.5,1.7c0.6,0.4,0.6,1.4,0,1.7 C11.8,7.9,10.2,8,9.1,9.1c-1,1-1.2,2.7-1.7,3.5C7,13.1,6,13.1,5.6,12.6z" />
+                </svg>
+                <span class="ms-1">Contact Section</span>
+            </span>
+
+            <div class="ftx-hero-header-wrapper">
+    
+                    <h1 class="ftx-hero-title ftx-hover-gradient">Let's Launch Your</h1>
+    
+                <div class="ftx-journey-row">
+                        <h1 class="ftx-hero-title ftx-hover-gradient">Journey</h1>
+        
+                    <div class="ftx-launch-graphics">
+                        <svg class="ftx-journey-path" viewBox="0 0 350 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path class="animated-path" d="M10,20 Q80,20 120,20 C160,20 160,60 120,60 L40,60 C0,60 0,100 40,100 L300,100 C340,100 340,140 300,140 L160,140 L160,185" stroke="#D1BEBE" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                            <path class="arrow-head" d="M140,165 L160,185 L180,165" stroke="#D1BEBE" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+
+                        <div class="ftx-rotating-stars">
+                            <div class="ftx-star-circle ftx-star-blue">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="2" x2="12" y2="22"></line>
+                                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <line x1="4.93" y1="19.07" x2="19.07" y2="4.93"></line>
+                                </svg>
+                            </div>
+                            <div class="ftx-star-circle ftx-star-green">
+                                <svg viewBox="0 0 24 24" fill="currentColor" color="#222">
+                                    <path d="M12 1L14.5 9.5L23 12L14.5 14.5L12 23L9.5 14.5L1 12L9.5 9.5L12 1Z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ftx-content-grid">
+
+                <div class="ftx-info-col">
+                    <div class="ftx-info-block">
+                        <p>Karachi, Pakistan</p>
+                        <p>2026</p>
+                    </div>
+                    <div class="ftx-info-block">
+                        <p>Office hours</p>
+                        <p>Monday - Friday</p>
+                        <p>11 AM - 2 PM</p>
+                    </div>
+                </div>
+
+                <div class="ftx-form-col">
+                    <form id="ftx-contact-form">
+
+                        <label class="ftx-label-main">Name (required)</label>
+
+                        <div class="ftx-form-row">
+                            <div class="ftx-form-group">
+                                <label class="ftx-label-sub">First Name</label>
+                                <input type="text" name="first_name" class="ftx-input" required>
+                            </div>
+                            <div class="ftx-form-group">
+                                <label class="ftx-label-sub">Last Name</label>
+                                <input type="text" name="last_name" class="ftx-input" required>
+                            </div>
+                        </div>
+
+                        <div class="ftx-form-group">
+                            <label class="ftx-label-sub">Service</label>
+                            <div class="ftx-select-wrapper">
+                                <select name="service_type" class="ftx-input ftx-select">
+                                    <option value=""></option>
+                                    <option value="Web Design">Web Design</option>
+                                    <option value="Development">Development</option>
+                                    <option value="Branding">Branding</option>
+                                </select>
+                                <svg class="ftx-select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="ftx-form-group">
+                            <label class="ftx-label-sub">Email (required)</label>
+                            <input type="email" name="user_email" class="ftx-input" required>
+                        </div>
+
+                        <div class="ftx-checkbox-group">
+                            <input type="checkbox" name="newsletter" id="ftx-news" class="ftx-checkbox" value="Yes">
+                            <label for="ftx-news" class="ftx-checkbox-label">Sign up for news and updates</label>
+                        </div>
+
+                        <div class="ftx-form-group">
+                            <label class="ftx-label-sub">Message</label>
+                            <input type="text" name="message" class="ftx-input">
+                        </div>
+
+                        <button type="submit" id="ftx-submit-btn" class="ftx-submit-btn">Submit</button>
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="ftx-footer">
+
+                <div class="ftx-footer-huge">
+                    <h2 class="ftx-footer-email">rk4328417@gmail.com</h2>
+                    <h2 class="ftx-footer-phone">(+92) 310 3371549</h2>
+                </div>
+
+                <div class="ftx-footer-details">
+                    <div>
+                        <p>Karachi, Pakistan</p>
+                        <p>2026</p>
+                    </div>
+                    <div>
+                        <p>Office hours</p>
+                        <p>Monday - Friday 11 AM - 2 PM</p>
+                    </div>
+                    <div class="ftx-links-right">
+                        <span style="color:#666">Say hello</span>
+                        <a href="#" class="ftx-link ftx-link-underline">Work with us</a>
+                    </div>
+                </div>
+
+                <div class="ftx-footer-bottom">
+                    <div>
+                        © 2026 Design by <span style="text-decoration: underline;">FinTrack Pro</span> | Photos from Raman .
+                    </div>
+
+                    <div class="ftx-social-links">
+                        <a href="#" class="ftx-social-icon">Bē</a>
+                        <a href="#" class="ftx-social-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                        <a href="#" class="ftx-social-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="ftx-link" style="margin-left: 20px;">Privacy Policy</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@* 
+======================================
+      ⭐ Infinite Marquee Strip ⭐
+======================================
+*@
+<section class="ftx-marquee-section">
+    <div class="ftx-marquee-track">
+
+        <div class="ftx-marquee-content">
+            <div class="ftx-marquee-item">
+                <span>Expense Tracking</span>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M2 12L22 12M4.92893 4.92893L19.0711 19.0711M4.92893 19.0711L19.0711 4.92893" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg>
+            </div>
+            <div class="ftx-marquee-item">
+                <span>Tax Estimation</span>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M2 12L22 12M4.92893 4.92893L19.0711 19.0711M4.92893 19.0711L19.0711 4.92893" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg>
+            </div>
+            <div class="ftx-marquee-item">
+                <span>Visual Analytics</span>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M2 12L22 12M4.92893 4.92893L19.0711 19.0711M4.92893 19.0711L19.0711 4.92893" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg>
+            </div>
+            <div class="ftx-marquee-item">
+                <span>Secure & Private</span>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M2 12L22 12M4.92893 4.92893L19.0711 19.0711M4.92893 19.0711L19.0711 4.92893" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg>
+            </div>
+            <div class="ftx-marquee-item">
+                <span>Smart Budgeting</span>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M2 12L22 12M4.92893 4.92893L19.0711 19.0711M4.92893 19.0711L19.0711 4.92893" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg>
+            </div>
+        </div>
+
+        <div class="ftx-marquee-content">
+            <div class="ftx-marquee-item">
+                <span>Expense Tracking</span>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M2 12L22 12M4.92893 4.92893L19.0711 19.0711M4.92893 19.0711L19.0711 4.92893" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg>
+            </div>
+            <div class="ftx-marquee-item">
+                <span>Tax Estimation</span>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M2 12L22 12M4.92893 4.92893L19.0711 19.0711M4.92893 19.0711L19.0711 4.92893" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg>
+            </div>
+            <div class="ftx-marquee-item">
+                <span>Visual Analytics</span>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M2 12L22 12M4.92893 4.92893L19.0711 19.0711M4.92893 19.0711L19.0711 4.92893" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg>
+            </div>
+            <div class="ftx-marquee-item">
+                <span>Secure & Private</span>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M2 12L22 12M4.92893 4.92893L19.0711 19.0711M4.92893 19.0711L19.0711 4.92893" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg>
+            </div>
+            <div class="ftx-marquee-item">
+                <span>Smart Budgeting</span>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M2 12L22 12M4.92893 4.92893L19.0711 19.0711M4.92893 19.0711L19.0711 4.92893" stroke="currentColor" stroke-width="3" stroke-linecap="round" /></svg>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // ==========================================
+        // 0. GSAP PLUGINS REGISTER
+        // ==========================================
+        if (typeof gsap !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+        }
+
+        // ==========================================
+        // MASTER FUNCTION CALLS (Execution Order)
+        // ==========================================
+        initLoader();
+        initHeroAnimations();
+        initHowItWorks();
+        initFeatureSection();
+        initFeatureScrollLine();
+        initTestimonials();
+        initMiscEffects();
+        initTrustSection();
+        initTeamSection();
+        initServicesHScroll();       
+        initNagiAnimation(); 
+        initMobAnimation();
+        initContactSection();
+        initFormInteractions();
+        initSpotlightEffect();
+        initEmailJSForm(); // <-- Added EmailJS Form Init
+        initTextHoverShine();
+
+        // ==========================================
+        // 1. HAMSTER LOADER LOGIC
+        // ==========================================
+        function initLoader() {
+            if (typeof gsap === 'undefined') return;
+
+            document.body.classList.add("loading-active");
+
+            const loaderTl = gsap.timeline();
+
+            loaderTl.to("#loader-animation-box", { opacity: 0, scale: 0.8, duration: 0.5, ease: "power2.inOut", delay: 2.0 })
+                .set("#loader-welcome-text", { display: "block" })
+                .to("#loader-welcome-text", { opacity: 1, y: -80, duration: 0.6, ease: "power2.out" })
+                .to("#ftx-loader-screen", {
+                    opacity: 0, duration: 0.8, delay: 1.0, ease: "power2.inOut",
+                    onComplete: () => {
+                        document.getElementById("ftx-loader-screen").style.display = "none";
+                        document.body.classList.remove("loading-active");
+
+                        gsap.to(".fade-up", {
+                            y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out"
+                        });
+                    }
+                });
+        }
+
+        // ==========================================
+        // 2. HERO SECTION CINEMATIC REVEAL & FLOATS
+        // ==========================================
+        function initHeroAnimations() {
+            if (typeof gsap === 'undefined') return;
+
+            gsap.set(".reveal-text", { y: "100%", opacity: 0 });
+
+            const heroTl = gsap.timeline({ delay: 4 });
+
+            heroTl.fromTo(".gsap-hero-badge",
+                    { opacity: 0, y: -20 },
+                    { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+                )
+                .to(".reveal-text",
+                    { y: "0%", opacity: 1, duration: 1, stagger: 0.2, ease: "power4.out" },
+                    "-=0.3"
+                )
+                .fromTo(".gsap-hero-desc",
+                    { opacity: 0, x: 30 },
+                    { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" },
+                    "-=0.6"
+                )
+                .fromTo(".gsap-hero-check span",
+                    { opacity: 0, x: -15 },
+                    { opacity: 1, x: 0, duration: 0.5, stagger: 0.15, ease: "power2.out" },
+                    "-=0.4"
+                )
+                .fromTo(".gsap-hero-btn",
+                    { opacity: 0, scale: 0.8, y: 20 },
+                    { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "back.out(1.5)" },
+                    "-=0.2"
+                )
+                .fromTo(".gsap-hero-showcase",
+                    { opacity: 0, y: 60 },
+                    { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+                    "-=0.4"
+                )
+                .fromTo(".ftx-floating-users",
+                    { opacity: 0, scale: 0.5, x: -40 },
+                    { opacity: 1, scale: 1, x: 0, duration: 0.7, ease: "back.out(1.2)" },
+                    "-=0.4"
+                )
+                .fromTo(".gsap-float-card",
+                    { opacity: 0, scale: 0.5, x: 40 },
+                    { opacity: 1, scale: 1, x: 0, duration: 0.7, ease: "back.out(1.2)" },
+                    "-=0.5"
+                )
+                .add(() => {
+                    gsap.to(".gsap-float-card", { y: -20, duration: 3, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 0.5 });
+                    gsap.to(".ftx-hero-section .ftx-spin-icon", { rotation: 360, duration: 10, ease: "linear", repeat: -1 });
+                    gsap.to(".ftx-spin-icon", { rotation: 360, duration: 10, ease: "linear", repeat: -1 });
+                });
+        }
+
+        // ==========================================
+        // 3. HOW IT WORKS (SVG LINE DRAWING)
+        // ==========================================
+        function initHowItWorks() {
+            if (typeof gsap === 'undefined') return;
+
+            const path = document.querySelector('.ftx-hiw-path path');
+            if (!path) return;
+
+            const pathLength = path.getTotalLength();
+            path.style.strokeDasharray = pathLength;
+            path.style.strokeDashoffset = pathLength;
+
+            const lineTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".ftx-hiw-flow-wrapper",
+                    start: "top 70%",
+                    end: "bottom 40%",
+                    scrub: 1,
+                }
+            });
+
+            lineTl.to(path, { strokeDashoffset: 0, duration: 2, ease: "none" })
+                .fromTo(".ftx-card-1", { opacity: 0, scale: 0.5, y: 50 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, 0.2)
+                .fromTo(".ftx-card-2", { opacity: 0, scale: 0.5, y: 50 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, 0.8)
+                .fromTo(".ftx-card-3", { opacity: 0, scale: 0.5, y: 50 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, 1.4)
+                .fromTo(".ftx-hiw-bottom-note", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3 }, 1.8);
+        }
+
+        // ==========================================
+        // 4. FEATURE SECTION SCROLL HIGHLIGHT & ROTATING 'L'
+        // ==========================================
+        function initFeatureSection() {
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+        // --- PART 1: TEXT & IMAGE SCROLLYTELLING ---
+        const featItems = gsap.utils.toArray('.ftx-feat-item');
+        const featImages = gsap.utils.toArray('.ftx-feat-img');
+
+        // Naya Gradients Array (Har item ke liye 2 colors)
+        const bgGradients = [
+        { c1: "#fff", c2: "#C1619E" }, // Feature 1
+        { c1: "#fff", c2: "#F589BA" }, // Feature 2
+        { c1: "#fff", c2: "#C672BF" }, // Feature 3
+        { c1: "#fff", c2: "#598BA4" }  // Feature 4
+        ];
+
+        if (featItems.length > 0 && featImages.length > 0) {
+        gsap.set(featImages[0], { opacity: 1, scale: 1 });
+        gsap.set(featItems[0], { opacity: 1 });
+
+        featItems.forEach((item, index) => {
+        ScrollTrigger.create({
+        trigger: item,
+        start: "top center",
+        end: "bottom center",
+        onEnter: () => activateFeature(index),
+        onEnterBack: () => activateFeature(index),
+        });
+        });
+
+        function activateFeature(index) {
+        gsap.to(".ftx-features-section", {
+        "--grad-color-1": bgGradients[index].c1,
+        "--grad-color-2": bgGradients[index].c2,
+        duration: 0.8,
+        ease: "power2.inOut"
+        });
+
+        featItems.forEach((el, i) => gsap.to(el, { opacity: i === index ? 1 : 0.15, duration: 0.4 }));
+        featImages.forEach((img, i) => gsap.to(img, { opacity: i === index ? 1 : 0, scale: i === index ? 1 : 0.95, duration: 0.6, ease: "power2.out" }));
+        }
+        }
+
+        // --- PART 2: ROTATING L-SHAPE ANIMATION ---
+        const lolideObject = document.querySelector('.ftx-L-lolide');
+        const featuresSection = document.querySelector('#features');
+
+        if (lolideObject && featuresSection) {
+        gsap.to(lolideObject, {
+        y: () => featuresSection.offsetHeight - 250,
+        rotation: 720,
+        ease: "none",
+        scrollTrigger: {
+        trigger: featuresSection,
+        start: "top center",
+        end: "bottom bottom",
+        scrub: 1.5
+        }
+        });
+        }
+        }
+
+        // ==========================================
+        // 5. DYNAMIC TESTIMONIALS
+        // ==========================================
+        function initTestimonials() {
+            const testimonialsData = [
+                { headline: `"My expenses are finally under control. The visual analytics are a game changer!"`, desc: "FinTrack Pro completely transformed how I manage my monthly budget. The tax estimation feature alone saved me hundreds of dollars. Highly recommended!", name: "Abdul Moiz", role: "Software Engineer" },
+                { headline: `"Incredibly secure and easy to use. I instantly know where my money is going."`, desc: "I used to track my expenses on complex Excel sheets. Syncing my accounts with FinTrack Pro was seamless. It categorizes everything automatically and the UI is beautiful.", name: "Mehdi Abbas Moosani", role: "Small Business Owner" },
+                { headline: `"The best financial decision I made this year. Period."`, desc: "I love the 256-bit encryption. It gives me peace of mind knowing my financial data is totally secure. The real-time tracking has helped me cut down on useless subscriptions.", name: "Rohit Gogoi", role: "Digital Marketer" }
+            ];
+
+            const userImages = document.querySelectorAll('.ftx-user-img');
+            const testiWrapper = document.getElementById('ftx-testi-text-wrapper');
+            const headlineEl = document.getElementById('ftx-testi-headline');
+            const descEl = document.getElementById('ftx-testi-desc');
+            const nameEl = document.getElementById('ftx-testi-name');
+            const roleEl = document.getElementById('ftx-testi-role');
+
+            if (!testiWrapper) return;
+
+            userImages.forEach(img => {
+                img.addEventListener('click', function () {
+                    userImages.forEach(el => el.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const index = this.getAttribute('data-index');
+                    const data = testimonialsData[index];
+
+                    gsap.to(testiWrapper, {
+                        opacity: 0, y: 10, duration: 0.2,
+                        onComplete: () => {
+                            headlineEl.innerText = data.headline;
+                            descEl.innerText = data.desc;
+                            nameEl.innerText = data.name;
+                            roleEl.innerText = data.role;
+                            gsap.to(testiWrapper, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" });
+                        }
+                    });
+                });
+            });
+        }
+
+        // ==========================================
+        // 6. MISC EFFECTS (Parallax & AOS)
+        // ==========================================
+        function initMiscEffects() {
+            document.addEventListener("mousemove", (e) => {
+                const x = (window.innerWidth - e.pageX) / 50;
+                const y = (window.innerHeight - e.pageY) / 50;
+                document.querySelectorAll('.parallax-element').forEach(el => {
+                    const speed = el.getAttribute('data-speed') || 1;
+                    gsap.to(el, { x: x * speed, y: y * speed, duration: 1, ease: "power1.out" });
+                });
+            });
+
+            if (typeof AOS !== 'undefined') {
+                AOS.init({ once: true, offset: 50 });
+            }
+        }
+
+        // ==========================================
+        // SCROLL UP & DOWN FADE ANIMATION
+        // ==========================================
+        if (typeof gsap !== 'undefined') {
+            const fadeElements = gsap.utils.toArray('.gsap-fade-anim');
+
+            fadeElements.forEach(el => {
+                gsap.fromTo(el,
+                    { opacity: 0, y: 50 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: el,
+                            start: "top 95%",
+                            end: "bottom 5%",
+                            toggleActions: "play reverse play reverse"
+                        }
+                    }
+                );
+            });
+        }
+
+        // ==========================================
+        // 7. TRUST SECTION (STATS COUNTER & TEAM)
+        // ==========================================
+        function initTrustSection() {
+            if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+            const counters = document.querySelectorAll('.gsap-counter');
+
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const prefix = counter.getAttribute('data-prefix') || '';
+                const suffix = counter.getAttribute('data-suffix') || '';
+
+                gsap.fromTo(counter,
+                    { innerText: 0 },
+                    {
+                        innerText: target,
+                        duration: 2.5,
+                        ease: "power2.out",
+                        scrollTrigger: { trigger: counter, start: "top 85%" },
+                        snap: { innerText: 1 },
+                        onUpdate: function() {
+                            const currentNum = Math.ceil(this.targets()[0].innerText);
+                            counter.innerText = prefix + currentNum.toLocaleString() + suffix;
+                        }
+                    }
+                );
+            });
+
+            gsap.fromTo(".ftx-team-card",
+                { opacity: 0, y: 60 },
+                {
+                    opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.2)",
+                    scrollTrigger: { trigger: ".ftx-team-grid", start: "top 80%" }
+                }
+            );
+        }
+
+    // ==========================================
+    // 8. CONTACT & FOOTER SECTION ANIMATION
+    // ==========================================
+    function initContactSection() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    // 1. Path aur Arrow ko GSAP ke liye tayar karna
+    const path = document.querySelector('.ftx-journey-path .animated-path');
+    const arrow = document.querySelector('.ftx-journey-path .arrow-head');
+
+    if (path) {
+    const pathLen = path.getTotalLength();
+    // Path ko bilkul hide kar diya initial state mein
+    gsap.set(path, { strokeDasharray: pathLen, strokeDashoffset: pathLen });
+    }
+    if (arrow) {
+    gsap.set(arrow, { opacity: 0 }); // Arrow ko initially hide kar diya
+    }
+
+    // 2. Stars ki continuous rotation (ye hamesha chalti rahegi)
+    gsap.to(".ftx-star-circle", {
+    rotation: 360,
+    duration: 8,
+    ease: "none", // Linear movement
+    repeat: -1    // Infinite loop
+    });
+
+    // 3. Scroll Trigger Timeline
+    const contactTl = gsap.timeline({
+    scrollTrigger: {
+    trigger: ".ftx-contact-wrapper",
+    start: "top 80%",
+    toggleActions: "play none none reverse"
+    }
+    });
+
+    // Existing Text Animations aur nayi Path animations
+    contactTl.fromTo(".ftx-contact-wrapper .ftx-version-badge",
+    { opacity: 0, y: -20 },
+    { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+    )
+    .fromTo(".ftx-contact-wrapper .ftx-hero-title",
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+    "-=0.3"
+    )
+    // 🔥 NAYA: Star container ka fade-in aur scale up
+    .fromTo(".ftx-rotating-stars",
+    { opacity: 0, scale: 0.5 },
+    { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.5)" },
+    "-=0.4"
+    )
+    // 🔥 NAYA: Line Draw Animation
+    .to(path, {
+    strokeDashoffset: 0, // Line draw ho rahi hai
+    duration: 2,
+    ease: "power2.out"
+    }, "-=0.2")
+    // 🔥 NAYA: Arrow Fade In jab line poori hone wali ho
+    .to(arrow, {
+    opacity: 1,
+    duration: 0.4,
+    ease: "power1.out"
+    }, "-=0.3")
+    .fromTo(".ftx-info-col .ftx-info-block",
+    { opacity: 0, x: -40 },
+    { opacity: 1, x: 0, duration: 0.6, stagger: 0.2, ease: "power2.out" },
+    "-=1.5" // Taki text form pichli animation ke sath sath hi aana shuru ho jaye
+    )
+    .fromTo(".ftx-form-col form > *",
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power2.out" },
+    "-=1.2"
+    )
+    .fromTo(".ftx-footer-huge h2",
+    { opacity: 0, scale: 0.9, y: 30 },
+    { opacity: 1, scale: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.2)" },
+    "-=0.5"
+    )
+    .fromTo([".ftx-footer-details > div", ".ftx-footer-bottom > div"],
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power2.out" },
+    "-=0.4"
+    );
+    }
+
+        // ==========================================
+        // 9. TEAM & ABOUT SECTION ANIMATION
+        // ==========================================
+        function initTeamSection() {
+            if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+            gsap.fromTo(".ftx-team-section .ftx-version-badge",
+                { opacity: 0, y: -30 },
+                {
+                    opacity: 1, y: 0, duration: 0.8, ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: ".ftx-team-section",
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+
+            gsap.fromTo(".ftx-stat-box",
+                { opacity: 0, y: 40, scale: 0.9 },
+                {
+                    opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.2, ease: "back.out(1.2)",
+                    scrollTrigger: {
+                        trigger: ".ftx-stats-container",
+                        start: "top 80%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+
+            gsap.fromTo(".ftx-team-container .ftx-section-header > *",
+                { opacity: 0, y: 30 },
+                {
+                    opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".ftx-team-container",
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        }
+
+        // ==========================================
+        // 🔦 10. SPOTLIGHT EFFECT ON SCROLL
+        // ==========================================
+        function initSpotlightEffect() {
+            const teamSection = document.getElementById('teamSection');
+
+            if (!teamSection) return;
+
+            const lightObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        teamSection.classList.add('light-is-on');
+                    } else {
+                        teamSection.classList.remove('light-is-on');
+                    }
+                });
+            }, {
+                threshold: 0.2
+            });
+
+            lightObserver.observe(teamSection);
+        }
+
+        // ==========================================
+        // 11. FORM INPUTS GSAP FOCUS ANIMATION
+        // ==========================================
+        function initFormInteractions() {
+            if (typeof gsap === 'undefined') return;
+
+            const inputs = document.querySelectorAll('.ftx-input');
+
+            inputs.forEach(input => {
+                const group = input.closest('.ftx-form-group');
+                if (!group) return;
+
+                const label = group.querySelector('.ftx-label-sub');
+
+                input.addEventListener('focus', () => {
+                    if (label) {
+                        gsap.to(label, {
+                            color: "#97C9E1",
+                            x: 5,
+                            duration: 0.3,
+                            ease: "power2.out"
+                        });
+                    }
+                    gsap.to(input, { borderBottomColor: "#97C9E1", duration: 0.3 });
+                });
+
+                input.addEventListener('blur', () => {
+                    if (label) {
+                        gsap.to(label, {
+                            color: "#ffffff",
+                            x: 0,
+                            duration: 0.3,
+                            ease: "power2.out"
+                        });
+                    }
+
+                    if (!input.value.trim()) {
+                        gsap.to(input, { borderBottomColor: "#999", duration: 0.3 });
+                    } else {
+                        gsap.to(input, { borderBottomColor: "#ffffff", duration: 0.3 });
+                    }
+                });
+            });
+        }
+
+        // ==========================================
+        // 12. FEATURE SECTION SVG SCROLL LINE (Updated)
+        // ==========================================
+        function initFeatureScrollLine() {
+            if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+            // Pehle check karein ke path exist karta hai
+            const scrollPath = document.querySelector(".ftx-feature-scroll-path");
+
+            if (scrollPath) {
+                // 1. Path ki total length calculate karein
+                const pathLength = scrollPath.getTotalLength();
+
+                // 2. Line ko initial state mein bilkul gayab (hide) kar dein
+                gsap.set(scrollPath, {
+                    strokeDasharray: pathLength,
+                    strokeDashoffset: pathLength
+                });
+
+                // 3. ScrollTrigger lagayen jo scroll ke sath line ko draw kare
+                gsap.to(scrollPath, {
+                    strokeDashoffset: 0, // 0 matlab poori line draw ho gayi
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: ".ftx-features-section", // Aapki section ki ID
+                        start: "top center",  // Jab section screen ke center tak pohanche
+                        end: "bottom center", // Jab section khatam hone lage
+                        scrub: 1,             // Smooth drawing delay (1 second lagta hai smooth hone me)
+                    }
+                });
+            }
+        }
+
+        // ==========================================
+        // 13. EMAILJS FORM SUBMISSION
+        // ==========================================
+        function initEmailJSForm() {
+            const contactForm = document.getElementById('ftx-contact-form');
+            if (!contactForm) return; // Prevent errors if form isn't on the page
+
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Page refresh hone se rokega
+
+                const btn = document.getElementById('ftx-submit-btn');
+                const originalText = btn.innerText;
+                btn.innerText = 'Sending...'; // Button ki state change kar rahe hain
+
+                // Aapki Service ID aur Template ID
+                emailjs.sendForm('service_seouurt', 'template_l6718wq', this)
+                    .then(function() {
+                        btn.innerText = 'Message Sent! ✅';
+                        contactForm.reset(); // Form clear kar dega
+
+                        // 3 seconds baad button wapis "Submit" ho jayega
+                        setTimeout(() => {
+                            btn.innerText = originalText;
+                        }, 3000);
+
+                    }, function(error) {
+                        btn.innerText = 'Failed to Send ❌';
+                        console.log('FAILED...', error);
+
+                        // 3 seconds baad button wapis normal ho jayega
+                        setTimeout(() => {
+                            btn.innerText = originalText;
+                        }, 3000);
+                    });
+            });
+        }
+
+        // ==========================================
+        // 16. SERVICES HORIZONTAL SCROLL (CARDS)
+        // ==========================================
+        function initServicesHScroll() {
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+        const section = document.querySelector('.ftx-services-hscroll-section');
+        const track = document.querySelector('.ftx-sh-cards-track');
+
+        if (!section || !track) return;
+
+        // Mobile pe agar ap isey vertical rakhna chahein toh return kar dein,
+        // lakin modern sites mobile pe bhi horizontal scroll (swipe) pasand karti hain.
+        const isMobile = window.innerWidth <= 768;
+
+        if (isMobile) {
+        // Mobile par hum GSAP scroll hata dete hain aur CSS me native scrolling allow karte hain
+        track.style.overflowX = 'auto';
+        track.style.scrollSnapType = 'x mandatory';
+        const cards = document.querySelectorAll('.ftx-sh-card');
+        cards.forEach(card => card.style.scrollSnapAlign = 'center');
+        // Hide scrollbar for clean UI on mobile
+        track.style.scrollbarWidth = 'none';
+        return;
+        }
+
+        // Amount to scroll left
+        function getScrollAmount() {
+        let trackWidth = track.scrollWidth;
+        return -(trackWidth - window.innerWidth);
+        }
+
+        const tween = gsap.to(track, {
+        x: getScrollAmount,
+        ease: "none"
+        });
+
+        ScrollTrigger.create({
+        trigger: section,
+        start: "top 10%", // Jab section top se thora neechay ho tab pin ho
+        end: () => `+=${getScrollAmount() * -1}`, // Jitni lambi line hai utni der pin rakho
+        pin: true,
+        animation: tween,
+        scrub: 1, // Smooth scrolling effect
+        invalidateOnRefresh: true
+        });
+        }
+
+        // ==========================================
+        // TEXT GRADIENT HOVER ANIMATION (FIXED)
+        // ==========================================
+        function initTextHoverShine() {
+        if (typeof gsap === 'undefined') return;
+
+        const textElements = document.querySelectorAll('#ftx-gradient-text, .ftx-hover-gradient');
+
+        textElements.forEach(text => {
+        // Har text element ke liye ek ruki hui (paused) timeline banayen
+        let shineAnim = gsap.to(text, {
+        backgroundPosition: "100% 0%",
+        duration: 0.8, // Speed thori fast kardi taake snappy lage
+        ease: "power2.inOut",
+        paused: true // Animation start mein ruki rahegi
+        });
+
+        // Jab Mouse aaye, toh aage ki taraf chale
+        text.addEventListener('mouseenter', () => {
+        shineAnim.play();
+        });
+
+        // Jab Mouse hate, toh wapas peeche (normal state) mein chali jaye
+        text.addEventListener('mouseleave', () => {
+        shineAnim.reverse();
+        });
+        });
+        }
+
+        
+
+        // ==========================================
+        // 2. MOB IMAGE FLICKER + ZOOM ANIMATION (FIXED)
+        // ==========================================
+        function initMobAnimation() {
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+        const mobImg = document.querySelector('.ftx-mob');
+        const teamSection = document.querySelector('#teamSection');
+
+        if (!mobImg || !teamSection) return;
+
+        // Mobile aur Desktop ke hisaab se opacity set karna
+        const isMobile = window.innerWidth <= 768;
+        const targetOpacity = isMobile ? 0.15 : 0.8;
+
+        // GSAP Timeline banayen
+        const flickerTl = gsap.timeline({
+        scrollTrigger: {
+        trigger: teamSection,
+        start: "top 75%", // Jab section screen me thora zyada dakhil ho jaye tab on ho
+        toggleActions: "play none none none"
+        }
+        });
+
+        // Flicker Sequence (Ek ke baad ek chalega)
+        flickerTl.to(mobImg, { opacity: targetOpacity, scale: 0.9, duration: 0.05 })
+        .to(mobImg, { opacity: 0.1, duration: 0.05 })
+        .to(mobImg, { opacity: targetOpacity, duration: 0.1 })
+        .to(mobImg, { opacity: 0.2, duration: 0.05 })
+        .to(mobImg, { opacity: 0, duration: 0.1 })
+        .to(mobImg, { opacity: targetOpacity, scale: 1.05, duration: 0.1 }) // Pop out
+        .to(mobImg, { opacity: 0.4, duration: 0.05 })
+        .to(mobImg, { opacity: targetOpacity, scale: 1, duration: 0.2 }); // Normal state
+        }
+
+        // ==========================================
+        // 1. NAGI IMAGE ANIMATION (SLIDE IN + FLOAT)
+        // ==========================================
+        function initNagiAnimation() {
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+        const nagiImg = document.querySelector('.ftx-nagi');
+        if (!nagiImg) return;
+
+        // Mobile par opacity check karne ke liye
+        const isMobile = window.innerWidth <= 768;
+        const targetOpacity = isMobile ? 0.3 : 1;
+
+        // Step 1: Slide In From Left
+        gsap.fromTo(nagiImg,
+        { x: -150, opacity: 0 }, // Shuru me 150px left aur gayab
+        {
+        x: 0,
+        opacity: targetOpacity,
+        duration: 1.5,
+        ease: "power3.out",
+        scrollTrigger: {
+        trigger: nagiImg.parentElement, // Jis section me Nagi hai, wo trigger banega
+        start: "top 70%",
+        toggleActions: "play none none reverse"
+        }
+        }
+        );
+
+        // Step 2: Continuous Floating Effect (Hawa me tairna)
+        gsap.to(nagiImg, {
+        y: -15, // 15px upar jayega
+        duration: 2,
+        repeat: -1, // Hamesha chalta rahega
+        yoyo: true, // Wapas aayega (Up & Down)
+        ease: "sine.inOut"
+        });
+        }
+
+    });
+</script>

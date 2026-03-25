@@ -1,0 +1,140 @@
+﻿@model FinTrack_Pro.Models.Investment
+@{
+    ViewData["Title"] = "Add Investment";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<style>
+    /* Same Premium CSS as before */
+    .ftx-form-wrapper {
+        max-width: 480px;
+        margin: 50px auto;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+        padding: 35px;
+        border: 1px solid #f1f1f1;
+    }
+
+    .ftx-form-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .ftx-form-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111;
+        margin: 0;
+    }
+
+    .ftx-form-group {
+        margin-bottom: 20px;
+    }
+
+    .ftx-label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .ftx-input {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 0.95rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background-color: #f8fafc;
+        color: #1e293b;
+        transition: all 0.3s ease;
+    }
+
+        .ftx-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+    .ftx-btn-submit {
+        width: 100%;
+        padding: 14px;
+        background-color: #111;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 10px;
+    }
+
+        .ftx-btn-submit:hover {
+            background-color: #333;
+        }
+
+    .ftx-btn-back {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: transparent;
+        color: #666;
+        font-size: 0.95rem;
+        font-weight: 600;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        transition: 0.2s;
+        margin-top: 15px;
+    }
+
+        .ftx-btn-back:hover {
+            background-color: #f1f5f9;
+            color: #111;
+        }
+</style>
+
+<div class="container">
+    <div class="ftx-form-wrapper">
+        <div class="ftx-form-header">
+            <h4 class="ftx-form-title">📈 Add New Asset</h4>
+        </div>
+
+        <form asp-action="Create" method="post">
+            <div class="ftx-form-group">
+                <label class="ftx-label">Asset Name</label>
+                <input asp-for="AssetName" class="ftx-input" placeholder="e.g. ARY Gold, Tesla Shares, DHA Plot" required autocomplete="off" />
+            </div>
+
+            <div class="ftx-form-group">
+                <label class="ftx-label">Category</label>
+                <select asp-for="Category" class="ftx-input" required>
+                    <option value="">Select Category...</option>
+                    @foreach (var cat in ViewBag.Categories)
+                    {
+                        <option value="@cat">@cat</option>
+                    }
+                </select>
+            </div>
+
+            <div class="ftx-form-group">
+                <label class="ftx-label">Symbol / Ticker (Optional)</label>
+                <input asp-for="Symbol" class="ftx-input" placeholder="e.g. BTC, AAPL (Leave empty if not sure)" autocomplete="off" />
+            </div>
+
+            <div class="ftx-form-group">
+                <label class="ftx-label">Invested Amount (Rs.)</label>
+                <input asp-for="InvestedAmount" type="number" step="0.01" class="ftx-input" placeholder="0.00" required />
+            </div>
+
+            <button type="submit" class="ftx-btn-submit">Save Investment</button>
+            <a asp-action="Index" class="ftx-btn-back">Cancel & Go Back</a>
+        </form>
+    </div>
+</div>

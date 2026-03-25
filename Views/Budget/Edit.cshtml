@@ -1,0 +1,54 @@
+﻿@model FinTrack_Pro.Models.Budget
+@{
+    ViewData["Title"] = "Edit Budget";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<style>
+    .ftx-glass-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+    }
+    .ftx-btn-save { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: 0.3s; }
+    .ftx-btn-save:hover { background: #2563eb; color: white; transform: translateY(-2px); }
+    .ftx-btn-cancel { background: #e2e8f0; color: #475569; padding: 10px 20px; border-radius: 10px; font-weight: 600; text-decoration: none; transition: 0.3s; }
+    .ftx-btn-cancel:hover { background: #cbd5e1; color: #334155; }
+</style>
+
+<div class="ftx-glass-container">
+    <h3 class="fw-bold mb-4" style="color: #1e293b;">✏️ Edit Budget</h3>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="BudgetId" />
+        <input type="hidden" asp-for="Month" />
+        <input type="hidden" asp-for="Year" />
+
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label fw-bold" style="color: #475569;">Category</label>
+            <select asp-for="CategoryId" class="form-select rounded-3" asp-items="ViewBag.CategoryId" required></select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Amount" class="form-label fw-bold" style="color: #475569;">Budget Limit (Rs.)</label>
+            <input asp-for="Amount" type="number" class="form-control rounded-3" required />
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex gap-3">
+            <button type="submit" class="ftx-btn-save">Update Budget</button>
+            <a asp-action="Index" class="ftx-btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

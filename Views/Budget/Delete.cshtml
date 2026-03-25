@@ -1,0 +1,81 @@
+﻿@model FinTrack_Pro.Models.Budget
+@{
+    ViewData["Title"] = "Delete Budget";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<style>
+    .ftx-glass-container-danger {
+        max-width: 500px;
+        margin: 40px auto;
+        background: rgba(254, 242, 242, 0.8); /* Red tint glassmorphism */
+        backdrop-filter: blur(16px);
+        border: 1px solid #fca5a5;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(239, 68, 68, 0.1);
+        text-align: center;
+    }
+
+    .ftx-btn-danger {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .ftx-btn-danger:hover {
+            background: #dc2626;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .ftx-btn-cancel {
+        background: #e2e8f0;
+        color: #475569;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+        .ftx-btn-cancel:hover {
+            background: #cbd5e1;
+            color: #334155;
+        }
+</style>
+
+<div class="ftx-glass-container-danger">
+    <div style="font-size: 48px; margin-bottom: 10px;">⚠️</div>
+    <h3 class="fw-bold text-danger mb-2">Are you sure?</h3>
+    <p style="color: #64748b; font-size: 15px; margin-bottom: 25px;">
+        Do you really want to delete the budget limit for <strong>@Model.Category?.Title</strong>? This action cannot be undone.
+    </p>
+
+    <div class="card border-0 shadow-sm mb-4 text-start" style="border-radius: 12px; background: white;">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Category:</span>
+                <span class="fw-bold">@Model.Category?.Title</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Month / Year:</span>
+                <span class="fw-bold">@Model.Month / @Model.Year</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span class="text-muted">Amount:</span>
+                <span class="fw-bold text-danger">Rs. @Model.Amount.ToString("N0")</span>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post" class="d-flex justify-content-center gap-3">
+        <input type="hidden" asp-for="BudgetId" />
+        <a asp-action="Index" class="ftx-btn-cancel">No, Keep It</a>
+        <button type="submit" class="ftx-btn-danger">Yes, Delete It</button>
+    </form>
+</div>

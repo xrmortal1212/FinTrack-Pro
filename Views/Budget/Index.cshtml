@@ -1,0 +1,401 @@
+﻿@model IEnumerable<FinTrack_Pro.Models.Budget>
+@{
+    ViewData["Title"] = "My Budgets";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+
+    var transactions = ViewBag.Transactions as IEnumerable<FinTrack_Pro.Models.Transaction> ?? new List<FinTrack_Pro.Models.Transaction>();
+
+    // 🪄 MASTER CALCULATIONS FOR SUMMARY
+    decimal totalBudget = Model.Sum(b => b.Amount);
+    decimal totalSpent = Model.Sum(b => transactions.Where(t => t.CategoryId == b.CategoryId && t.Date.Month == b.Month).Sum(t => t.Amount));
+    decimal remainingBalance = totalBudget - totalSpent;
+
+    decimal overallPercentage = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
+    string overallColor = overallPercentage >= 100 ? "ftx-fill-danger" : (overallPercentage >= 80 ? "ftx-fill-warn" : "ftx-fill-safe");
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+    /* BUDGET DASHBOARD STYLES */
+    .ftx-dash-budget-wrapper {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Header & Button */
+    .ftx-dash-budget-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .ftx-dash-budget-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .ftx-dash-budget-add-btn {
+        background: #f15e36;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        text-decoration: none;
+        cursor: pointer;
+        /* Custom animation handled by GSAP now, removed CSS transition for transform */
+        will-change: transform;
+    }
+
+
+    /* Glassmorphism General */
+    .ftx-glass-card {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+        will-change: transform, box-shadow; /* For smooth GSAP animation */
+    }
+
+    /* Summary Cards */
+    .ftx-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .ftx-summary-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .ftx-summary-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .ftx-summary-info p {
+        margin: 0;
+        font-size: 14px;
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    .ftx-summary-info h3 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 800;
+        color: #1e293b;
+    }
+
+    /* Chart & Progress Section */
+    .ftx-visual-section {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    @@media (max-width: 768px) {
+        .ftx-visual-section {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .ftx-overall-progress-wrap {
+        margin-top: 15px;
+    }
+
+    .ftx-overall-track {
+        height: 14px;
+        background: rgba(226, 232, 240, 0.8);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .ftx-overall-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); /* Smoother progress fill */
+    }
+
+    /* Budget List Grid */
+    .ftx-dash-budget-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+    }
+
+    /* Budget Card Internals */
+    .ftx-budget-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .ftx-cat-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .ftx-cat-icon {
+        font-size: 24px;
+    }
+
+    .ftx-actions a {
+        color: #94a3b8;
+        margin-left: 8px;
+        transition: 0.2s;
+        display: inline-block;
+        will-change: transform;
+    }
+
+        .ftx-actions a:hover.edit {
+            color: #3b82f6;
+        }
+
+        .ftx-actions a:hover.delete {
+            color: #ef4444;
+        }
+
+    /* Progress Colors */
+    .ftx-fill-safe {
+        background: linear-gradient(90deg, #10b981, #34d399);
+    }
+
+    .ftx-fill-warn {
+        background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    }
+
+    .ftx-fill-danger {
+        background: linear-gradient(90deg, #ef4444, #f87171);
+    }
+</style>
+
+<div class="ftx-dash-budget-wrapper">
+
+    <div class="ftx-dash-budget-header" data-aos="fade-down" data-aos-duration="600">
+        <h2 class="ftx-dash-budget-title">Budget Overview 🎯</h2>
+        <a asp-action="Create" class="ftx-dash-budget-add-btn ftx-btn-hover">+ Create New Budget </a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="ftx-summary-grid">
+            <div class="ftx-glass-card ftx-summary-card ftx-hover-card" data-aos="fade-up" data-aos-delay="0" data-aos-duration="600">
+                <div class="ftx-summary-icon" style="background: #e0f2fe; color: #0284c7;">💰</div>
+                <div class="ftx-summary-info">
+                    <p>Total Budget</p>
+                    <h3>Rs. @totalBudget.ToString("N0")</h3>
+                </div>
+            </div>
+            <div class="ftx-glass-card ftx-summary-card ftx-hover-card" data-aos="fade-up" data-aos-delay="100" data-aos-duration="600">
+                <div class="ftx-summary-icon" style="background: #fef08a; color: #ca8a04;">📉</div>
+                <div class="ftx-summary-info">
+                    <p>Total Spent</p>
+                    <h3>Rs. @totalSpent.ToString("N0")</h3>
+                </div>
+            </div>
+            <div class="ftx-glass-card ftx-summary-card ftx-hover-card" data-aos="fade-up" data-aos-delay="200" data-aos-duration="600">
+                <div class="ftx-summary-icon" style="background: #dcfce7; color: #16a34a;">✨</div>
+                <div class="ftx-summary-info">
+                    <p>Remaining Balance</p>
+                    <h3>Rs. @remainingBalance.ToString("N0")</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="ftx-visual-section">
+            <div class="ftx-glass-card ftx-hover-card" data-aos="fade-right" data-aos-delay="300" data-aos-duration="800">
+                <h5 style="font-weight:700; color:#334155;">Budget Distribution</h5>
+                <canvas id="budgetDonutChart" style="max-height: 200px; margin-top:10px;"></canvas>
+            </div>
+
+            <div class="ftx-glass-card ftx-hover-card" data-aos="fade-left" data-aos-delay="400" data-aos-duration="800" style="display:flex; flex-direction:column; justify-content:center;">
+                <h5 style="font-weight:700; color:#334155;">Overall Monthly Progress</h5>
+                <p style="color:#64748b; font-size:14px;">You have spent <strong>@Math.Round(overallPercentage)%</strong> of your total monthly limit.</p>
+
+                <div class="ftx-overall-progress-wrap">
+                    <div class="d-flex justify-content-between mb-2" style="font-size:14px; font-weight:600;">
+                        <span>Spent: Rs. @totalSpent.ToString("N0")</span>
+                        <span>Limit: Rs. @totalBudget.ToString("N0")</span>
+                    </div>
+                    <div class="ftx-overall-track">
+                        <div class="ftx-overall-fill @overallColor" style="width: @(overallPercentage > 100 ? 100 : Math.Round(overallPercentage))%;"></div>
+                    </div>
+                    @if (overallPercentage >= 100)
+                    {
+                        <div class="text-danger mt-2 fw-bold" style="font-size: 13px;" data-aos="zoom-in" data-aos-delay="600">⚠️ You have exceeded your overall budget limit!</div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <h4 data-aos="fade-in" data-aos-delay="100" style="font-weight:800; color:#1e293b; margin-bottom: 20px;">Category Limits</h4>
+
+    <div class="ftx-dash-budget-grid">
+        @if (!Model.Any())
+        {
+            <div class="ftx-glass-card" data-aos="zoom-in" data-aos-duration="600" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                <h4>No Budgets Set Yet!</h4>
+                <p>Click the "Create New Budget" button above to start managing your expenses.</p>
+            </div>
+        }
+        else
+        {
+            int delay = 0;
+            @foreach (var item in Model)
+            {
+                var spent = transactions.Where(t => t.CategoryId == item.CategoryId && t.Date.Month == item.Month).Sum(t => t.Amount);
+                var percentage = item.Amount > 0 ? (spent / item.Amount) * 100 : 0;
+                string fillClass = percentage >= 100 ? "ftx-fill-danger" : (percentage >= 80 ? "ftx-fill-warn" : "ftx-fill-safe");
+                string statusText = percentage >= 100 ? $"Over by Rs. {(spent - item.Amount):N0}" : $"Rs. {(item.Amount - spent):N0} left";
+
+                <div class="ftx-glass-card ftx-hover-card" data-aos="fade-up" data-aos-delay="@delay" data-aos-duration="500">
+                    <div class="ftx-budget-card-header mb-3">
+                        <div class="ftx-cat-info">
+                            <span class="ftx-cat-icon">📑</span> <h5 style="margin:0; font-weight:700;">@item.Category.Title</h5>
+                        </div>
+                        <div class="ftx-actions">
+                            <a asp-action="Edit" asp-route-id="@item.BudgetId" class="edit icon-hover" title="Edit"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
+                            <a asp-action="Delete" asp-route-id="@item.BudgetId" class="delete icon-hover" title="Delete"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></a>
+                        </div>
+                    </div>
+
+                    <div style="font-size:14px; color:#64748b; margin-bottom:8px;">
+                        Spent <strong style="color:#1e293b; font-size:16px;">Rs. @spent.ToString("N0")</strong> / @item.Amount.ToString("N0")
+                    </div>
+
+                    <div class="ftx-overall-track" style="height: 8px; margin-bottom: 8px;">
+                        <div class="ftx-overall-fill @fillClass" style="width: @(percentage > 100 ? 100 : Math.Round(percentage))%;"></div>
+                    </div>
+
+                    <div style="font-size: 12px; font-weight: 600; color: @(percentage >= 100 ? "#ef4444" : "#10b981")">
+                        @statusText
+                    </div>
+                </div>
+                delay += 100; // Increment delay for staggered grid effect
+            }
+        }
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // 1. Initialize AOS
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                once: true,
+                offset: 30
+            });
+        }
+
+        // 2. GSAP Hover for Glass Cards (Summary & Category Limits)
+        const glassCards = document.querySelectorAll('.ftx-hover-card');
+        glassCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    y: -6,
+                    scale: 1.01,
+                    boxShadow: "0 15px 35px rgba(31, 38, 135, 0.12)",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    y: 0,
+                    scale: 1,
+                    boxShadow: "0 8px 32px rgba(31, 38, 135, 0.05)",
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+        });
+
+        // 3. GSAP Hover for Primary Add Button
+        const addBtn = document.querySelector('.ftx-btn-hover');
+        if (addBtn) {
+            addBtn.addEventListener('mouseenter', () => {
+                gsap.to(addBtn, { y: -3, backgroundColor: "#d94d28", duration: 0.2, ease: "power1.out" });
+            });
+            addBtn.addEventListener('mouseleave', () => {
+                gsap.to(addBtn, { y: 0, backgroundColor: "#f15e36", duration: 0.2, ease: "power1.out" });
+            });
+        }
+
+        // 4. GSAP Hover for Action Icons (Edit/Delete)
+        const iconLinks = document.querySelectorAll('.icon-hover');
+        iconLinks.forEach(icon => {
+            icon.addEventListener('mouseenter', () => {
+                gsap.to(icon, { scale: 1.2, duration: 0.2, ease: "back.out(1.7)" });
+            });
+            icon.addEventListener('mouseleave', () => {
+                gsap.to(icon, { scale: 1, duration: 0.2, ease: "back.out(1.7)" });
+            });
+        });
+    });
+</script>
+
+@if (Model.Any())
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Chart.js Setup
+            var categories = @Html.Raw(Json.Serialize(Model.Select(b => b.Category.Title)));
+            var limits = @Html.Raw(Json.Serialize(Model.Select(b => b.Amount)));
+
+            var ctx = document.getElementById('budgetDonutChart').getContext('2d');
+            var donutChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        data: limits,
+                        backgroundColor: [
+                            '#f15e36', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 6 // Thora sa hover effect barha diya
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 8 } }
+                    },
+                    cutout: '70%',
+                    animation: {
+                        animateScale: true, // Chart ab scale-in hoke aayega
+                        animateRotate: true
+                    }
+                }
+            });
+        });
+    </script>
+}

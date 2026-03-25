@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="ft-auth-wrapper">
+    <div class="ft-auth-container">
+
+        <div class="ft-auth-slider-side">
+            <div class="ft-slider-content">
+                <div class="ft-slider-tags">
+                    <span class="ft-tag">Secure Data</span>
+                    <span class="ft-tag">24/7 Access</span>
+                </div>
+
+                <div class="ft-slider-quote">
+                    "The dark mode interface is so seamless. I can manage my entire portfolio late at night without straining my eyes."
+                </div>
+
+                <div>
+                    <div class="ft-slider-author">Raman .</div>
+                    <div class="ft-slider-role">Tech Master</div>
+                </div>
+            </div>
+
+            
+        </div>
+
+        <div class="ft-auth-form-side">
+
+            <div class="ft-auth-logo">
+                <img src="~/images/logo.png" style="height:50px;width:50px;" alt="Alternate Text" />
+            </div>
+
+            <h1 class="ft-auth-title">Welcome back</h1>
+            <p class="ft-auth-subtitle">Please enter your details to sign in to your FinTrack account.</p>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-danger">@ViewBag.Error</div>
+            }
+
+            <form asp-action="Login" method="post">
+
+                <div class="ft-form-group">
+                    <label class="ft-form-label">Email Address</label>
+                    <input name="email" type="email" class="form-control ft-form-input" placeholder="name@example.com" required />
+                </div>
+
+                <div class="ft-form-group">
+                    <label class="ft-form-label">
+                        Password                       
+                    </label>
+                    <input name="passwordHash" type="password" class="form-control ft-form-input" placeholder="Enter your password" required />
+                </div>
+
+                <button type="submit" class="ft-btn-primary">Sign In</button>
+            </form>
+
+            <div class="ft-auth-divider"> OR CONTINUE WITH </div>
+
+            <div class="ft-social-group">
+                <form asp-controller="Account" asp-action="GoogleLogin" method="post" style="width: 100%;">
+                    <button type="submit" class="ft-btn-social" style="width: 100%;">
+                        <img src="~/images/google_svg.png" width="25" alt="Google" />
+                    </button>
+                </form>
+            </div>
+
+            <div class="ft-auth-footer">
+                Don't have an account? <a asp-controller="Account" asp-action="Register">Sign up</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>

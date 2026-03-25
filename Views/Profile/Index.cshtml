@@ -1,0 +1,169 @@
+﻿@model FinTrack_Pro.Models.User
+@{
+    ViewData["Title"] = "My Profile";
+
+    // Agar Pfp nahi hai toh naam ka pehla letter as avatar show karega
+    string pfpUrl = string.IsNullOrEmpty(Model.ProfilePicturePath)
+        ? $"https://ui-avatars.com/api/?name={Model.FullName}&background=1e293b&color=fff&size=150"
+        : Model.ProfilePicturePath;
+
+    // Agar Banner nahi hai toh default CSS gradient use hoga
+    string bannerStyle = string.IsNullOrEmpty(Model.BannerPath)
+        ? "background: linear-gradient(135deg, #f15e36 0%, #ff9e80 100%);"
+        : $"background: url('{Model.BannerPath}') center/cover no-repeat;";
+}
+
+<style>
+    .ft-profile-wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px 15px;
+    }
+
+    /* Banner Area */
+    .ft-profile-banner {
+        height: 250px;
+        border-radius: 24px 24px 0 0;
+        position: relative;
+        @Html.Raw(bannerStyle)
+    }
+
+    /* Main Glass Card */
+    .ft-profile-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+        border-radius: 24px;
+        margin-top: -80px; /* Banner ke upar overlap karne ke liye */
+        position: relative;
+        padding: 40px;
+        z-index: 10;
+        text-align: center;
+    }
+
+    /* Profile Avatar */
+    .ft-profile-avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 6px solid #ffffff;
+        background-color: #ffffff;
+        object-fit: cover;
+        margin-top: -110px; /* Card ke bahar nikalne ke liye */
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .ft-profile-name {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .ft-profile-profession {
+        color: #f15e36;
+        font-weight: 600;
+        font-size: 16px;
+        margin-top: 5px;
+    }
+
+    .ft-profile-bio {
+        color: #475569;
+        font-size: 15px;
+        max-width: 600px;
+        margin: 15px auto;
+        line-height: 1.6;
+    }
+
+    /* Info Grid */
+    .ft-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+        text-align: left;
+    }
+
+    .ft-info-box {
+        background: rgba(255, 255, 255, 0.5);
+        padding: 15px 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .ft-info-label {
+        font-size: 12px;
+        color: #94a3b8;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .ft-info-value {
+        font-size: 15px;
+        color: #1e293b;
+        font-weight: 600;
+        margin-top: 5px;
+    }
+
+    .ft-btn-edit {
+        display: inline-block;
+        background: #1e293b;
+        color: #ffffff;
+        padding: 12px 30px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 30px;
+        transition: 0.3s;
+    }
+
+        .ft-btn-edit:hover {
+            background: #0f172a;
+            color: white;
+            transform: translateY(-2px);
+        }
+</style>
+
+<div class="ft-profile-wrapper">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-4" role="alert">
+            <strong>Success!</strong> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="ft-profile-banner"></div>
+
+    <div class="ft-profile-card">
+        <img src="@pfpUrl" alt="Profile Picture" class="ft-profile-avatar" />
+
+        <h1 class="ft-profile-name">@Model.FullName</h1>
+        <div class="ft-profile-profession">@(string.IsNullOrEmpty(Model.Profession) ? "FinTrack User" : Model.Profession)</div>
+
+        <p class="ft-profile-bio">
+            @(string.IsNullOrEmpty(Model.Bio) ? "Welcome to my FinTrack profile! I am managing my finances smartly." : Model.Bio)
+        </p>
+
+        <div class="ft-info-grid">
+            <div class="ft-info-box">
+                <div class="ft-info-label">Email Address</div>
+                <div class="ft-info-value">@Model.Email</div>
+            </div>
+            <div class="ft-info-box">
+                <div class="ft-info-label">Phone Number</div>
+                <div class="ft-info-value">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "Not Provided" : Model.PhoneNumber)</div>
+            </div>
+            <div class="ft-info-box">
+                <div class="ft-info-label">Member Since</div>
+                <div class="ft-info-value">@Model.CreatedAt.ToString("MMMM yyyy")</div>
+            </div>
+        </div>
+
+        <a asp-action="Edit" class="ft-btn-edit">Edit Profile</a>
+    </div>
+</div>

@@ -1,0 +1,293 @@
+﻿@model FinTrack_Pro.Models.User
+@{
+    ViewData["Title"] = "Edit User Matrix";
+    Layout = "_AdminLayout"; // Dashboard ka layout connect ho gaya
+}
+
+<style>
+    /* ==============================================
+           EDIT USER PAGE STYLES (FIN AI THEME)
+           ============================================== */
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        max-width: 600px; /* Form ke size ke sath align karne ke liye */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .page-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .page-title i {
+            color: var(--accent-green);
+        }
+
+    .btn-back {
+        background: transparent;
+        color: var(--text-muted);
+        border: 1px solid var(--border-color);
+        padding: 8px 16px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: 0.3s;
+    }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+    /* Form Card Container */
+    .edit-card {
+        background-color: var(--panel-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+        /* Top Accent Line */
+        .edit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+        }
+
+    /* User Preview Header */
+    .user-preview {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .preview-avatar {
+        width: 60px;
+        height: 60px;
+        background: rgba(209, 255, 39, 0.1);
+        border: 1px solid rgba(209, 255, 39, 0.2);
+        color: var(--accent-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .preview-info p {
+        color: var(--text-muted);
+        font-size: 13px;
+        margin: 5px 0 0 0;
+    }
+
+    .preview-info h4 {
+        color: var(--text-main);
+        font-size: 18px;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    /* Custom Form Elements */
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .cyber-label {
+        display: block;
+        color: var(--text-muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .cyber-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 14px 18px;
+        border-radius: 12px;
+        font-family: inherit;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+        .cyber-input:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 15px rgba(209, 255, 39, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .cyber-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+    /* Custom Select */
+    .cyber-select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23d1ff27%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+        background-repeat: no-repeat;
+        background-position: right 18px top 50%;
+        background-size: 12px auto;
+    }
+
+        .cyber-select option {
+            background: var(--panel-bg);
+            color: var(--text-main);
+        }
+
+    /* Buttons */
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 40px;
+        padding-top: 25px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: var(--text-muted);
+        border: none;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.3s;
+        text-decoration: none;
+    }
+
+        .btn-cancel:hover {
+            color: var(--text-main);
+        }
+
+    .btn-save {
+        background: var(--accent-green);
+        color: #000;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 30px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(209, 255, 39, 0.2);
+        }
+</style>
+
+<div class="page-header gsap-form">
+    <div class="page-title">
+        <i class="bi bi-person-gear"></i> System Profile Editor
+    </div>
+    <a asp-action="UsersList" class="btn-back">
+        <i class="bi bi-arrow-return-left"></i> Return
+    </a>
+</div>
+
+<div class="edit-card gsap-form">
+
+    <div class="user-preview">
+        @{
+            string initial = !string.IsNullOrEmpty(Model.FullName) ? Model.FullName.Substring(0, 1).ToUpper() : "U";
+        }
+        <div class="preview-avatar">@initial</div>
+        <div class="preview-info">
+            <h4>@Model.FullName</h4>
+            <p><i class="bi bi-fingerprint"></i> System ID: #@Model.Id</p>
+        </div>
+    </div>
+
+    <form asp-action="EditUser" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+
+        <div class="form-group">
+            <label class="cyber-label"><i class="bi bi-envelope-at me-1"></i> Email Identifier (Locked)</label>
+            <input type="email" class="cyber-input" value="@Model.Email" disabled />
+        </div>
+
+        <div class="form-group">
+            <label class="cyber-label"><i class="bi bi-person-badge me-1"></i> Full Name</label>
+            <input type="text" name="fullName" class="cyber-input" value="@Model.FullName" required autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+            <label class="cyber-label"><i class="bi bi-shield-check me-1"></i> Access Level (Role)</label>
+            <select name="role" class="cyber-input cyber-select">
+                @if (Model.Role == "Admin")
+                {
+                    <option value="Admin" selected>System Administrator (Admin)</option>
+                    <option value="User">Basic Citizen (User)</option>
+                }
+                else
+                {
+                    <option value="User" selected>Basic Citizen (User)</option>
+                    <option value="Admin">System Administrator (Admin)</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="UsersList" class="btn-cancel">Cancel Modification</a>
+            <button type="submit" class="btn-save">
+                <i class="bi bi-check2-circle"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (typeof gsap !== 'undefined') {
+                // Form elements entry animation
+                gsap.from(".gsap-form", {
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    ease: "power3.out",
+                    delay: 0.1
+                });
+            }
+        });
+    </script>
+}

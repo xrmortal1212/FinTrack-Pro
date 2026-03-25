@@ -1,0 +1,353 @@
+﻿@model IEnumerable<FinTrack_Pro.Models.User>
+@{
+    ViewData["Title"] = "User Guild (Manage)";
+    Layout = "_AdminLayout"; // Dashboard ka layout connect ho gaya
+}
+
+<style>
+    /* ==============================================
+           USER MANAGEMENT PAGE STYLES (FIN AI THEME)
+           ============================================== */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .page-title-box h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .page-title-box h2 i {
+            color: var(--accent-green);
+        }
+
+    .page-title-box p {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .btn-back {
+        background: transparent;
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.3s;
+    }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+    /* Table Container */
+    .table-container {
+        background-color: var(--panel-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 30px;
+        overflow-x: auto; /* Mobile ke liye scrollable */
+    }
+
+    /* Controls Bar (Search/Filter) */
+    .table-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .search-box {
+        position: relative;
+        width: 300px;
+    }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 10px 15px 10px 40px;
+            border-radius: 30px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+            .search-box input:focus {
+                border-color: var(--accent-green);
+                box-shadow: 0 0 10px rgba(209, 255, 39, 0.1);
+            }
+
+    /* Custom Table */
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 800px; /* Minimum width taake shrink na ho */
+    }
+
+        .custom-table th {
+            text-align: left;
+            padding: 15px;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .custom-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            font-size: 14px;
+            color: var(--text-main);
+            vertical-align: middle;
+        }
+
+        .custom-table tr:hover td {
+            background-color: rgba(255,255,255,0.01);
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+    /* User Profile Setup */
+    .user-profile-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .user-avatar {
+        width: 38px;
+        height: 38px;
+        background: linear-gradient(135deg, #1f1f23, #2a2a30);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    /* Badges */
+    .badge {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .badge-admin {
+        background: rgba(209, 255, 39, 0.1);
+        color: var(--accent-green);
+        border: 1px solid rgba(209, 255, 39, 0.2);
+    }
+
+    .badge-user {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-muted);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Action Buttons */
+    .action-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-edit {
+        background: transparent;
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 6px 15px;
+        border-radius: 30px;
+        font-size: 13px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+        .btn-edit:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            background: rgba(209, 255, 39, 0.05);
+        }
+
+    .btn-delete {
+        background: transparent;
+        color: #ff4757;
+        border: 1px solid rgba(255, 71, 87, 0.3);
+        padding: 6px 15px;
+        border-radius: 30px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .btn-delete:hover {
+            background: #ff4757;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 71, 87, 0.4);
+        }
+</style>
+
+<div class="page-header gsap-item">
+    <div class="page-title-box">
+        <h2><i class="bi bi-people-fill"></i> User Guild Matrix</h2>
+        <p>Monitor, manage, and modify access privileges for all registered citizens.</p>
+    </div>
+    <a asp-action="Index" class="btn-back">
+        <i class="bi bi-arrow-left"></i> Dashboard Return
+    </a>
+</div>
+
+<div class="table-container gsap-item">
+
+    <div class="table-controls">
+        <div class="search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Search by name or email..." id="userSearch">
+        </div>
+        <div style="color: var(--text-muted); font-size: 13px;">
+            Total Records: <strong style="color: var(--text-main);">@Model.Count()</strong>
+        </div>
+    </div>
+
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>Identifier</th>
+                <th>Citizen Details</th>
+                <th>Email Configuration</th>
+                <th>Access Level</th>
+                <th>Onboard Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var user in Model)
+                {
+                    // Pehla letter nikalne ke liye for avatar
+                    string initial = !string.IsNullOrEmpty(user.FullName) ? user.FullName.Substring(0, 1).ToUpper() : "U";
+
+                    <tr>
+                        <td style="color: var(--text-muted);">#@user.Id</td>
+
+                        <td>
+                            <div class="user-profile-cell">
+                                <div class="user-avatar">@initial</div>
+                                <strong>@user.FullName</strong>
+                            </div>
+                        </td>
+
+                        <td style="color: var(--text-muted);">@user.Email</td>
+
+                        <td>
+                            @if (user.Role == "Admin")
+                            {
+                                <span class="badge badge-admin"><i class="bi bi-star-fill"></i> System Admin</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-user"><i class="bi bi-person-fill"></i> Basic User</span>
+                            }
+                        </td>
+
+                        <td style="color: var(--text-muted);">@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+
+                        <td>
+                            <div class="action-group">
+                                <a asp-action="EditUser" asp-route-id="@user.Id" class="btn-edit">Edit</a>
+
+                                <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post" onsubmit="return confirm('WARNING: Are you sure you want to completely erase this user from the system matrix?');">
+                                    <button type="submit" class="btn-delete">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i class="bi bi-inbox fs-2 mb-2 d-block"></i>
+                        No users found in the database.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (typeof gsap !== 'undefined') {
+                // Page load animation
+                gsap.from(".gsap-item", {
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.15,
+                    ease: "power3.out",
+                    delay: 0.1
+                });
+            }
+
+            // Simple search functionality (Bonus feature)
+            const searchInput = document.getElementById('userSearch');
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function() {
+                    let filter = this.value.toLowerCase();
+                    let rows = document.querySelectorAll('.custom-table tbody tr');
+
+                    rows.forEach(row => {
+                        let text = row.innerText.toLowerCase();
+                        if (text.includes(filter)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+}

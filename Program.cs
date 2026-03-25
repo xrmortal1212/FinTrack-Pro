@@ -30,11 +30,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromDays(7);
     })
     // YAHAN SE NAYA CODE ADD KAREIN:
-    .AddGoogle(options =>
-    {
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-    });
+    //.AddGoogle(options =>
+    //{
+    //    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    //    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    //});
 
 var app = builder.Build();
 

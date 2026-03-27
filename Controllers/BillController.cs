@@ -72,13 +72,21 @@ namespace FinTrack_Pro.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Bill model)
         {
+            // 🚨 YEH LINES ADD KAREIN: 
+            // Validation check se pehle in fields ko ignore karwayen kyunke hum inhe khud set kar rahe hain.
+            ModelState.Remove("UserId");
+            ModelState.Remove("IsPaid");
+            ModelState.Remove("IsRecurring");
+            // Note: Agar aapke Bill model mein public virtual User User {get; set;} jaisi property hai, toh niche wali line bhi zaroor likhein:
+            ModelState.Remove("User");
+
             if (ModelState.IsValid)
             {
                 var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 model.UserId = userId;
                 model.IsPaid = false;
 
-                // NAYA LOGIC: Check karein recurring hai ya nahi
+                // Check karein recurring hai ya nahi
                 if (model.RecurringFrequency != "None" && !string.IsNullOrEmpty(model.RecurringFrequency))
                 {
                     model.IsRecurring = true;
@@ -86,14 +94,19 @@ namespace FinTrack_Pro.Controllers
                 else
                 {
                     model.IsRecurring = false;
+                    model.RecurringFrequency = "None"; // Safe side ke liye
                 }
 
                 _context.Bills.Add(model);
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = $"{model.Title} bill added successfully!";
+
+                // Aap chahain toh isko RedirectToAction("Index", "Bill") bhi kar sakte hain taake user ko add hone ke baad list nazar aaye
                 return RedirectToAction("Dashboard", "Home");
             }
+
+            // Agar koi form validation fail ho jaye toh wapas view dikhaye ga
             return View(model);
         }
 
